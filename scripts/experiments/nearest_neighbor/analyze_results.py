@@ -215,10 +215,11 @@ def write_summary(path, runs, cfg, comparisons, pairing, param_table, incomplete
         "## Setup",
         f"- Scale preset: `{cfg['scale_preset']}`; preset overrides: `{json.dumps(cfg['preset_overrides'])}`",
         f"- Sequence length: {cfg['sequence_length']} total tokens = 1 reference + {cfg['n_candidates']} candidates",
-        f"- Training pool {cfg['train_size']} (optimizer {cfg['optimizer_train_size']}, validation {cfg['val_size']}); "
-        f"held-out {cfg['test_size']} (balanced over iid/late/early/near_best)",
+        f"- Split: optimizer-training {cfg['optimizer_train_size']} / validation {cfg['val_size']} / held-out "
+        f"{cfg['test_size']} ({cfg['split_fractions']['train']:.0%} / {cfg['split_fractions']['validation']:.0%} / "
+        f"{cfg['split_fractions']['test']:.0%}); held-out balanced over iid/late/early/near_best",
         f"- Hidden size {cfg['hidden_size']}, VQC depth {cfg['qnn_depth']}, qubits {cfg['n_qubits']}, "
-        f"epochs <= {cfg['epochs']}, patience {cfg['patience']}, batch {cfg['batch_size']}, lr {cfg['lr']}",
+        f"epochs {cfg['epochs']} (no early stopping), batch {cfg['batch_size']}, lr {cfg['lr']}",
         f"- Seeds ({len(seeds)}): {seeds}; models: {sorted({m for _, m in runs})}",
         "- Every metric excludes the reference token and the first candidate (`metric_mask`).",
         "- The best-validation checkpoint was evaluated once on held-out data; no held-out selection.",

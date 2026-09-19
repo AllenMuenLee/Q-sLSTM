@@ -38,19 +38,21 @@ from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON
 REPO_ROOT = Path(__file__).resolve().parents[3]
 ALPHA_TOLERANCE = 1e-5
 
+# Split: the paper preset uses 5,000 sequences in total, split 70% / 10% / 20% into optimizer-training
+# (3,500), validation (500), and held-out test (1,000). The training pool below is train + validation.
 # Scale-controlling settings. "paper" is the reported study; "pilot" is a small pipeline / VQC-cost
 # check whose artifacts are always labeled as such. Explicit CLI values override either preset and
 # are recorded (the scale label then says so).
 PRESETS = {
     "paper": dict(
-        sequence_length=32, train_size=4000, val_fraction=0.1, test_size=1000,
-        extrapolation_length=64, extrapolation_size=250, hidden_size=4, qnn_depth=2,
-        batch_size=64, epochs=50, patience=10, n_seeds=5,
+        sequence_length=32, train_size=4000, val_fraction=0.125, test_size=1000,
+        extrapolation_length=64, extrapolation_size=250, hidden_size=6, qnn_depth=3,
+        batch_size=64, epochs=100, n_seeds=5,
     ),
     "pilot": dict(
-        sequence_length=8, train_size=24, val_fraction=0.25, test_size=8,
+        sequence_length=8, train_size=32, val_fraction=0.125, test_size=8,
         extrapolation_length=16, extrapolation_size=4, hidden_size=2, qnn_depth=1,
-        batch_size=8, epochs=2, patience=2, n_seeds=2,
+        batch_size=8, epochs=2, n_seeds=2,
     ),
 }
 PRESET_FIELDS = tuple(k for k in PRESETS["paper"] if k != "n_seeds")
@@ -69,8 +71,10 @@ def add_run_arguments(parser):
     a = parser.add_argument
     a("--scale", choices=sorted(PRESETS), default="paper", help="scale preset (default: paper)")
     a("--sequence-length", type=int, default=None, help="total tokens incl. the reference token (paper: 32)")
-    a("--train-size", type=int, default=None, help="IID training-pool size before the validation split (paper: 4000)")
-    a("--val-fraction", type=float, default=None, help="fraction of the pool used for validation (paper: 0.1)")
+    a("--train-size", type=int, default=None,
+      help="IID pool size = training + validation (paper: 4000, split 3500 / 500)")
+    a("--val-fraction", type=float, default=None,
+      help="fraction of the pool used for validation (paper: 0.125, i.e. 10%% of train+val+test)")
     a("--test-size", type=int, default=None, help="balanced held-out suite size (paper: 1000)")
     a("--extrapolation-length", type=int, default=None, help="total tokens of the extrapolation suite (paper: 64)")
     a("--extrapolation-size", type=int, default=None, help="extrapolation suite size (paper: 250)")
@@ -85,7 +89,6 @@ def add_run_arguments(parser):
     a("--epochs", type=int, default=None)
     a("--lr", type=float, default=1e-2)
     a("--weight-decay", type=float, default=0.0)
-    a("--patience", type=int, default=None, help="epochs without validation improvement before stopping")
     a("--grad-clip", type=float, default=0.0, help="max gradient norm; 0 disables clipping (norms are still logged)")
     a("--record-margin", type=float, default=NearestNeighborConfig.record_margin)
     a("--near-best-delta", type=float, default=NearestNeighborConfig.near_best_delta)
@@ -162,6 +165,12 @@ def resolve_config(args):
         "n_candidates": resolved["sequence_length"] - 1,
         "val_size": val_size,
         "optimizer_train_size": resolved["train_size"] - val_size,
+        "split_fractions": {  # of train + validation + held-out test
+            name: n / (resolved["train_size"] + resolved["test_size"])
+            for name, n in (("train", resolved["train_size"] - val_size), ("validation", val_size),
+                            ("test", resolved["test_size"]))
+        },
+        "early_stopping": "none: every run trains for the full epoch budget; best-validation checkpoint kept",
         "run_extrapolation": bool(a.get("run_extrapolation", False)),
         "input_size": INPUT_SIZE,
         "output_size": OUTPUT_SIZE,
@@ -178,7 +187,7 @@ def resolve_config(args):
         "loss": "mean squared error over loss_mask (every candidate, reference token excluded)",
         "selection_metric": "validation MSE over metric_mask (second candidate onward)",
     }
-    for key in ("epochs", "patience", "batch_size"):
+    for key in ("epochs", "batch_size"):
         if config[key] < 1:
             raise ValueError(f"{key} must be positive, got {config[key]}")
     return config
@@ -359,7 +368,7 @@ def evaluate_split(model, dataset, split, config, run_dir):
 # ---------------------------------------------------------------------------------------------
 
 def train_model(model, train_ds, val_ds, config, run_dir):
-    """Adam training with masked MSE, validation-based checkpointing, and early stopping."""
+    """Adam training with masked MSE for the full epoch budget; keeps the best-validation checkpoint."""
     device = config["device"]
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.Adam(params, lr=config["lr"], weight_decay=config["weight_decay"])
@@ -367,7 +376,7 @@ def train_model(model, train_ds, val_ds, config, run_dir):
     loader = DataLoader(train_ds, batch_size=config["batch_size"], shuffle=True, generator=loader_gen)
     clip = config["grad_clip"]
 
-    history, best_val, best_epoch, stale = [], math.inf, 0, 0
+    history, best_val, best_epoch = [], math.inf, 0
     order_hash = hashlib.sha256()
     ckpt_dir = run_dir / "checkpoints"
     ckpt_dir.mkdir(parents=True, exist_ok=True)
@@ -426,14 +435,9 @@ def train_model(model, train_ds, val_ds, config, run_dir):
         payload = {"epoch": epoch, "model_state_dict": copy.deepcopy(model.state_dict()),
                    "val_mse": val["val_mse"], "config": config}
         if improved:
-            best_val, best_epoch, stale = val["val_mse"], epoch, 0
+            best_val, best_epoch = val["val_mse"], epoch
             torch.save(payload, ckpt_dir / "best.pt")
-        else:
-            stale += 1
         torch.save({**payload, "optimizer_state_dict": optimizer.state_dict()}, ckpt_dir / "last.pt")
-        if stale >= config["patience"]:
-            print(f"early stopping after epoch {epoch} (best epoch {best_epoch})", flush=True)
-            break
 
     return {
         "history": history, "best_epoch": best_epoch, "best_val_mse": best_val,

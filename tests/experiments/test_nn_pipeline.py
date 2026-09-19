@@ -28,7 +28,7 @@ SCRIPTS = REPO_ROOT / "scripts" / "experiments" / "nearest_neighbor"
 
 TINY = dict(scale="pilot", sequence_length=6, train_size=12, val_fraction=0.25, test_size=4,
             extrapolation_length=10, extrapolation_size=4, hidden_size=2, qnn_depth=1,
-            batch_size=6, epochs=2, patience=2, run_extrapolation=True)
+            batch_size=6, epochs=2, run_extrapolation=True)
 
 
 def load_script(name):
@@ -47,10 +47,19 @@ def test_paper_preset_matches_the_documented_scale(tmp_path):
     cfg = resolve_config({"model": "qslstm", "seed": 0, "save_dir": str(tmp_path)})
     assert cfg["scale_label"] == "paper" and cfg["preset_overrides"] == {}
     assert (cfg["sequence_length"], cfg["n_candidates"]) == (32, 31)
-    assert (cfg["train_size"], cfg["optimizer_train_size"], cfg["val_size"], cfg["test_size"]) == (4000, 3600, 400, 1000)
+    assert (cfg["train_size"], cfg["optimizer_train_size"], cfg["val_size"], cfg["test_size"]) == (4000, 3500, 500, 1000)
     assert (cfg["extrapolation_length"], cfg["extrapolation_size"]) == (64, 250)
     assert cfg["input_size"] == 3 and cfg["output_size"] == 1 and cfg["input_projection"] is False
     assert cfg["n_qubits"] == 3 + cfg["hidden_size"]
+    assert {k: round(v, 6) for k, v in cfg["split_fractions"].items()} == {"train": 0.7, "validation": 0.1, "test": 0.2}
+    assert "patience" not in cfg
+
+
+def test_patience_argument_is_gone():
+    train = load_script("train_nearest_neighbor")
+    assert "--patience" not in train.build_parser().format_help()
+    with pytest.raises(SystemExit):
+        train.build_parser().parse_args(["--model", "qlstm", "--patience", "10"])
 
 
 def test_overrides_are_labeled_and_conflicting_sizes_rejected(tmp_path):
@@ -99,6 +108,22 @@ def test_non_finite_values_abort_with_run_epoch_batch_identity(tmp_path):
     (tmp_path / "run").mkdir()
     with pytest.raises(NonFiniteError, match=r"run_seed=5 model=qlstm epoch=1 batch=0"):
         train_model(NaNModel(), ds["train"], ds["val"], cfg, tmp_path / "run")
+
+
+def test_training_uses_full_epoch_budget_without_early_stopping(tmp_path):
+    class Flat(nn.Module):  # never improves: validation MSE is constant
+        def __init__(self):
+            super().__init__()
+            self.p = nn.Parameter(torch.zeros(1))
+
+        def forward(self, x, **kwargs):
+            return (self.p * 0.0 + x[..., :1] * 0.0, None)
+
+    cfg = tiny_config("qlstm", tmp_path, 6, epochs=7)
+    ds = make_datasets(cfg)
+    (tmp_path / "run").mkdir()
+    result = train_model(Flat(), ds["train"], ds["val"], cfg, tmp_path / "run")
+    assert result["epochs_run"] == 7 and result["best_epoch"] == 1
 
 
 @pytest.fixture(scope="module")
@@ -282,6 +307,6 @@ def test_training_cli_exposes_required_arguments():
     for flag in ("--model", "--scale", "--sequence-length", "--train-size", "--test-size",
                  "--extrapolation-length", "--extrapolation-size", "--run-extrapolation", "--seed", "--data-seed",
                  "--hidden-size", "--qnn-depth", "--gate-epsilon", "--batch-size", "--epochs", "--lr",
-                 "--weight-decay", "--patience", "--record-margin", "--near-best-delta", "--value-separation",
+                 "--weight-decay", "--record-margin", "--near-best-delta", "--value-separation",
                  "--device", "--save-dir"):
         assert flag in help_text, flag
