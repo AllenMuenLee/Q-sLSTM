@@ -1,0 +1,58 @@
+{
+  "batch_size": 64,
+  "device": "cpu",
+  "early_stopping": "none: every run trains for the full epoch budget; best-validation checkpoint kept",
+  "epochs": 100,
+  "extrapolation_length": 64,
+  "extrapolation_size": 250,
+  "gate_epsilon": 1e-06,
+  "generation": {
+    "best_similarity_range": [
+      0.9,
+      0.995
+    ],
+    "early_fraction": 0.25,
+    "late_fraction": 0.25,
+    "near_best_delta": 0.05,
+    "record_margin": 0.02,
+    "value_separation": 0.4
+  },
+  "grad_clip": 0.0,
+  "hidden_size": 6,
+  "input_projection": false,
+  "input_size": 3,
+  "kind": "nearest_neighbor_run",
+  "loss": "mean squared error over loss_mask (every candidate, reference token excluded)",
+  "lr": 0.01,
+  "model": "qslstm",
+  "n_candidates": 31,
+  "n_qubits": 9,
+  "optimizer_train_size": 3500,
+  "output_size": 1,
+  "preset_overrides": {},
+  "qnn_depth": 3,
+  "run_extrapolation": true,
+  "save_dir": "results/nearest_neighbor",
+  "scale_label": "paper",
+  "scale_preset": "paper",
+  "seeds": {
+    "data": 1620716702,
+    "data_seed_base": 1023290587,
+    "loader": 299036448,
+    "model": 1399774588,
+    "run_seed": 1023290587,
+    "split": 99091760
+  },
+  "selection_metric": "validation MSE over metric_mask (second candidate onward)",
+  "sequence_length": 32,
+  "split_fractions": {
+    "test": 0.2,
+    "train": 0.7,
+    "validation": 0.1
+  },
+  "test_size": 1000,
+  "train_size": 4000,
+  "val_fraction": 0.125,
+  "val_size": 500,
+  "weight_decay": 0.0
+}
