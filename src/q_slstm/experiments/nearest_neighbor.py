@@ -47,12 +47,12 @@ PRESETS = {
     "paper": dict(
         sequence_length=32, train_size=4000, val_fraction=0.125, test_size=1000,
         extrapolation_length=64, extrapolation_size=250, hidden_size=6, qnn_depth=3,
-        batch_size=64, epochs=100, n_seeds=5,
+        batch_size=64, epochs=100, lr=1e-2, n_seeds=5,
     ),
     "pilot": dict(
         sequence_length=8, train_size=32, val_fraction=0.125, test_size=8,
         extrapolation_length=16, extrapolation_size=4, hidden_size=2, qnn_depth=1,
-        batch_size=8, epochs=2, n_seeds=2,
+        batch_size=8, epochs=2, lr=1e-2, n_seeds=2,
     ),
 }
 PRESET_FIELDS = tuple(k for k in PRESETS["paper"] if k != "n_seeds")
@@ -87,7 +87,7 @@ def add_run_arguments(parser):
     a("--gate-epsilon", type=float, default=DEFAULT_GATE_EPSILON, help="qslstm gate/normalizer epsilon")
     a("--batch-size", type=int, default=None)
     a("--epochs", type=int, default=None)
-    a("--lr", type=float, default=1e-2)
+    a("--lr", type=float, default=None, help="overrides the preset learning rate")
     a("--weight-decay", type=float, default=0.0)
     a("--grad-clip", type=float, default=0.0, help="max gradient norm; 0 disables clipping (norms are still logged)")
     a("--record-margin", type=float, default=NearestNeighborConfig.record_margin)
@@ -177,7 +177,6 @@ def resolve_config(args):
         "input_projection": False,
         "n_qubits": INPUT_SIZE + resolved["hidden_size"],
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
-        "lr": a.get("lr", 1e-2),
         "weight_decay": a.get("weight_decay", 0.0),
         "grad_clip": a.get("grad_clip", 0.0),
         "device": a.get("device", "cpu"),
@@ -190,6 +189,8 @@ def resolve_config(args):
     for key in ("epochs", "batch_size"):
         if config[key] < 1:
             raise ValueError(f"{key} must be positive, got {config[key]}")
+    if not config["lr"] > 0:
+        raise ValueError(f"lr must be positive, got {config['lr']}")
     return config
 
 
