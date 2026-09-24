@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import subprocess
 import sys
@@ -25,7 +26,9 @@ ROOT = SCRIPT_DIR.parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(SCRIPT_DIR))
 
-from q_slstm.experiments.nearest_neighbor import PRESETS, add_run_arguments, resolve_config, run_directory  # noqa: E402
+from q_slstm.experiments.nearest_neighbor import (  # noqa: E402
+    PRESETS, add_run_arguments, resolve_config, run_directory, sweep_directory,
+)
 from q_slstm.models.factory import QUANTUM_MODELS  # noqa: E402
 from q_slstm.models.q_slstm_cell import QSLSTM_RECURRENCE  # noqa: E402
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE  # noqa: E402
@@ -93,11 +96,13 @@ def main(argv=None):
         if n < 1:
             raise SystemExit("--n-seeds must be at least 1")
         seeds = draw_seeds(n, args.master_seed)
+    # Fix the date once, so every child run lands in the same folder even past midnight.
+    args.run_date = args.run_date or datetime.date.today().isoformat()
 
-    jobs, scale_label = [], None
+    jobs, scale_label, root = [], None, None
     for seed in seeds:
         config = resolve_config({**vars(args), "model": args.model, "seed": seed})
-        scale_label = config["scale_label"]
+        scale_label, root = config["scale_label"], sweep_directory(config)
         jobs.append((child_arguments(args, args.model, seed), run_directory(config), args.resume))
 
     print(f"scale={scale_label} model={args.model}: {len(jobs)} runs, {args.workers} worker(s)", flush=True)
@@ -107,7 +112,6 @@ def main(argv=None):
     if args.dry_run:
         return 0
 
-    root = Path(args.save_dir) / scale_label
     root.mkdir(parents=True, exist_ok=True)
     (root / f"seeds_{args.model}.json").write_text(json.dumps(
         {"model": args.model, "seeds": seeds, "n_seeds": len(seeds),
@@ -121,7 +125,7 @@ def main(argv=None):
     if failed:
         print(f"{failed} run(s) failed; see failure.json / console_log.txt in the run directories", file=sys.stderr)
     else:
-        print(f"done. After running the other model with the same seeds: "
+        print(f"done. After running the other model with the same seeds and --run-date {args.run_date}: "
               f"python scripts/experiments/nearest_neighbor/analyze_results.py --runs-dir {root}")
     return 1 if failed else 0
 

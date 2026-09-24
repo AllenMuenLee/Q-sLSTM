@@ -47,6 +47,8 @@ def use_qslstm_model(qslstm_model):
     global QSLSTM, MODELS
     MODELS = model_pair(qslstm_model)
     QSLSTM = qslstm_model
+
+
 SPLIT_TITLES = {"test": "held-out (trained length)", "extrapolation": "EXTRAPOLATION (length-trained checkpoints)"}
 PRIMARY_METRIC = "mse"
 COMPARISON_METRICS = ("mse", "mae", "final_mse", "event_mse", "nonevent_mse", "drift_nonevent",
@@ -75,7 +77,11 @@ def discover_runs(runs_dir, models=None):
         if not (run_dir / "complete.json").exists():
             incomplete.append(run_dir)
             continue
-        runs[(config["seeds"]["run_seed"], config["model"])] = (run_dir, config)
+        key = (config["seeds"]["run_seed"], config["model"])
+        if key in runs:
+            raise SystemExit(f"seed {key[0]} {key[1]} was run more than once under {runs_dir} "
+                             f"({runs[key][0]} and {run_dir}); point --runs-dir at one dated sweep folder")
+        runs[key] = (run_dir, config)
     labels = {cfg["scale_label"] for _, cfg in runs.values()}
     if len(labels) > 1:
         raise SystemExit(f"runs of several scales found under {runs_dir}: {sorted(labels)}; analyze one at a time")

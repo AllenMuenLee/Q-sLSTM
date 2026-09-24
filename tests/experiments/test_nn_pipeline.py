@@ -285,10 +285,11 @@ def test_separately_run_models_combine_in_one_analysis(tmp_path):
     sweep = load_script("run_sweep")
     common = ["--scale", "pilot", "--sequence-length", "6", "--train-size", "12", "--val-fraction", "0.25",
               "--test-size", "4", "--hidden-size", "2", "--qnn-depth", "1", "--batch-size", "6", "--epochs", "1",
-              "--n-seeds", "2", "--master-seed", "1", "--workers", "2", "--save-dir", str(tmp_path)]
+              "--n-seeds", "2", "--master-seed", "1", "--workers", "2", "--save-dir", str(tmp_path),
+              "--run-date", "2026-01-02"]
     assert sweep.main(["--model", "qlstm"] + common) == 0
     analyze = load_script("analyze_results")
-    root = tmp_path / "pilot-overridden"
+    root = tmp_path / "pilot-overridden" / "2026-01-02"
     with pytest.raises(SystemExit, match="qslstm"):
         analyze.analyze(root, tmp_path / "early")  # only one model finished so far
     assert sweep.main(["--model", "qslstm"] + common) == 0
@@ -308,5 +309,5 @@ def test_training_cli_exposes_required_arguments():
                  "--extrapolation-length", "--extrapolation-size", "--run-extrapolation", "--seed", "--data-seed",
                  "--hidden-size", "--qnn-depth", "--gate-epsilon", "--batch-size", "--epochs", "--lr",
                  "--weight-decay", "--record-margin", "--near-best-delta", "--value-separation",
-                 "--device", "--save-dir"):
+                 "--device", "--save-dir", "--run-date"):
         assert flag in help_text, flag

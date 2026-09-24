@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import copy
+import datetime
 import hashlib
 import json
 import math
@@ -97,6 +98,9 @@ def add_run_arguments(parser):
     a("--value-separation", type=float, default=NearestNeighborConfig.value_separation)
     a("--device", choices=["cpu", "cuda"], default="cpu")
     a("--save-dir", type=str, default="results/nearest_neighbor")
+    a("--run-date", type=str, default=None,
+      help="date folder (YYYY-MM-DD) under <save-dir>/<scale>; default: today. Pass an earlier date "
+           "to add the other model to that day's runs or to resume them")
 
 
 SEED_TAGS = {"data": 1, "split": 2, "loader": 3, "model": 4}
@@ -152,6 +156,11 @@ def resolve_config(args):
     if not 0 < val_size < resolved["train_size"]:
         raise ValueError("train_size and val_fraction leave no training or validation sequences")
     run_seed = int(a.get("seed", 0))
+    run_date = a.get("run_date") or datetime.date.today().isoformat()
+    try:
+        datetime.date.fromisoformat(run_date)
+    except ValueError:
+        raise ValueError(f"--run-date must be YYYY-MM-DD, got {run_date!r}") from None
     config = {
         "kind": "nearest_neighbor_run",
         "model": a["model"],
@@ -181,6 +190,7 @@ def resolve_config(args):
         "generation": generation.to_dict(),
         "seeds": derive_seeds(run_seed, a.get("data_seed")),
         "save_dir": str(a.get("save_dir", "results/nearest_neighbor")),
+        "run_date": run_date,
         "loss": "mean squared error over loss_mask (every candidate, reference token excluded)",
         "selection_metric": "validation MSE over metric_mask (second candidate onward)",
     }
@@ -192,8 +202,13 @@ def resolve_config(args):
     return config
 
 
+def sweep_directory(config):
+    """<save_dir>/<scale>/<run date>: one dated folder per sweep, so later sweeps never overwrite it."""
+    return Path(config["save_dir"]) / config["scale_label"] / config["run_date"]
+
+
 def run_directory(config):
-    return Path(config["save_dir"]) / config["scale_label"] / f"seed_{config['seeds']['run_seed']}" / config["model"]
+    return sweep_directory(config) / f"seed_{config['seeds']['run_seed']}" / config["model"]
 
 
 def make_datasets(config):
