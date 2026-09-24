@@ -1,0 +1,109 @@
+{
+  "alignment_diagnostic": {
+    "apr_oct": {
+      "best_lag": 0,
+      "correlation_by_weather_lag_hours": {
+        "-1": 0.9308133223326306,
+        "-2": 0.81752044281796,
+        "0": 0.9694202317482388,
+        "1": 0.9218752792605653,
+        "2": 0.7936929412849153
+      },
+      "n_rows": 336
+    },
+    "nov_mar": {
+      "best_lag": null,
+      "correlation_by_weather_lag_hours": {
+        "-1": null,
+        "-2": null,
+        "0": null,
+        "1": null,
+        "2": null
+      },
+      "n_rows": 0
+    }
+  },
+  "coverage_by_split": {
+    "test": {
+      "candidate_windows": 68,
+      "eligible_windows": 68,
+      "expected_rows": 68,
+      "first_timestamp_utc": "2024-06-12T10:00:00Z",
+      "last_timestamp_utc": "2024-06-15T05:00:00Z",
+      "valid_row_fraction": 1.0,
+      "valid_rows": 68,
+      "valid_window_fraction": 1.0
+    },
+    "train": {
+      "candidate_windows": 227,
+      "eligible_windows": 227,
+      "expected_rows": 235,
+      "first_timestamp_utc": "2024-06-01T06:00:00Z",
+      "last_timestamp_utc": "2024-06-11T00:00:00Z",
+      "valid_row_fraction": 1.0,
+      "valid_rows": 235,
+      "valid_window_fraction": 1.0
+    },
+    "val": {
+      "candidate_windows": 33,
+      "eligible_windows": 33,
+      "expected_rows": 33,
+      "first_timestamp_utc": "2024-06-11T01:00:00Z",
+      "last_timestamp_utc": "2024-06-12T09:00:00Z",
+      "valid_row_fraction": 1.0,
+      "valid_rows": 33,
+      "valid_window_fraction": 1.0
+    }
+  },
+  "duplicate_generation_records_collapsed": 0,
+  "expected_rows": 336,
+  "failures": [],
+  "generation_quality_flag_counts": {
+    "0": 336
+  },
+  "generation_status_counts": {
+    "ok": 336
+  },
+  "insufficient_history_targets": 8,
+  "invalid_reason_counts": {},
+  "min_coverage": 0.95,
+  "scale_label": "pilot",
+  "valid_rows": 336,
+  "weather_per_location": {
+    "kingston": {
+      "boundary_duplicates_collapsed": 0,
+      "grid_timestamps_absent": 0,
+      "n_requests": 1,
+      "non_finite_values": 0,
+      "rows_after_trim": 336
+    },
+    "london": {
+      "boundary_duplicates_collapsed": 0,
+      "grid_timestamps_absent": 0,
+      "n_requests": 1,
+      "non_finite_values": 0,
+      "rows_after_trim": 336
+    },
+    "ottawa": {
+      "boundary_duplicates_collapsed": 0,
+      "grid_timestamps_absent": 0,
+      "n_requests": 1,
+      "non_finite_values": 0,
+      "rows_after_trim": 336
+    },
+    "toronto": {
+      "boundary_duplicates_collapsed": 0,
+      "grid_timestamps_absent": 0,
+      "n_requests": 1,
+      "non_finite_values": 0,
+      "rows_after_trim": 336
+    },
+    "windsor": {
+      "boundary_duplicates_collapsed": 0,
+      "grid_timestamps_absent": 0,
+      "n_requests": 1,
+      "non_finite_values": 0,
+      "rows_after_trim": 336
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "toronto_2026-01-01_2026-01-01.json",
+  "http_status": 200,
+  "key": "open_meteo/toronto/2026-01-01_2026-01-01",
+  "last_modified": null,
+  "location_id": "toronto",
+  "month": "2026-01",
+  "n_bytes": 1868,
+  "n_http_requests": 2,
+  "n_http_retries": 1,
+  "params": {
+    "end_date": "2026-01-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "43.6532",
+    "longitude": "-79.3832",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2026-01-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:17:17Z",
+  "sha256": "6b17335a59de6ae8a502aa03879bbf9b7badaaf4dd68e2359a06221a4001dbc9",
+  "snapshot": "20260923T191717Z_6b17335a59de",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

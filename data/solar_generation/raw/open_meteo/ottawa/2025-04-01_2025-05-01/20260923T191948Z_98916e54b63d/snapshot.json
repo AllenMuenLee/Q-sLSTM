@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "ottawa_2025-04-01_2025-05-01.json",
+  "http_status": 200,
+  "key": "open_meteo/ottawa/2025-04-01_2025-05-01",
+  "last_modified": null,
+  "location_id": "ottawa",
+  "month": "2025-04",
+  "n_bytes": 40601,
+  "n_http_requests": 3,
+  "n_http_retries": 2,
+  "params": {
+    "end_date": "2025-05-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "45.4215",
+    "longitude": "-75.6972",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2025-04-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:19:48Z",
+  "sha256": "98916e54b63db52a9c5c27fc1acc6a89ab4da1c0ef89b9a1c6b754e2da87eea2",
+  "snapshot": "20260923T191948Z_98916e54b63d",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

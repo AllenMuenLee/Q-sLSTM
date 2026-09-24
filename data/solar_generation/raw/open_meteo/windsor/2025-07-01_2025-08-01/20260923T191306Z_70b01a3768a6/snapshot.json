@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "windsor_2025-07-01_2025-08-01.json",
+  "http_status": 200,
+  "key": "open_meteo/windsor/2025-07-01_2025-08-01",
+  "last_modified": null,
+  "location_id": "windsor",
+  "month": "2025-07",
+  "n_bytes": 42456,
+  "n_http_requests": 1,
+  "n_http_retries": 0,
+  "params": {
+    "end_date": "2025-08-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "42.3149",
+    "longitude": "-83.0364",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2025-07-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:13:06Z",
+  "sha256": "70b01a3768a6ac078057dc0b9f911267182e9f5b733240db6e4d74176b947265",
+  "snapshot": "20260923T191306Z_70b01a3768a6",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "ottawa_2024-03-01_2024-04-01.json",
+  "http_status": 200,
+  "key": "open_meteo/ottawa/2024-03-01_2024-04-01",
+  "last_modified": null,
+  "location_id": "ottawa",
+  "month": "2024-03",
+  "n_bytes": 41676,
+  "n_http_requests": 2,
+  "n_http_retries": 1,
+  "params": {
+    "end_date": "2024-04-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "45.4215",
+    "longitude": "-75.6972",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2024-03-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:18:54Z",
+  "sha256": "3d1a4d5a9719107f3a0022a963fd18f05d7653a163d42162a96bfef3a1d51eae",
+  "snapshot": "20260923T191854Z_3d1a4d5a9719",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

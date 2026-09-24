@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "toronto_2024-10-01_2024-11-01.json",
+  "http_status": 200,
+  "key": "open_meteo/toronto/2024-10-01_2024-11-01",
+  "last_modified": null,
+  "location_id": "toronto",
+  "month": "2024-10",
+  "n_bytes": 41358,
+  "n_http_requests": 1,
+  "n_http_retries": 0,
+  "params": {
+    "end_date": "2024-11-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "43.6532",
+    "longitude": "-79.3832",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2024-10-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:16:07Z",
+  "sha256": "6361a4cd0392db49fae631aa53bcee3dc35a07fef1e5173526f6ac470db29611",
+  "snapshot": "20260923T191607Z_6361a4cd0392",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

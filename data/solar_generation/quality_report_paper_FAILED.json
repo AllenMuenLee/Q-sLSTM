@@ -1,0 +1,117 @@
+{
+  "alignment_diagnostic": {
+    "apr_oct": {
+      "best_lag": 0,
+      "correlation_by_weather_lag_hours": {
+        "-1": 0.9215134610913118,
+        "-2": 0.7975276350423479,
+        "0": 0.9643973822713452,
+        "1": 0.9166094202011738,
+        "2": 0.7868390391423905
+      },
+      "n_rows": 10272
+    },
+    "nov_mar": {
+      "best_lag": 0,
+      "correlation_by_weather_lag_hours": {
+        "-1": 0.8636247470089502,
+        "-2": 0.7237105613685256,
+        "0": 0.9118366687283036,
+        "1": 0.8534777456797622,
+        "2": 0.7059037015359173
+      },
+      "n_rows": 7272
+    }
+  },
+  "coverage_by_split": {
+    "test": {
+      "candidate_windows": 3509,
+      "eligible_windows": 2970,
+      "expected_rows": 3509,
+      "first_timestamp_utc": "2025-08-08T01:00:00Z",
+      "last_timestamp_utc": "2026-01-01T05:00:00Z",
+      "valid_row_fraction": 0.9398689085209462,
+      "valid_rows": 3298,
+      "valid_window_fraction": 0.8463949843260188
+    },
+    "train": {
+      "candidate_windows": 12248,
+      "eligible_windows": 11809,
+      "expected_rows": 12280,
+      "first_timestamp_utc": "2024-01-01T06:00:00Z",
+      "last_timestamp_utc": "2025-05-26T21:00:00Z",
+      "valid_row_fraction": 0.9903094462540717,
+      "valid_rows": 12161,
+      "valid_window_fraction": 0.964157413455258
+    },
+    "val": {
+      "candidate_windows": 1755,
+      "eligible_windows": 1717,
+      "expected_rows": 1755,
+      "first_timestamp_utc": "2025-05-26T22:00:00Z",
+      "last_timestamp_utc": "2025-08-08T00:00:00Z",
+      "valid_row_fraction": 0.9965811965811966,
+      "valid_rows": 1749,
+      "valid_window_fraction": 0.9783475783475784
+    }
+  },
+  "duplicate_generation_records_collapsed": 0,
+  "expected_rows": 17544,
+  "failures": [
+    "test: valid rows 0.9399 < 0.95"
+  ],
+  "generation_quality_flag_counts": {
+    "-1": 335,
+    "-4": 1,
+    "0": 17208
+  },
+  "generation_status_counts": {
+    "flagged": 336,
+    "ok": 17208
+  },
+  "insufficient_history_targets": 32,
+  "invalid_reason_counts": {
+    "generation_quality_flag_-1": 335,
+    "generation_quality_flag_-4": 1
+  },
+  "min_coverage": 0.95,
+  "scale_label": "paper",
+  "valid_rows": 17208,
+  "weather_per_location": {
+    "kingston": {
+      "boundary_duplicates_collapsed": 576,
+      "grid_timestamps_absent": 0,
+      "n_requests": 25,
+      "non_finite_values": 0,
+      "rows_after_trim": 17544
+    },
+    "london": {
+      "boundary_duplicates_collapsed": 576,
+      "grid_timestamps_absent": 0,
+      "n_requests": 25,
+      "non_finite_values": 0,
+      "rows_after_trim": 17544
+    },
+    "ottawa": {
+      "boundary_duplicates_collapsed": 576,
+      "grid_timestamps_absent": 0,
+      "n_requests": 25,
+      "non_finite_values": 0,
+      "rows_after_trim": 17544
+    },
+    "toronto": {
+      "boundary_duplicates_collapsed": 576,
+      "grid_timestamps_absent": 0,
+      "n_requests": 25,
+      "non_finite_values": 0,
+      "rows_after_trim": 17544
+    },
+    "windsor": {
+      "boundary_duplicates_collapsed": 576,
+      "grid_timestamps_absent": 0,
+      "n_requests": 25,
+      "non_finite_values": 0,
+      "rows_after_trim": 17544
+    }
+  }
+}

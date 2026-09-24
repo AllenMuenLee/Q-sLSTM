@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "toronto_2024-02-01_2024-03-01.json",
+  "http_status": 200,
+  "key": "open_meteo/toronto/2024-02-01_2024-03-01",
+  "last_modified": null,
+  "location_id": "toronto",
+  "month": "2024-02",
+  "n_bytes": 38826,
+  "n_http_requests": 1,
+  "n_http_retries": 0,
+  "params": {
+    "end_date": "2024-03-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "43.6532",
+    "longitude": "-79.3832",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2024-02-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:15:00Z",
+  "sha256": "8ea4b23ede4788207a93fe86fef00f62bdb3c7989c6871db48257c9864a70f9a",
+  "snapshot": "20260923T191500Z_8ea4b23ede47",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

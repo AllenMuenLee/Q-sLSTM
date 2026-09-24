@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "london_2026-01-01_2026-01-01.json",
+  "http_status": 200,
+  "key": "open_meteo/london/2026-01-01_2026-01-01",
+  "last_modified": null,
+  "location_id": "london",
+  "month": "2026-01",
+  "n_bytes": 1891,
+  "n_http_requests": 1,
+  "n_http_retries": 0,
+  "params": {
+    "end_date": "2026-01-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "42.9849",
+    "longitude": "-81.2453",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2026-01-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:14:58Z",
+  "sha256": "5f4d1e210b5ca9ba475c3803d859eaba11f1bc0d1bae76b88c5a46bf6a81c3ad",
+  "snapshot": "20260923T191458Z_5f4d1e210b5c",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

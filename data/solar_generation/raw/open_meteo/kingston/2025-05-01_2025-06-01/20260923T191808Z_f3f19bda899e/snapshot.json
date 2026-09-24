@@ -1,0 +1,30 @@
+{
+  "content_type": "application/json; charset=utf-8",
+  "etag": null,
+  "filename": "kingston_2025-05-01_2025-06-01.json",
+  "http_status": 200,
+  "key": "open_meteo/kingston/2025-05-01_2025-06-01",
+  "last_modified": null,
+  "location_id": "kingston",
+  "month": "2025-05",
+  "n_bytes": 42406,
+  "n_http_requests": 1,
+  "n_http_retries": 0,
+  "params": {
+    "end_date": "2025-06-01",
+    "hourly": "shortwave_radiation,direct_radiation,diffuse_radiation,cloud_cover,temperature_2m,relative_humidity_2m,wind_speed_10m,precipitation",
+    "latitude": "44.2312",
+    "longitude": "-76.4860",
+    "models": "era5",
+    "precipitation_unit": "mm",
+    "start_date": "2025-05-01",
+    "temperature_unit": "celsius",
+    "timezone": "UTC",
+    "wind_speed_unit": "kmh"
+  },
+  "retrieved_at_utc": "2026-09-23T19:18:08Z",
+  "sha256": "f3f19bda899ec544a0a3fe6ec2d29d2781011c9a3caf492224e87db18ec8377d",
+  "snapshot": "20260923T191808Z_f3f19bda899e",
+  "source": "open_meteo",
+  "url": "https://archive-api.open-meteo.com/v1/archive"
+}

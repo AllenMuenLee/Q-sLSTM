@@ -1,0 +1,31 @@
+{
+  "artifact_sha256": {
+    "alpha_metrics_test.csv": "96536cacf0ade59607daf73bee7241379406840b6d8c06f3a84450a91b27179a",
+    "checkpoints/best.pt": "85fff3ecaf87918c830d30f2875ae71662d2a923eeeff8a825936e8a0e63d34d",
+    "checkpoints/last.pt": "e874c0e768e13bd558ffd47573465e93e73437d4b43bb99ad30ed92092696c4b",
+    "config.json": "f3c70c9a2b57404351c991beb33c0a78f5a9498b90d40041e8727923cf005de3",
+    "dataset_manifest.json": "473b16e72a89a6c299508a33787cc84a30fcd6a1469b0c125fe10941d841de67",
+    "environment.json": "7c64e6181e44db7cf4061d85bbd759695d59ac5c2d66208e8ce73da822a3134f",
+    "history.csv": "13fb931d2fc2bd5b26180265eab76f88134c42caa14e6362fcd6481f996489a3",
+    "init_parameters.json": "620089ded7ea2dc4b621599706551b791dba2059c0eb8184369a505ee5be9e29",
+    "parameters.json": "d7f7fcc6f3443f6e562bb23183133d7eea60d9af379314fe6a4645bd5790b0e6",
+    "per_day_metrics_test.csv": "eeaf63d113e076eb2c0aefb188edf62ee0a76e3f87be24bdefaa32d6fa14aec5",
+    "per_seed_metrics_test.csv": "03b8a54accec439c2170d055759ab7b98b063a7a4175e62006193bf2ea8e3376",
+    "predictions_test.csv": "945e1d62086eccae312d67c0e0364adcdd3e0c31a4b2ca1c1fbebe97f9361f03",
+    "scaler.json": "a8f346026d075cf6b0888c45d87f997ae66d9c1ac91217d458c3fde518e73404",
+    "source_revision.json": "f2f519979fd0c377278d5ec57f3c9d0f7003d8f2cb44b6cf7db943d1ea45fd80",
+    "timing.json": "85dff7165ae221484b9502f485ba9d0d6489571a66ac193131d5ae0762b99735",
+    "train_summary.json": "00b0575822f657ab7610a1b84381cb5e6d28f0404f480811685b5c201d4686d6"
+  },
+  "best_epoch": 2,
+  "config_hash": "17138a6da5c918ee",
+  "dataset_id": "b34896367832cf11",
+  "model": "qslstm",
+  "n_test_windows": 68,
+  "run_seed": 0,
+  "scale_label": "pilot",
+  "study_id": "534261b8c832",
+  "test_mse_mwh2": 12739.558735947468,
+  "test_window_ids_sha256": "58f9b8dcf577f4a6d235cf4c6f7953772c5029cf6513c5042bac2e970385901c",
+  "trainable_parameters": 65
+}
