@@ -38,6 +38,17 @@ def unwrap(model):
     return getattr(model, "base_model", model)
 
 
+@pytest.mark.parametrize("projection_size", [0, 1])
+def test_log_variant_is_available_with_or_without_projection(script, projection_size):
+    from q_slstm.models.q_slstm_log_cell import CustomQsLSTMLogCell
+
+    model = script.make_model(make_args(model="qslstm_log", input_projection_size=projection_size))
+    assert isinstance(unwrap(model).cell, CustomQsLSTMLogCell)
+    outputs, state = model(torch.zeros(2, 3, 2))
+    assert outputs.shape == (2, 3, 1)
+    assert len(state) == 4
+
+
 def test_qslstm_without_projection_uses_original_width(script):
     model = script.make_model(make_args(input_size=2))
     base = unwrap(model)
@@ -162,3 +173,4 @@ def test_cli_exposes_gate_epsilon():
     )
     assert result.returncode == 0
     assert "--gate_epsilon" in result.stdout
+    assert "qslstm_log" in result.stdout

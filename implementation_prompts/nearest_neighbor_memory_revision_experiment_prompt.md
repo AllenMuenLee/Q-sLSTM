@@ -1,5 +1,10 @@
 # Implementation Prompt: Nearest-Neighbor Memory-Revision Experiment
 
+> Current recurrence update: use [the unclipped polynomial Q-sLSTM](q-slstm_polynomial_update.md).
+> Its binary scale state and exact diagnostic denominator supersede the older
+> log-gate and epsilon-floor details below. Keep recurrence versions separate
+> in experiments; the task, data, and paired-comparison protocol still apply.
+
 Implement one controlled synthetic experiment that tests whether the Q-sLSTM
 can revise a stored value when a more relevant item arrives and preserve that
 value through later distractors. The task is adapted from the xLSTM nearest-

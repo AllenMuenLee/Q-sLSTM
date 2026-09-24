@@ -33,7 +33,9 @@ from q_slstm.datasets.nearest_neighbor import (
 )
 from q_slstm.experiments import nearest_neighbor_metrics as nnm
 from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
-from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON
+from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
+from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
+from q_slstm.utils.seeds import stable_seed
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 ALPHA_TOLERANCE = 1e-5
@@ -84,7 +86,7 @@ def add_run_arguments(parser):
     a("--qnn-depth", type=int, default=None)
     a("--input-size", type=int, default=None, help=f"fixed to {INPUT_SIZE}; conflicting values are rejected")
     a("--output-size", type=int, default=None, help=f"fixed to {OUTPUT_SIZE}; conflicting values are rejected")
-    a("--gate-epsilon", type=float, default=DEFAULT_GATE_EPSILON, help="qslstm gate/normalizer epsilon")
+    a("--gate-epsilon", type=float, default=DEFAULT_GATE_EPSILON, help="legacy compatibility setting; polynomial qslstm has no gate clipping or denominator floor")
     a("--batch-size", type=int, default=None)
     a("--epochs", type=int, default=None)
     a("--lr", type=float, default=None, help="overrides the preset learning rate")
@@ -95,11 +97,6 @@ def add_run_arguments(parser):
     a("--value-separation", type=float, default=NearestNeighborConfig.value_separation)
     a("--device", choices=["cpu", "cuda"], default="cpu")
     a("--save-dir", type=str, default="results/nearest_neighbor")
-
-
-def stable_seed(*parts):
-    """31-bit seed derived from the parts via SeedSequence (stable across runs and platforms)."""
-    return int(np.random.SeedSequence([int(p) for p in parts]).generate_state(1)[0] & 0x7FFFFFFF)
 
 
 SEED_TAGS = {"data": 1, "split": 2, "loader": 3, "model": 4}
@@ -177,6 +174,7 @@ def resolve_config(args):
         "input_projection": False,
         "n_qubits": INPUT_SIZE + resolved["hidden_size"],
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
+        "qslstm_recurrence": QSLSTM_LOG_RECURRENCE if a["model"] == "qslstm_log" else QSLSTM_RECURRENCE,
         "weight_decay": a.get("weight_decay", 0.0),
         "grad_clip": a.get("grad_clip", 0.0),
         "device": a.get("device", "cpu"),
@@ -494,6 +492,11 @@ def _write_json(path, payload):
 def run_experiment(config, run_dir=None):
     """Train one model on one seed, evaluate the best-validation checkpoint once, write artifacts."""
     run_dir = Path(run_dir) if run_dir is not None else run_directory(config)
+    previous_config = run_dir / "config.json"
+    if previous_config.exists():
+        previous = json.loads(previous_config.read_text(encoding="utf-8"))
+        if previous.get("qslstm_recurrence") != config.get("qslstm_recurrence"):
+            raise ValueError("Existing run uses a different Q-sLSTM recurrence; choose a new --save-dir")
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "complete.json").unlink(missing_ok=True)
     _write_json(run_dir / "config.json", config)
@@ -565,8 +568,10 @@ def verify_pairing(run_dir_a, run_dir_b):
     ma, mb = load(run_dir_a, "dataset_manifest.json"), load(run_dir_b, "dataset_manifest.json")
     ia, ib = load(run_dir_a, "init_parameters.json"), load(run_dir_b, "init_parameters.json")
     sa, sb = load(run_dir_a, "train_summary.json"), load(run_dir_b, "train_summary.json")
+    ca, cb = load(run_dir_a, "config.json"), load(run_dir_b, "config.json")
     shared = sorted(set(ia["checksums"]) & set(ib["checksums"]))
     return {
+        "recurrence_version_equal": ca.get("qslstm_recurrence") == cb.get("qslstm_recurrence"),
         "dataset_checksums_equal": ma["splits"] == mb["splits"],
         "seed_map_equal": ma["seeds"] == mb["seeds"],
         "loader_order_equal": sa["loader_order_checksum_epoch1"] == sb["loader_order_checksum_epoch1"],

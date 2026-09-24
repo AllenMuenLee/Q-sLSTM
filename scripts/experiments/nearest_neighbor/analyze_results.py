@@ -25,9 +25,28 @@ import pandas as pd  # noqa: E402
 from q_slstm.experiments import nearest_neighbor_metrics as nnm  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import verify_pairing  # noqa: E402
 
-MODELS = ("qlstm", "qslstm")
-MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)"}
-COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452"}
+QSLSTM_MODELS = ("qslstm", "qslstm_log")
+MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)",
+                "qslstm_log": "Q-sLSTM-log (ln(2/(1-q)) gates)"}
+COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868"}
+
+
+def model_pair(qslstm_model):
+    """The two models of one comparison: QLSTM and the chosen Q-sLSTM variant."""
+    if qslstm_model not in QSLSTM_MODELS:
+        raise ValueError(f"qslstm_model must be one of {QSLSTM_MODELS}, got {qslstm_model!r}")
+    return ("qlstm", qslstm_model)
+
+
+# Q-sLSTM variant compared against QLSTM; set with --qslstm-model (use_qslstm_model).
+QSLSTM = "qslstm"
+MODELS = model_pair(QSLSTM)
+
+
+def use_qslstm_model(qslstm_model):
+    global QSLSTM, MODELS
+    MODELS = model_pair(qslstm_model)
+    QSLSTM = qslstm_model
 SPLIT_TITLES = {"test": "held-out (trained length)", "extrapolation": "EXTRAPOLATION (length-trained checkpoints)"}
 PRIMARY_METRIC = "mse"
 COMPARISON_METRICS = ("mse", "mae", "final_mse", "event_mse", "nonevent_mse", "drift_nonevent",
@@ -39,14 +58,20 @@ LAG_PLOT = nnm.LAGS
 # Loading
 # ---------------------------------------------------------------------------------------------
 
-def discover_runs(runs_dir):
-    """Completed runs under `runs_dir` as {(run_seed, model): (run_dir, config)}."""
+def discover_runs(runs_dir, models=None):
+    """Completed runs under `runs_dir` as {(run_seed, model): (run_dir, config)}.
+
+    Only runs of `models` are kept (default: every model). The recurrence check covers the
+    Q-sLSTM runs only, since QLSTM does not use a Q-sLSTM recurrence.
+    """
     runs, incomplete = {}, []
     for cfg_path in sorted(Path(runs_dir).rglob("config.json")):
         config = json.loads(cfg_path.read_text(encoding="utf-8"))
         if config.get("kind") != "nearest_neighbor_run":
             continue
         run_dir = cfg_path.parent
+        if models is not None and config["model"] not in models:
+            continue
         if not (run_dir / "complete.json").exists():
             incomplete.append(run_dir)
             continue
@@ -54,7 +79,21 @@ def discover_runs(runs_dir):
     labels = {cfg["scale_label"] for _, cfg in runs.values()}
     if len(labels) > 1:
         raise SystemExit(f"runs of several scales found under {runs_dir}: {sorted(labels)}; analyze one at a time")
+    versions = {(cfg["model"], cfg.get("qslstm_recurrence", "legacy_log_stabilized"))
+                for _, cfg in runs.values() if cfg["model"] != "qlstm"}
+    if len({model for model, _ in versions}) < len(versions):
+        raise SystemExit("Runs use different Q-sLSTM recurrences; analyze each version separately")
     return runs, incomplete
+
+
+def add_qslstm_model_argument(parser):
+    parser.add_argument("--qslstm-model", choices=QSLSTM_MODELS, default="qslstm",
+                        help="Q-sLSTM variant compared against QLSTM (default: qslstm)")
+
+
+def analysis_dir_name(name):
+    """Default output folder; the log variant gets its own so the two comparisons never overwrite."""
+    return name if QSLSTM == "qslstm" else f"{name}_{QSLSTM}"
 
 
 def load_table(runs, filename):
@@ -227,7 +266,7 @@ def write_summary(path, runs, cfg, comparisons, pairing, param_table, incomplete
         "## Parameter matching",
         _markdown_table(param_table),
         "",
-        "## Pairing verification (same seed, QLSTM vs Q-sLSTM)",
+        f"## Pairing verification (same seed, QLSTM vs {MODEL_LABELS[QSLSTM]})",
         _markdown_table(pd.DataFrame(pairing).T.reset_index().rename(columns={"index": "run_seed"})
                         .drop(columns=["shared_parameter_names"], errors="ignore")) if pairing else "no paired seeds",
         "",
@@ -239,11 +278,11 @@ def write_summary(path, runs, cfg, comparisons, pairing, param_table, incomplete
         lines += [f"## {title}", ""]
         prim = comparisons[split]["primary_summary"]
         lines += [
-            f"### Primary: {prim['metric']} (all cases, second candidate onward), paired Q-sLSTM - QLSTM",
+            f"### Primary: {prim['metric']} (all cases, second candidate onward), paired {QSLSTM} - qlstm",
             f"- Paired seeds: {prim['n_paired_seeds']}; mean difference {_fmt(prim['mean_difference'], 5)} "
             f"(sd {_fmt(prim['sd_difference'], 5)}); 95% CI "
             f"[{_fmt(prim['ci95_low'], 5)}, {_fmt(prim['ci95_high'], 5)}] ({prim['ci_method']})",
-            f"- Seeds where Q-sLSTM is lower: {prim['seeds_a_lower']} of {prim['n_paired_seeds']}",
+            f"- Seeds where {QSLSTM} is lower: {prim['seeds_a_lower']} of {prim['n_paired_seeds']}",
             "",
             _markdown_table(comparisons[split]["primary_table"]),
             "",
@@ -252,7 +291,7 @@ def write_summary(path, runs, cfg, comparisons, pairing, param_table, incomplete
                 ["model", "case_type", "n_seeds", "mse_mean", "mse_sd", "mae_mean", "mae_sd",
                  "final_mse_mean", "event_mse_mean", "nonevent_mse_mean"]]),
             "",
-            "### Paired differences (Q-sLSTM - QLSTM) by case and metric",
+            f"### Paired differences ({QSLSTM} - qlstm) by case and metric",
             _markdown_table(comparisons[split]["paired_summaries"][
                 ["case_type", "metric", "n_paired_seeds", "mean_difference", "sd_difference",
                  "ci95_low", "ci95_high", "seeds_a_lower"]]),
@@ -268,14 +307,15 @@ def write_summary(path, runs, cfg, comparisons, pairing, param_table, incomplete
 # Driver
 # ---------------------------------------------------------------------------------------------
 
-def analyze(runs_dir, out_dir=None):
-    runs, incomplete = discover_runs(runs_dir)
+def analyze(runs_dir, out_dir=None, qslstm_model="qslstm"):
+    use_qslstm_model(qslstm_model)
+    runs, incomplete = discover_runs(runs_dir, MODELS)
     if not runs:
         raise SystemExit(f"no completed nearest-neighbor runs under {runs_dir}")
     missing = [m for m in MODELS if not any(model == m for _, model in runs)]
     if missing:
         raise SystemExit(f"no completed runs for {missing}; run each model with run_sweep.py (same seeds) first")
-    out_dir = Path(out_dir) if out_dir else Path(runs_dir) / "analysis"
+    out_dir = Path(out_dir) if out_dir else Path(runs_dir) / analysis_dir_name("analysis")
     (out_dir / "plots").mkdir(parents=True, exist_ok=True)
     configs = [cfg for _, cfg in runs.values()]
 
@@ -287,8 +327,8 @@ def analyze(runs_dir, out_dir=None):
               file=sys.stderr)
     pairing = {}
     for seed in seeds:
-        if (seed, "qlstm") in runs and (seed, "qslstm") in runs:
-            pairing[seed] = verify_pairing(runs[(seed, "qlstm")][0], runs[(seed, "qslstm")][0])
+        if (seed, "qlstm") in runs and (seed, QSLSTM) in runs:
+            pairing[seed] = verify_pairing(runs[(seed, "qlstm")][0], runs[(seed, QSLSTM)][0])
     (out_dir / "pairing_check.json").write_text(json.dumps(pairing, indent=2), encoding="utf-8")
     rows = []
     for (seed, model), (run_dir, cfg) in sorted(runs.items()):
@@ -311,13 +351,13 @@ def analyze(runs_dir, out_dir=None):
         per_seed.to_csv(out_dir / f"combined_per_seed_metrics_{split}.csv", index=False)
         per_seq.to_csv(out_dir / f"combined_per_sequence_metrics_{split}.csv", index=False)
 
-        table, prim = nnm.paired_difference(per_seed, PRIMARY_METRIC, "all", split)
+        table, prim = nnm.paired_difference(per_seed, PRIMARY_METRIC, "all", split, model_a=QSLSTM)
         table.to_csv(out_dir / f"primary_paired_differences_{split}.csv", index=False)
         summaries = []
         for case in ("all", *nnm.CASE_ORDER):
             for metric in COMPARISON_METRICS:
                 if metric in per_seed.columns:
-                    summaries.append(nnm.paired_difference(per_seed, metric, case, split)[1])
+                    summaries.append(nnm.paired_difference(per_seed, metric, case, split, model_a=QSLSTM)[1])
         paired_summaries = pd.DataFrame(summaries)
         paired_summaries.to_csv(out_dir / f"paired_comparison_{split}.csv", index=False)
         summary = nnm.model_summary(per_seed, list(COMPARISON_METRICS), split)
@@ -356,9 +396,11 @@ def analyze(runs_dir, out_dir=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Analyze a nearest-neighbor sweep.")
     parser.add_argument("--runs-dir", required=True, help="directory containing the run directories")
-    parser.add_argument("--out-dir", default=None, help="default: <runs-dir>/analysis")
+    parser.add_argument("--out-dir", default=None,
+                        help="default: <runs-dir>/analysis (analysis_qslstm_log for --qslstm-model qslstm_log)")
+    add_qslstm_model_argument(parser)
     args = parser.parse_args(argv)
-    analyze(args.runs_dir, args.out_dir)
+    analyze(args.runs_dir, args.out_dir, args.qslstm_model)
     return 0
 
 

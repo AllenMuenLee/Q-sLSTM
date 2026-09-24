@@ -28,6 +28,7 @@ def build_result_path(args, experiment_root: Path):
 	MODEL_EXTRA_PARAMS = {
 		"qlstm": [],
 		"qslstm": [],
+		"qslstm_log": [],
 		"lstm": [],
 		"self_modulating_qfwp": [],
 		"self_modulating_qfwp_only_new_params": [],

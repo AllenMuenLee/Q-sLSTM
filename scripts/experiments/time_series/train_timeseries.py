@@ -32,6 +32,7 @@ from q_slstm.utils.experiment import Tee
 
 from q_slstm.models.qlstm_cell import CustomQLSTMCell
 from q_slstm.models.q_slstm_cell import CustomQsLSTMCell, DEFAULT_GATE_EPSILON
+from q_slstm.models.q_slstm_log_cell import CustomQsLSTMLogCell
 from q_slstm.models.sequence_wrappers import CustomLSTM, CustomQsLSTM
 
 class StandardLSTMCell(nn.Module):
@@ -67,7 +68,7 @@ def make_model(args):
     Move your existing model-creation if/elif here.
     """
     use_input_projection = (
-        args.model in ("qlstm", "qslstm", "lstm")
+        args.model in ("qlstm", "qslstm", "qslstm_log", "lstm")
         and args.input_projection_size > 0
         and args.input_size > args.input_projection_size
     )
@@ -91,10 +92,11 @@ def make_model(args):
             else base_model
         )
         return model.to(args.device).float()
-    elif args.model == "qslstm":
-        # Q-sLSTM: bounded log gates, xLSTM stabilizer, (h, c, n, m) state.
+    elif args.model in ("qslstm", "qslstm_log"):
+        # Q-sLSTM variants: (h, c, n, binary_scale) state.
         print("OPERATING MODEL {}".format(args.model))
-        qslstm_cell = CustomQsLSTMCell(
+        cell_type = CustomQsLSTMLogCell if args.model == "qslstm_log" else CustomQsLSTMCell
+        qslstm_cell = cell_type(
             effective_input_size,
             args.hidden_size,
             args.output_size,
@@ -144,6 +146,7 @@ def main():
         choices=[
             "qlstm",
             "qslstm",
+            "qslstm_log",
             "lstm",
             "self_modulating_qfwp",
             "self_modulating_qfwp_only_new_params",
@@ -193,7 +196,7 @@ def main():
         "--gate_epsilon",
         type=float,
         default=DEFAULT_GATE_EPSILON,
-        help="Epsilon in (0, 1) bounding the quantum input/forget log-ratio transforms and the normalizer division (qslstm only, default: 1e-6)",
+        help="Legacy compatibility setting in (0, 1); polynomial qslstm has no gate clipping or denominator floor",
     )
 
     parser.add_argument("--batch_size", type=int, default=2, help="Batch size (large batch size may also need larger learning rate)")

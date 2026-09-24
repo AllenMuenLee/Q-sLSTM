@@ -83,7 +83,7 @@ def predict_and_log(
 			yhat = model(xb)
 
 			# NOTE: 這段就是你原本的「model-specific output handling」
-			if args.model in ("qlstm", "qslstm", "lstm"):
+			if args.model in ("qlstm", "qslstm", "qslstm_log", "lstm"):
 				yhat, _ = yhat
 				yhat = yhat[:, -1, :]
 			elif args.model in (

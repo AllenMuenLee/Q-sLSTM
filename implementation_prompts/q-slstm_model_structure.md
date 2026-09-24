@@ -1,5 +1,8 @@
 # QLSTM Model Structure
 
+> Historical architecture description. For the current Q-sLSTM state and
+> unclipped gate arithmetic, follow [the polynomial update](q-slstm_polynomial_update.md).
+
 ## Overview
 
 The model is a quantum-enhanced, normalized LSTM for sequence prediction. Each gate is produced by an independent variational quantum circuit (VQC), while an additional normalizer state controls the scale of the cell state.

@@ -32,7 +32,8 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from scipy import stats  # noqa: E402
 
-from analyze_results import COLORS, MODEL_LABELS, MODELS, discover_runs  # noqa: E402
+import analyze_results as ar  # noqa: E402
+from analyze_results import COLORS, MODEL_LABELS, discover_runs  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import make_datasets  # noqa: E402
 
 STEP_KINDS = ("event", "near_best_distractor", "other_distractor")
@@ -90,11 +91,12 @@ def paired(summary):
     for (split, kind), g in summary.groupby(["split", "kind"]):
         for metric in ("pull", "write_k"):
             w = g.pivot(index="run_seed", columns="model", values=metric).dropna()
-            d = w["qslstm"] - w["qlstm"]
+            q = ar.QSLSTM
+            d = w[q] - w["qlstm"]
             rows.append({"split": split, "kind": kind, "metric": metric, "n_pairs": len(d),
                          "qlstm_mean": w["qlstm"].mean(), "qlstm_std": w["qlstm"].std(ddof=1),
-                         "qslstm_mean": w["qslstm"].mean(), "qslstm_std": w["qslstm"].std(ddof=1),
-                         "diff_mean": d.mean(), "qslstm_higher_seeds": int((d > 0).sum()),
+                         f"{q}_mean": w[q].mean(), f"{q}_std": w[q].std(ddof=1),
+                         "diff_mean": d.mean(), f"{q}_higher_seeds": int((d > 0).sum()),
                          "wilcoxon_p": stats.wilcoxon(d).pvalue if len(d) > 1 else np.nan})
     return pd.DataFrame(rows)
 
@@ -116,7 +118,7 @@ def plot(summary, path):
         for c, (metric, ylabel) in enumerate((("pull", "pull toward candidate value"),
                                               ("write_k", "write coefficient k"))):
             ax = axes[r, c]
-            for i, model in enumerate(MODELS):
+            for i, model in enumerate(ar.MODELS):
                 sel = summary[(summary["split"] == split) & (summary["model"] == model)]
                 g = sel.groupby("kind")[metric]
                 mean, std = g.mean().reindex(STEP_KINDS), g.std(ddof=1).reindex(STEP_KINDS)
@@ -140,10 +142,12 @@ def main(argv=None):
     parser.add_argument("--runs-dir", default="results/nearest_neighbor/paper")
     parser.add_argument("--out-dir", default=None, help="default: <runs-dir>/analysis/false_revision")
     parser.add_argument("--splits", nargs="+", default=["test", "extrapolation"])
+    ar.add_qslstm_model_argument(parser)
     args = parser.parse_args(argv)
+    ar.use_qslstm_model(args.qslstm_model)
 
-    runs, _ = discover_runs(args.runs_dir)
-    out_dir = Path(args.out_dir) if args.out_dir else Path(args.runs_dir) / "analysis" / "false_revision"
+    runs, _ = discover_runs(args.runs_dir, ar.MODELS)
+    out_dir = Path(args.out_dir) if args.out_dir else Path(args.runs_dir) / ar.analysis_dir_name("analysis") / "false_revision"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     cache, frames = {}, []

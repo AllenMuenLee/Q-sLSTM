@@ -1,5 +1,10 @@
 # Implementation Prompt: Convert the Current QLSTM to the Q-sLSTM Structure
 
+> Historical specification. The current production gate arithmetic, state
+> representation, and boundary handling are defined in
+> [the polynomial update](q-slstm_polynomial_update.md), which supersedes the
+> clipped log-gate/stabilizer instructions below.
+
 Implement the Q-sLSTM architecture described in
 `implementation_prompts/q-slstm_model_structure.md` in the current repository.
 Modify the production code and add focused tests. Preserve the existing classical

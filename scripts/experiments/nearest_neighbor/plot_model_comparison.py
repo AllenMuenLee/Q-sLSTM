@@ -31,7 +31,8 @@ import pandas as pd  # noqa: E402
 from scipy import stats  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from analyze_results import COLORS, MODEL_LABELS, MODELS, discover_runs, load_table  # noqa: E402
+import analyze_results as ar  # noqa: E402
+from analyze_results import COLORS, MODEL_LABELS, discover_runs, load_table  # noqa: E402
 
 SPLITS = ("test", "extrapolation")
 EPOCH_COLUMNS = {"train_loss": "train loss", "val_mse": "validation MSE", "epoch_gap": "val loss − train loss"}
@@ -89,15 +90,16 @@ def paired_stats(table, metrics):
         if metric not in table:
             continue
         w = table.pivot(index="run_seed", columns="model", values=metric).dropna()
-        d = w["qslstm"] - w["qlstm"]
+        q = ar.QSLSTM
+        d = w[q] - w["qlstm"]
         p = stats.wilcoxon(d).pvalue if len(d) > 1 and (d != 0).any() else np.nan
         rows.append({"metric": metric, "n_pairs": len(d),
                      "qlstm_mean": w["qlstm"].mean(), "qlstm_std": w["qlstm"].std(ddof=1),
-                     "qslstm_mean": w["qslstm"].mean(), "qslstm_std": w["qslstm"].std(ddof=1),
+                     f"{q}_mean": w[q].mean(), f"{q}_std": w[q].std(ddof=1),
                      "diff_mean": d.mean(), "diff_std": d.std(ddof=1),
-                     "qslstm_better_seeds": int((d < 0).sum()), "wilcoxon_p": p,
-                     "std_ratio_qslstm_over_qlstm": w["qslstm"].std(ddof=1) / w["qlstm"].std(ddof=1),
-                     "brown_forsythe_p": stats.levene(w["qlstm"], w["qslstm"], center="median").pvalue})
+                     f"{q}_better_seeds": int((d < 0).sum()), "wilcoxon_p": p,
+                     f"std_ratio_{q}_over_qlstm": w[q].std(ddof=1) / w["qlstm"].std(ddof=1),
+                     "brown_forsythe_p": stats.levene(w["qlstm"], w[q], center="median").pvalue})
     return pd.DataFrame(rows)
 
 
@@ -128,7 +130,7 @@ def _band(ax, hist, column, model, **kw):
 
 def plot_loss_curves(hist, table, path, log=False):
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharey=True)
-    for model in MODELS:
+    for model in ar.MODELS:
         n = hist.loc[hist["model"] == model, "run_seed"].nunique()
         _band(axes[0], hist, "train_loss", model, label=f"{MODEL_LABELS[model]} (n={n})")
         _band(axes[1], hist, "val_mse", model, label=f"{MODEL_LABELS[model]} val MSE")
@@ -152,7 +154,7 @@ def plot_epoch_gap(hist, path, first_epoch=2):
     # Epoch 1's train loss is averaged over a still-untrained model, so it dwarfs the rest of the curve.
     hist = hist[hist["epoch"] >= first_epoch]
     fig, ax = plt.subplots(figsize=(6.5, 4))
-    for model in MODELS:
+    for model in ar.MODELS:
         _band(ax, hist, "epoch_gap", model, label=MODEL_LABELS[model])
     ax.axhline(0, color="black", lw=0.8)
     ax.set_xlabel("epoch")
@@ -166,10 +168,10 @@ def plot_epoch_gap(hist, path, first_epoch=2):
 def _paired_panel(ax, table, metric, title, bars=True):
     """Mean ± std over seeds (bars from zero, or a zoomed marker), grey lines join each seed's two models."""
     w = table.pivot(index="run_seed", columns="model", values=metric).dropna()
-    x = np.arange(len(MODELS))
+    x = np.arange(len(ar.MODELS))
     for _, row in w.iterrows():
-        ax.plot(x, row[list(MODELS)].values, color="grey", alpha=0.35, lw=0.8, zorder=1)
-    for i, model in enumerate(MODELS):
+        ax.plot(x, row[list(ar.MODELS)].values, color="grey", alpha=0.35, lw=0.8, zorder=1)
+    for i, model in enumerate(ar.MODELS):
         if bars:
             ax.bar(i, w[model].mean(), yerr=w[model].std(ddof=1), capsize=4, width=0.55,
                    color=COLORS[model], alpha=0.75, zorder=0)
@@ -177,11 +179,11 @@ def _paired_panel(ax, table, metric, title, bars=True):
             ax.errorbar(i + 0.18, w[model].mean(), yerr=w[model].std(ddof=1), fmt="D", ms=7, capsize=4,
                         color=COLORS[model], markeredgecolor="black", zorder=3)
         ax.scatter(np.full(len(w), i), w[model], color=COLORS[model], edgecolor="black", s=16, zorder=2)
-    d = w["qslstm"] - w["qlstm"]
+    d = w[ar.QSLSTM] - w["qlstm"]
     p = stats.wilcoxon(d).pvalue if len(d) > 1 and (d != 0).any() else np.nan
-    ax.set_xticks(x, [MODEL_LABELS[m].split(" ")[0] for m in MODELS])
-    spread = ", ".join(f"{MODEL_LABELS[m].split(' ')[0]} {w[m].mean():.4f}±{w[m].std(ddof=1):.4f}" for m in MODELS)
-    ax.set_title(f"{title}\n{spread}\nΔ={d.mean():+.4f}, Q-sLSTM lower {int((d < 0).sum())}/{len(d)}, p={p:.3g}",
+    ax.set_xticks(x, [MODEL_LABELS[m].split(" ")[0] for m in ar.MODELS])
+    spread = ", ".join(f"{MODEL_LABELS[m].split(' ')[0]} {w[m].mean():.4f}±{w[m].std(ddof=1):.4f}" for m in ar.MODELS)
+    ax.set_title(f"{title}\n{spread}\nΔ={d.mean():+.4f}, {MODEL_LABELS[ar.QSLSTM].split(" ")[0]} lower {int((d < 0).sum())}/{len(d)}, p={p:.3g}",
                  fontsize=8.5)
     ax.grid(axis="y", alpha=0.3)
 
@@ -208,7 +210,7 @@ def plot_std_epochs(hist, path):
     """Standard deviation over seeds at every epoch (log scale: epoch 1 is far larger than the rest)."""
     fig, axes = plt.subplots(1, len(EPOCH_COLUMNS), figsize=(4.6 * len(EPOCH_COLUMNS), 3.8), squeeze=False)
     for ax, (column, label) in zip(axes[0], EPOCH_COLUMNS.items()):
-        for model in MODELS:
+        for model in ar.MODELS:
             std = hist[hist["model"] == model].groupby("epoch")[column].std(ddof=1)
             ax.plot(std.index, std.values, color=COLORS[model], label=MODEL_LABELS[model])
         ax.set_yscale("log")
@@ -225,7 +227,7 @@ def std_table(table, metrics):
     for metric in metrics:
         if metric not in table:
             continue
-        for model in MODELS:
+        for model in ar.MODELS:
             v = table.loc[table["model"] == model, metric].dropna()
             lo, hi = bootstrap_std_ci(v)
             rows.append({"metric": metric, "model": model, "n_seeds": len(v), "std": v.std(ddof=1),
@@ -242,7 +244,7 @@ def plot_std_metrics(stds, summary, path):
     for ax, (title, metrics) in zip(axes, groups):
         metrics = [m for m in metrics if m in set(stds["metric"])]
         x = np.arange(len(metrics))
-        for i, model in enumerate(MODELS):
+        for i, model in enumerate(ar.MODELS):
             sel = stds[stds["model"] == model].set_index("metric").loc[metrics]
             ax.bar(x + (i - 0.5) * width, sel["std"], width, color=COLORS[model], alpha=0.8,
                    label=MODEL_LABELS[model], capsize=3,
@@ -260,19 +262,20 @@ def plot_std_metrics(stds, summary, path):
 # Driver
 # ---------------------------------------------------------------------------------------------
 
-def compare(runs_dir, out_dir=None):
-    runs, incomplete = discover_runs(runs_dir)
+def compare(runs_dir, out_dir=None, qslstm_model="qslstm"):
+    ar.use_qslstm_model(qslstm_model)
+    runs, incomplete = discover_runs(runs_dir, ar.MODELS)
     if incomplete:
         print(f"WARNING: skipping {len(incomplete)} incomplete run(s): {[str(p) for p in incomplete]}",
               file=sys.stderr)
     seeds = sorted({s for s, _ in runs})
-    unpaired = [s for s in seeds if not all((s, m) in runs for m in MODELS)]
+    unpaired = [s for s in seeds if not all((s, m) in runs for m in ar.MODELS)]
     if unpaired:
         print(f"WARNING: seeds {unpaired} lack one model; excluded from paired statistics", file=sys.stderr)
-    if not any(model == "qlstm" for _, model in runs) or not any(model == "qslstm" for _, model in runs):
+    if not all(any(model == m for _, model in runs) for m in ar.MODELS):
         raise SystemExit(f"need completed runs of both models under {runs_dir}")
 
-    out_dir = Path(out_dir) if out_dir else Path(runs_dir) / "analysis" / "model_comparison"
+    out_dir = Path(out_dir) if out_dir else Path(runs_dir) / ar.analysis_dir_name("analysis") / "model_comparison"
     out_dir.mkdir(parents=True, exist_ok=True)
 
     hist = load_history(runs)
@@ -310,8 +313,9 @@ def main(argv=None):
     parser.add_argument("--runs-dir", default="results/nearest_neighbor/paper",
                         help="sweep directory containing seed_*/<model>/ runs")
     parser.add_argument("--out-dir", default=None, help="default: <runs-dir>/analysis/model_comparison")
+    ar.add_qslstm_model_argument(parser)
     args = parser.parse_args(argv)
-    compare(args.runs_dir, args.out_dir)
+    compare(args.runs_dir, args.out_dir, args.qslstm_model)
     return 0
 
 

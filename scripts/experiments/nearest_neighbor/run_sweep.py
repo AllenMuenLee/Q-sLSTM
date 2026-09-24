@@ -19,7 +19,6 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-import numpy as np
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parents[2]
@@ -28,23 +27,11 @@ sys.path.insert(0, str(SCRIPT_DIR))
 
 from q_slstm.experiments.nearest_neighbor import PRESETS, add_run_arguments, resolve_config, run_directory  # noqa: E402
 from q_slstm.models.factory import QUANTUM_MODELS  # noqa: E402
+from q_slstm.models.q_slstm_cell import QSLSTM_RECURRENCE  # noqa: E402
+from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE  # noqa: E402
+from q_slstm.utils.seeds import draw_seeds  # noqa: E402
 
 SWEEP_ONLY = {"model", "seeds", "n_seeds", "master_seed", "workers", "resume", "dry_run"}
-MAX_SEED = 2**31 - 1
-
-
-def draw_seeds(n, master_seed):
-    """`n` distinct run seeds drawn reproducibly from `master_seed`.
-
-    Seeds are generated one at a time, so the list for n is a prefix of the list for any larger n.
-    """
-    rng = np.random.default_rng(np.random.SeedSequence([int(master_seed), 7]))
-    seeds = []
-    while len(seeds) < n:
-        candidate = int(rng.integers(0, MAX_SEED))
-        if candidate not in seeds:
-            seeds.append(candidate)
-    return seeds
 
 
 def build_parser():
@@ -77,6 +64,12 @@ def child_arguments(args, model, seed):
 
 def run_one(job):
     argv, run_dir, resume = job
+    if (run_dir / "config.json").exists():
+        previous = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
+        model_name = argv[argv.index("--model") + 1]
+        recurrence = QSLSTM_LOG_RECURRENCE if model_name == "qslstm_log" else QSLSTM_RECURRENCE
+        if previous.get("qslstm_recurrence") != recurrence:
+            return run_dir, "FAILED (different recurrence; choose a new --save-dir)", 0.0
     if resume and (run_dir / "complete.json").exists():
         return run_dir, "skipped", 0.0
     run_dir.mkdir(parents=True, exist_ok=True)

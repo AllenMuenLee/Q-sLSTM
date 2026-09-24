@@ -16,10 +16,10 @@ def make_outputs():
     return torch.arange(BATCH * SEQ * OUT, dtype=torch.float32).reshape(BATCH, SEQ, OUT)
 
 
-@pytest.mark.parametrize("model_name", ["qlstm", "qslstm", "lstm"])
+@pytest.mark.parametrize("model_name", ["qlstm", "qslstm", "qslstm_log", "lstm"])
 def test_training_selects_last_step(model_name):
     outputs = make_outputs()
-    state = (torch.zeros(BATCH, 1),) * (4 if model_name == "qslstm" else 2)
+    state = (torch.zeros(BATCH, 1),) * (4 if model_name in ("qslstm", "qslstm_log") else 2)
 
     prediction = _extract_model_output(Namespace(model=model_name), (outputs, state))
 
@@ -38,12 +38,13 @@ class EchoModel(nn.Module):
 
 
 @pytest.mark.parametrize("batch_size", [2, 4])
-def test_prediction_logging_selects_last_step(tmp_path, batch_size):
+@pytest.mark.parametrize("model_name", ["qlstm", "qslstm_log"])
+def test_prediction_logging_selects_last_step(tmp_path, batch_size, model_name):
     outputs = make_outputs()
     targets = outputs[:, -1, :].clone()
     loader = DataLoader(TensorDataset(outputs, targets), batch_size=batch_size, shuffle=False)
     csv_path = tmp_path / "prediction_log.csv"
-    args = Namespace(model="qlstm", device="cpu", horizon=1)
+    args = Namespace(model=model_name, device="cpu", horizon=1)
 
     predict_and_log(args, EchoModel(), loader, train_len=0, csv_path=csv_path, epoch=1, debug_plot=False)
 

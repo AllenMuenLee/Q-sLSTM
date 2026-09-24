@@ -1,7 +1,7 @@
 # Sequence wrappers that unroll a single cell over time.
 #
 # CustomLSTM  : classical two-state (h, c) contract, used by the LSTM baseline (unchanged).
-# CustomQsLSTM : Q-sLSTM four-state (h, c, n, m) contract.
+# CustomQsLSTM : Q-sLSTM four-state contract: (h, c, n, m) stabilized, or (h, c, n, binary_scale) for qslstm_log.
 # The validation and unrolling helpers below are used by CustomQsLSTM only.
 # Both wrappers accept `return_diagnostics=True` to also return the analysis-only write proportion.
 
@@ -103,7 +103,7 @@ class CustomLSTM(nn.Module):
 
 
 class CustomQsLSTM(nn.Module):
-    """Four-state (h, c, n, m) sequence wrapper for the Q-sLSTM cell."""
+    """Four-state sequence wrapper for the Q-sLSTM cells."""
 
     N_STATES = 4
 
@@ -128,5 +128,5 @@ class CustomQsLSTM(nn.Module):
             outputs, state, alpha = _unroll_with_alpha(self.cell, x, hidden)
             return outputs, state, {"alpha": alpha}
 
-        outputs, (h_t, c_t, n_t, m_t) = _unroll(self.cell, x, hidden)
-        return outputs, (h_t, c_t, n_t, m_t)
+        outputs, state = _unroll(self.cell, x, hidden)
+        return outputs, state
