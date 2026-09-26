@@ -1,0 +1,114 @@
+{
+  "checksum_method": "sha256 over dtype, shape, and little-endian tensor bytes",
+  "generation": {
+    "best_similarity_range": [
+      0.9,
+      0.995
+    ],
+    "early_fraction": 0.25,
+    "late_fraction": 0.25,
+    "near_best_delta": 0.05,
+    "record_margin": 0.02,
+    "value_separation": 0.4
+  },
+  "n_candidates": 31,
+  "seeds": {
+    "data": 1666436832,
+    "data_seed_base": 435874469,
+    "loader": 1816530985,
+    "model": 1265898672,
+    "run_seed": 435874469,
+    "split": 1042999814
+  },
+  "sequence_length": 32,
+  "splits": {
+    "extrapolation": {
+      "case_counts": {
+        "early": 62,
+        "iid": 63,
+        "late": 63,
+        "near_best": 62
+      },
+      "checksums": {
+        "best_indices": "de7448f709448d40c00953a91037e8a3ac0968ef6184388d2e26f0d5b0f89a23",
+        "case_types": "153d936ac013b8861447666330ada151a29bfbdef1be5df9c712bedf6f0bb5df",
+        "combined": "5bda92c7bbb9d7239eb925dea1a4d74d4a4d05002bc9aee6c6948a52de020a8c",
+        "event_mask": "727309a65521827163c9d16031e568f4566efbe058d01dccd3b835a2e1e0a5d4",
+        "inputs": "a00d517d7c433fd21217a051e8024a34bbad8304d69e40bdd8c75661d4b923e0",
+        "loss_mask": "20a7c78f21a3506b43a5949ca6ea28e53e269261d8f9ee134c15f685af2d57c4",
+        "metric_mask": "5d0d655d158a19d7a97a1a76c322c4ea68b0eb60b18230b2c38d866bf7e281cb",
+        "sequence_ids": "c31418e7dac91169319600e2aada2011468ebbc2763a4c522afb3f00195057e0",
+        "similarities": "d39482711c14ff3528f87a994f4fd8d7beadce789de6398d41988376e2f6d7fb",
+        "targets": "a895b1ab0b507e859ca6ea1390bba9b28bb2fc7e9f96570195f1c5c4c14b76b9"
+      },
+      "n_sequences": 250,
+      "sequence_length": 64
+    },
+    "test": {
+      "case_counts": {
+        "early": 250,
+        "iid": 250,
+        "late": 250,
+        "near_best": 250
+      },
+      "checksums": {
+        "best_indices": "c667f17194d1255a9621ca81b8ec4fd20fb91a53785c2286c29b7533a80ad924",
+        "case_types": "f89bb7f41836ed9903934dc96aa4bd698cf04257d6a2e71485a18722c335aba0",
+        "combined": "bf17fc67cb5201506d479a1ac6c7ea06f93e3fd855eca64c2cf79ef289d3ee97",
+        "event_mask": "7ef86d872b21db5bd7a12b674487ec8b3418f7f1fc68c648b23e9b7f34813966",
+        "inputs": "af15fa117a5d191d4deec0675b5ccd65a4e88c2a5cd5067255c55aa19a8bf1ac",
+        "loss_mask": "32ccd045a102175511be47df24acfc63886afddfb0a5a6955a3fd46c48fe9305",
+        "metric_mask": "35e67c15a4ed047336fc530c4ba5358b82ac1938b7340bbf54a66a4cba78e1e3",
+        "sequence_ids": "14a2a718998053a3f36728a613ddca8e48096d8905224920a8611aee10c3736c",
+        "similarities": "7a8a5d44ddad036e7ca8145df59cdd92f42b5c47611159f09d773b31e7b5b08c",
+        "targets": "56d88d4b541039cbfa54c275d5a722082570bebdbc1a0da20c44eb3550562d52"
+      },
+      "n_sequences": 1000,
+      "sequence_length": 32
+    },
+    "train": {
+      "case_counts": {
+        "early": 0,
+        "iid": 3500,
+        "late": 0,
+        "near_best": 0
+      },
+      "checksums": {
+        "best_indices": "f9179d931ccb8db1c9167fc1043123974d4ed75c7b3ffb3af33dcb19a471c301",
+        "case_types": "2bd7a82b464e57d03d8906666d4844064dccce996a0b6e3b6e7ebef4532d0558",
+        "combined": "8efd6bafc07c1746a65e0a9c78c815cebe49275d76d4573164c052631eab2327",
+        "event_mask": "4b0e3e1ca78f7251cc07bffc3ec59d6d3ef9a684833fdb94860eee848091e964",
+        "inputs": "3d871deaf0d2708fc27188f2934370019ec0e6fd01c4934e695824275c10719f",
+        "loss_mask": "9bd3c4c5b0feefbe17bce0bfd5afba46021b0f7b2cbae506902a113f836a37ed",
+        "metric_mask": "c31dc847ac0d34855a84103c842ca1af27d1a98f796e17cb4c41c3eaa86e5653",
+        "sequence_ids": "aeb7e0747976d5090ac6d3feca63d64172ba8a5a59c5ccfedcbf7dd088f65e7d",
+        "similarities": "54855e8ac60b460633877c250fc17ae2efd4998019066c0fcfcb061f5f12b44c",
+        "targets": "48c3b0aa955790d3139b6ea74a021b6db7afd34a7f6895876ec021b5e9fb508a"
+      },
+      "n_sequences": 3500,
+      "sequence_length": 32
+    },
+    "val": {
+      "case_counts": {
+        "early": 0,
+        "iid": 500,
+        "late": 0,
+        "near_best": 0
+      },
+      "checksums": {
+        "best_indices": "e28accb990ee1f1db1a3fdcae5c2c50b36d2705b19dbc4a91ea0b84266f9eaee",
+        "case_types": "72647dfd2fe67baeca82ec915970ad7d1115f58d6790476a6ca533528aded72c",
+        "combined": "2c66f8664c820927c976b3ff39c5a779027c9f2002f11d5ccb38c824579b36fe",
+        "event_mask": "dcd98c3089fc36c277b8a2c82dfd9dad447940395e78b253baab35cd3acd17aa",
+        "inputs": "9c1d9b9505ce0db3cb35e405b3fcaf403dea427edacb53e9b15a9560156f75d5",
+        "loss_mask": "987de2d81ea152d2e275883c4b59c0a6d665b38b3137888d4ed05f5c46519100",
+        "metric_mask": "319635efca472e122c7b85e0afbba99d385fc9c52ec953201455fa4e208e5177",
+        "sequence_ids": "1575f8281860429d2fd54001595079729c2f2a1bd00b3feb2ff99dc072672249",
+        "similarities": "a78ccbb3486f35f8e4b34c212af3251473fe55ab3e1f6715f78a36ddcb339511",
+        "targets": "e68fcc08329f3831732b724178a647f4cfc234197779556c4d047ded77805801"
+      },
+      "n_sequences": 500,
+      "sequence_length": 32
+    }
+  }
+}

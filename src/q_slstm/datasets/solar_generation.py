@@ -622,8 +622,9 @@ def prepare_dataset(data_dir, scale, collection_file=None, sequence_length=None,
 
     pointer = data_dir / f"prepared_{scale_label}.json"
     atomic_write_json(pointer, {"dataset_id": dataset_id, "scale_label": scale_label,
-                                "processed_dir": os.path.relpath(final, pointer.parent),
-                                "manifest": os.path.relpath(final / "dataset_manifest.json", pointer.parent)})
+                                "processed_dir": Path(os.path.relpath(final, pointer.parent)).as_posix(),
+                                "manifest": Path(os.path.relpath(final / "dataset_manifest.json",
+                                                                 pointer.parent)).as_posix()})
     log(f"dataset {dataset_id}: {manifest['window_counts']}; pointer {pointer}")
     return manifest, pointer
 
@@ -654,7 +655,7 @@ class PreparedDataset:
         path = Path(path)
         if path.name.startswith("prepared_"):
             pointer = json.loads(path.read_text(encoding="utf-8"))
-            path = (path.parent / pointer["processed_dir"]).resolve()
+            path = (path.parent / pointer["processed_dir"].replace("\\", "/")).resolve()  # old Windows pointers
         elif path.name == "dataset_manifest.json":
             path = path.parent
         self.dir = path

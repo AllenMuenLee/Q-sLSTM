@@ -15,6 +15,8 @@ torch.set_default_dtype(torch.float32)
 def q_function(x, q_weights, n_class):
     """ The variational quantum circuit. """
 
+    R = torch.pi / 2
+
     n_dep = q_weights.shape[0]
     n_qub = q_weights.shape[1]
 
@@ -26,8 +28,11 @@ def q_function(x, q_weights, n_class):
 
     # Sequence of trainable variational layers
     for k in range(n_dep):
-        entangling_layer(n_qub)
-        RY_layer(q_weights[k])
+        w = q_weights[k]
+        norm = torch.linalg.vector_norm(w)
+
+        theta = R * torch.tanh(norm / R) * w / norm
+        RY_layer(theta)
 
     # Expectation values in the Z basis
     # only measure first "n_class" of qubits and discard the rest

@@ -70,4 +70,3 @@ def entangling_layer(nqubits):
 def cycle_entangling_layer(nqubits):
 	for i in range(0, nqubits):  
 		qml.CNOT(wires=[i, (i + 1) % nqubits])
-		

@@ -115,7 +115,7 @@ def _read_dataset_manifest(path):
     path = Path(path)
     if path.name.startswith("prepared_"):
         pointer = json.loads(path.read_text(encoding="utf-8"))
-        path = path.parent / pointer["manifest"]
+        path = path.parent / pointer["manifest"].replace("\\", "/")  # old Windows pointers
     return json.loads(path.read_text(encoding="utf-8"))
 
 

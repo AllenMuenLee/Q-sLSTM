@@ -1,0 +1,31 @@
+{
+  "hidden_size": 6,
+  "n_qubits": 9,
+  "parameter_shapes": {
+    "cell.cell_gate.weights": [
+      3,
+      9
+    ],
+    "cell.forget_gate.weights": [
+      3,
+      9
+    ],
+    "cell.input_gate.weights": [
+      3,
+      9
+    ],
+    "cell.output_gate.weights": [
+      3,
+      9
+    ],
+    "cell.output_post_processing.bias": [
+      1
+    ],
+    "cell.output_post_processing.weight": [
+      1,
+      6
+    ]
+  },
+  "qnn_depth": 3,
+  "trainable_parameters": 115
+}
