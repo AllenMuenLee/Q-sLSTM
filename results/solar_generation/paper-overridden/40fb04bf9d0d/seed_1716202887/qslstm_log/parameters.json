@@ -1,0 +1,42 @@
+{
+  "hidden_size": 6,
+  "n_qubits": 9,
+  "parameter_shapes": {
+    "core.cell.cell_gate.weights": [
+      3,
+      9
+    ],
+    "core.cell.forget_gate.weights": [
+      3,
+      9
+    ],
+    "core.cell.input_gate.weights": [
+      3,
+      9
+    ],
+    "core.cell.output_gate.weights": [
+      3,
+      9
+    ],
+    "core.cell.output_post_processing.bias": [
+      1
+    ],
+    "core.cell.output_post_processing.weight": [
+      1,
+      6
+    ],
+    "projection.bias": [
+      3
+    ],
+    "projection.weight": [
+      3,
+      13
+    ]
+  },
+  "projection_activation": "tanh",
+  "projection_parameters": 42,
+  "qnn_depth": 3,
+  "quantum_input_size": 3,
+  "raw_input_size": 13,
+  "trainable_parameters": 157
+}

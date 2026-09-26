@@ -1,0 +1,56 @@
+{
+  "config_hash": "8011a92084edc54d",
+  "dataset_manifest": "data/solar_generation/prepared_paper.json",
+  "kind": "solar_generation_run",
+  "model": "qslstm_log",
+  "save_dir": "results/solar_generation",
+  "seeds": {
+    "data_seed": null,
+    "data_seed_note": "inapplicable: one fixed dataset and chronological split for every seed and model",
+    "epoch_order_rule": "numpy default_rng(SeedSequence([loader, epoch])).permutation(n_train_windows)",
+    "loader": 456344715,
+    "model": 1947452360,
+    "projection": 712001960,
+    "run_seed": 1710807515
+  },
+  "study": {
+    "batch_size": 64,
+    "dataset_id": "5971ec600297559a",
+    "dataset_overrides": {
+      "min_coverage": {
+        "preset": 0.95,
+        "used": 0.93
+      }
+    },
+    "device": "cpu",
+    "epochs": 60,
+    "gate_epsilon": 1e-06,
+    "grad_clip": 0.0,
+    "hidden_size": 6,
+    "horizon_hours": 1,
+    "kind": "solar_generation_study",
+    "loss": "MSE on the standardized final output step only (outputs[:, -1, :] vs target [B, 1])",
+    "lr": 0.01,
+    "n_qubits": 9,
+    "n_vqcs_per_cell": 4,
+    "optimizer": "Adam",
+    "output_size": 1,
+    "precision": "float32",
+    "projection": "Linear(13, 3) + tanh at every timestep",
+    "projection_activation": "tanh",
+    "projection_size": 3,
+    "qnn_depth": 3,
+    "qslstm_recurrence": "log_gate_binary_scale_v1",
+    "quantum_input_size": 3,
+    "raw_input_size": 13,
+    "save_alpha_trace": false,
+    "scale_label": "paper-overridden",
+    "scale_preset": "paper",
+    "selection": "lowest validation MSE (earliest epoch on exact ties); no early stopping",
+    "sequence_length": 32,
+    "simulator": "pennylane default.qubit (parameter broadcasting)",
+    "training_overrides": {},
+    "weight_decay": 0.0
+  },
+  "study_id": "40fb04bf9d0d"
+}

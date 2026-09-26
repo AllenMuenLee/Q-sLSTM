@@ -1,0 +1,49 @@
+study=40fb04bf9d0d scale=paper-overridden model=qslstm_log seed=1952804984 dataset=5971ec600297559a L=32 projection 13->3 qubits=9 depth=3 epochs=60 batch=64
+run directory: results/solar_generation/paper-overridden/40fb04bf9d0d/seed_1952804984/qslstm_log
+[qslstm_log seed 1952804984] epoch 001 train 0.22826 val 0.05003 (scaled) gnorm 0.335 (9128.6s) *
+[qslstm_log seed 1952804984] epoch 002 train 0.04237 val 0.03442 (scaled) gnorm 0.294 (9810.2s) *
+[qslstm_log seed 1952804984] epoch 003 train 0.03481 val 0.03266 (scaled) gnorm 0.271 (10676.3s) *
+[qslstm_log seed 1952804984] epoch 004 train 0.03292 val 0.04280 (scaled) gnorm 0.255 (11910.5s)
+[qslstm_log seed 1952804984] epoch 005 train 0.03201 val 0.02802 (scaled) gnorm 0.281 (13391.3s) *
+[qslstm_log seed 1952804984] epoch 006 train 0.03044 val 0.03230 (scaled) gnorm 0.246 (14227.4s)
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 48, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 42, in main
+    run_dir = run_experiment(config, resume=args.resume, overwrite=args.overwrite)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 559, in run_experiment
+    result = train_model(model, train_ds, val_ds, config, run_dir, resume_state)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 309, in train_model
+    loss.backward()
+    ~~~~~~~~~~~~~^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/_tensor.py", line 631, in backward
+    torch.autograd.backward(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, gradient, retain_graph, create_graph, inputs=inputs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/__init__.py", line 381, in backward
+    _engine_run_backward(
+    ~~~~~~~~~~~~~~~~~~~~^
+        tensors,
+        ^^^^^^^^
+    ...<5 lines>...
+        accumulate_grad=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/graph.py", line 869, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        t_outputs, *args, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # Calls into the C++ engine to run the backward pass
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/function.py", line 302, in apply
+    def apply(self, *args):
+    
+KeyboardInterrupt
+study=40fb04bf9d0d scale=paper-overridden model=qslstm_log seed=1952804984 dataset=5971ec600297559a L=32 projection 13->3 qubits=9 depth=3 epochs=60 batch=64
+run directory: results/solar_generation/paper-overridden/40fb04bf9d0d/seed_1952804984/qslstm_log

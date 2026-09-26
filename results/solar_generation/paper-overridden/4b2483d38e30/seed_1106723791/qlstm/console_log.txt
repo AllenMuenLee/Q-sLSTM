@@ -1,0 +1,73 @@
+study=4b2483d38e30 scale=paper-overridden model=qlstm seed=1106723791 dataset=5971ec600297559a L=32 projection 13->3 qubits=9 depth=3 epochs=60 batch=64
+run directory: results/solar_generation/paper-overridden/4b2483d38e30/seed_1106723791/qlstm
+[qlstm seed 1106723791] epoch 001 train 0.22461 val 0.03749 (scaled) gnorm 0.344 (9070.5s) *
+[qlstm seed 1106723791] epoch 002 train 0.03779 val 0.03030 (scaled) gnorm 0.265 (9794.7s) *
+[qlstm seed 1106723791] epoch 003 train 0.03395 val 0.04440 (scaled) gnorm 0.232 (10647.9s)
+[qlstm seed 1106723791] epoch 004 train 0.03302 val 0.02677 (scaled) gnorm 0.235 (10034.6s) *
+[qlstm seed 1106723791] epoch 005 train 0.03206 val 0.03921 (scaled) gnorm 0.227 (3603.1s)
+[qlstm seed 1106723791] epoch 006 train 0.03094 val 0.03132 (scaled) gnorm 0.211 (3664.1s)
+[qlstm seed 1106723791] epoch 007 train 0.03037 val 0.02940 (scaled) gnorm 0.209 (3825.2s)
+[qlstm seed 1106723791] epoch 008 train 0.02982 val 0.02787 (scaled) gnorm 0.205 (3798.1s)
+[qlstm seed 1106723791] epoch 009 train 0.02916 val 0.02705 (scaled) gnorm 0.197 (3759.4s)
+[qlstm seed 1106723791] epoch 010 train 0.02965 val 0.02494 (scaled) gnorm 0.204 (3956.6s) *
+[qlstm seed 1106723791] epoch 011 train 0.02853 val 0.02962 (scaled) gnorm 0.194 (3906.4s)
+[qlstm seed 1106723791] epoch 012 train 0.02808 val 0.02833 (scaled) gnorm 0.185 (3816.4s)
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 48, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 42, in main
+    run_dir = run_experiment(config, resume=args.resume, overwrite=args.overwrite)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 559, in run_experiment
+    result = train_model(model, train_ds, val_ds, config, run_dir, resume_state)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 305, in train_model
+    outputs = model(inputs)[0]
+              ~~~~~^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/projected_quantum.py", line 30, in forward
+    return self.core(z, hidden)
+           ~~~~~~~~~^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 78, in forward
+    out, h_t, c_t = self.cell(x_t, (h_t, c_t))  # Update hidden and cell states
+                    ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/qlstm_cell.py", line 47, in forward
+    g_t = torch.tanh(self.cell_gate(combined))       # Cell gate
+                     ~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/vqc.py", line 50, in forward
+    expvals = torch.stack(self.VQC(X, self.weights, self.n_class))
+                          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 863, in __call__
+    return self._impl_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 831, in _impl_call
+    tape = self.construct(args, kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 825, in construct
+    _validate_qfunc_output(self._qfunc_output, tape.measurements)
+                                               ^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/tape/qscript.py", line 237, in measurements
+    @property
+    
+KeyboardInterrupt
+study=4b2483d38e30 scale=paper-overridden model=qlstm seed=1106723791 dataset=5971ec600297559a L=32 projection 13->3 qubits=9 depth=3 epochs=60 batch=64
+run directory: results/solar_generation/paper-overridden/4b2483d38e30/seed_1106723791/qlstm

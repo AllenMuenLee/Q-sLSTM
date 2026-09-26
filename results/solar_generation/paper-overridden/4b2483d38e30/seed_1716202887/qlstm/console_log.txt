@@ -1,0 +1,146 @@
+study=4b2483d38e30 scale=paper-overridden model=qlstm seed=1716202887 dataset=5971ec600297559a L=32 projection 13->3 qubits=9 depth=3 epochs=60 batch=64
+run directory: results/solar_generation/paper-overridden/4b2483d38e30/seed_1716202887/qlstm
+[qlstm seed 1716202887] epoch 001 train 0.23895 val 0.03904 (scaled) gnorm 0.362 (3160.3s) *
+[qlstm seed 1716202887] epoch 002 train 0.04219 val 0.03251 (scaled) gnorm 0.274 (3187.0s) *
+[qlstm seed 1716202887] epoch 003 train 0.03786 val 0.03115 (scaled) gnorm 0.253 (3265.7s) *
+[qlstm seed 1716202887] epoch 004 train 0.03553 val 0.02918 (scaled) gnorm 0.245 (3189.7s) *
+[qlstm seed 1716202887] epoch 005 train 0.03399 val 0.03541 (scaled) gnorm 0.25 (3224.4s)
+[qlstm seed 1716202887] epoch 006 train 0.03343 val 0.03425 (scaled) gnorm 0.26 (3327.8s)
+[qlstm seed 1716202887] epoch 007 train 0.03160 val 0.02615 (scaled) gnorm 0.235 (3246.9s) *
+[qlstm seed 1716202887] epoch 008 train 0.03171 val 0.02675 (scaled) gnorm 0.245 (3268.0s)
+[qlstm seed 1716202887] epoch 009 train 0.03117 val 0.02565 (scaled) gnorm 0.247 (3327.9s) *
+[qlstm seed 1716202887] epoch 010 train 0.03038 val 0.02737 (scaled) gnorm 0.243 (3321.0s)
+[qlstm seed 1716202887] epoch 011 train 0.03104 val 0.03322 (scaled) gnorm 0.275 (3369.9s)
+[qlstm seed 1716202887] epoch 012 train 0.03040 val 0.02509 (scaled) gnorm 0.269 (3396.4s) *
+[qlstm seed 1716202887] epoch 013 train 0.02927 val 0.02480 (scaled) gnorm 0.245 (3588.8s) *
+[qlstm seed 1716202887] epoch 014 train 0.02943 val 0.03969 (scaled) gnorm 0.268 (3609.7s)
+[qlstm seed 1716202887] epoch 015 train 0.02960 val 0.02834 (scaled) gnorm 0.265 (3830.7s)
+[qlstm seed 1716202887] epoch 016 train 0.02879 val 0.02439 (scaled) gnorm 0.264 (3755.1s) *
+[qlstm seed 1716202887] epoch 017 train 0.02955 val 0.03229 (scaled) gnorm 0.278 (3793.7s)
+[qlstm seed 1716202887] epoch 018 train 0.02960 val 0.02535 (scaled) gnorm 0.272 (3926.0s)
+[qlstm seed 1716202887] epoch 019 train 0.02886 val 0.02713 (scaled) gnorm 0.253 (3873.0s)
+[qlstm seed 1716202887] epoch 020 train 0.02871 val 0.02366 (scaled) gnorm 0.26 (3838.0s) *
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 48, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 42, in main
+    run_dir = run_experiment(config, resume=args.resume, overwrite=args.overwrite)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 559, in run_experiment
+    result = train_model(model, train_ds, val_ds, config, run_dir, resume_state)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 320, in train_model
+    val_mse = evaluate_mse(model, val_ds, config, epoch)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 264, in evaluate_mse
+    outputs = model(inputs.to(config["study"]["device"]))[0]
+              ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/projected_quantum.py", line 30, in forward
+    return self.core(z, hidden)
+           ~~~~~~~~~^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 78, in forward
+    out, h_t, c_t = self.cell(x_t, (h_t, c_t))  # Update hidden and cell states
+                    ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/qlstm_cell.py", line 45, in forward
+    i_t = torch.sigmoid(self.input_gate(combined))   # Input gate
+                        ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/vqc.py", line 50, in forward
+    expvals = torch.stack(self.VQC(X, self.weights, self.n_class))
+                          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 863, in __call__
+    return self._impl_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 836, in _impl_call
+    res = execute(
+        (tape,),
+    ...<5 lines>...
+        **self.execute_kwargs,
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/execution.py", line 238, in execute
+    results = run(tapes, device, config, inner_transform)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/run.py", line 298, in run
+    results = inner_execute(tapes)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/run.py", line 263, in inner_execute
+    results = device.execute(transformed_tapes, execution_config=execution_config)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/modifiers/simulator_tracking.py", line 30, in execute
+    results = untracked_execute(self, circuits, execution_config)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/modifiers/single_tape_support.py", line 32, in execute
+    results = batch_execute(self, circuits, execution_config)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 824, in execute
+    return tuple(
+        _simulate_wrapper(
+    ...<11 lines>...
+        for c, _key in zip(circuits, prng_keys)
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 825, in <genexpr>
+    _simulate_wrapper(
+    ~~~~~~~~~~~~~~~~~^
+        c,
+        ^^
+    ...<8 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 1190, in _simulate_wrapper
+    return simulate(circuit, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 387, in simulate
+    state, is_state_batched = get_final_state(
+                              ~~~~~~~~~~~~~~~^
+        circuit, debugger=debugger, prng_key=ops_key, **execution_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 218, in get_final_state
+    state = apply_operation(
+        op,
+    ...<5 lines>...
+        **execution_kwargs,
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/functools.py", line 934, in wrapper
+    return dispatch(args[0].__class__)(*args, **kw)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/apply_operation.py", line 236, in apply_operation
+    return _apply_operation_default(op, state, is_state_batched, debugger)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/apply_operation.py", line 262, in _apply_operation_default
+    return apply_operation_einsum(op, state, is_state_batched=is_state_batched)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/apply_operation.py", line 111, in apply_operation_einsum
+    return math.einsum(einsum_indices, reshaped_mat, state)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/math/multi_dispatch.py", line 591, in einsum
+    return np.einsum(indices, *operands, like=like)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/autoray/autoray.py", line 94, in do
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/functional.py", line 373, in einsum
+    return _VF.einsum(equation, operands)  # type: ignore[attr-defined]
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+study=4b2483d38e30 scale=paper-overridden model=qlstm seed=1716202887 dataset=5971ec600297559a L=32 projection 13->3 qubits=9 depth=3 epochs=60 batch=64
+run directory: results/solar_generation/paper-overridden/4b2483d38e30/seed_1716202887/qlstm

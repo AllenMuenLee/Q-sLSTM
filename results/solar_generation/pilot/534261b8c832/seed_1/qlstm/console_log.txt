@@ -1,7 +1,0 @@
-C:\Users\limue\AppData\Roaming\Python\Python313\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
-  import pynvml  # type: ignore[import]
-study=534261b8c832 scale=pilot model=qlstm seed=1 dataset=b34896367832cf11 L=8 projection 13->3 qubits=5 depth=1 epochs=2 batch=8
-run directory: results\solar_generation\pilot\534261b8c832\seed_1\qlstm
-[qlstm seed 1] epoch 001 train 0.96320 val 0.49868 (scaled) gnorm 1.48 (24.4s) *
-[qlstm seed 1] epoch 002 train 0.43725 val 0.17275 (scaled) gnorm 0.883 (39.2s) *
-run complete: results\solar_generation\pilot\534261b8c832\seed_1\qlstm

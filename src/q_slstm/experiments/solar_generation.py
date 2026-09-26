@@ -40,7 +40,7 @@ OUTPUT_SIZE = 1
 
 PRESETS = {
     "paper": dict(sequence_length=32, projection_size=3, hidden_size=6, qnn_depth=3, batch_size=64,
-                  epochs=60, lr=1e-2, n_seeds=5),
+                  epochs=60, lr=1e-2, n_seeds=20),
     "pilot": dict(sequence_length=8, projection_size=3, hidden_size=2, qnn_depth=1, batch_size=8,
                   epochs=2, lr=1e-2, n_seeds=2),
 }
