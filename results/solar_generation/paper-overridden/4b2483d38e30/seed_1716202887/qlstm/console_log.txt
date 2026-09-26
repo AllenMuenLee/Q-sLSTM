@@ -157,3 +157,128 @@ run directory: results/solar_generation/paper-overridden/4b2483d38e30/seed_17162
 [qlstm seed 1716202887] epoch 011 train 0.03104 val 0.03322 (scaled) gnorm 0.275 (4730.1s)
 [qlstm seed 1716202887] epoch 012 train 0.03040 val 0.02509 (scaled) gnorm 0.269 (4728.0s) *
 [qlstm seed 1716202887] epoch 013 train 0.02927 val 0.02480 (scaled) gnorm 0.245 (4731.4s) *
+[qlstm seed 1716202887] epoch 014 train 0.02943 val 0.03969 (scaled) gnorm 0.268 (5065.1s)
+[qlstm seed 1716202887] epoch 015 train 0.02960 val 0.02834 (scaled) gnorm 0.265 (8926.5s)
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 48, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 42, in main
+    run_dir = run_experiment(config, resume=args.resume, overwrite=args.overwrite)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 559, in run_experiment
+    result = train_model(model, train_ds, val_ds, config, run_dir, resume_state)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 305, in train_model
+    outputs = model(inputs)[0]
+              ~~~~~^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/projected_quantum.py", line 30, in forward
+    return self.core(z, hidden)
+           ~~~~~~~~~^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 78, in forward
+    out, h_t, c_t = self.cell(x_t, (h_t, c_t))  # Update hidden and cell states
+                    ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/qlstm_cell.py", line 46, in forward
+    f_t = torch.sigmoid(self.forget_gate(combined))  # Forget gate
+                        ~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/vqc.py", line 50, in forward
+    expvals = torch.stack(self.VQC(X, self.weights, self.n_class))
+                          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 863, in __call__
+    return self._impl_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 836, in _impl_call
+    res = execute(
+        (tape,),
+    ...<5 lines>...
+        **self.execute_kwargs,
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/execution.py", line 238, in execute
+    results = run(tapes, device, config, inner_transform)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/run.py", line 298, in run
+    results = inner_execute(tapes)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/run.py", line 263, in inner_execute
+    results = device.execute(transformed_tapes, execution_config=execution_config)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/modifiers/simulator_tracking.py", line 30, in execute
+    results = untracked_execute(self, circuits, execution_config)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/modifiers/single_tape_support.py", line 32, in execute
+    results = batch_execute(self, circuits, execution_config)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 824, in execute
+    return tuple(
+        _simulate_wrapper(
+    ...<11 lines>...
+        for c, _key in zip(circuits, prng_keys)
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 825, in <genexpr>
+    _simulate_wrapper(
+    ~~~~~~~~~~~~~~~~~^
+        c,
+        ^^
+    ...<8 lines>...
+        },
+        ^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 1190, in _simulate_wrapper
+    return simulate(circuit, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 392, in simulate
+    return measure_final_state(
+        circuit, state, is_state_batched, prng_key=meas_key, **execution_kwargs
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
+    return func(*args, **kwargs)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 283, in measure_final_state
+    return tuple(
+        measure(mp, state, is_state_batched=is_state_batched) for mp in circuit.measurements
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 284, in <genexpr>
+    measure(mp, state, is_state_batched=is_state_batched) for mp in circuit.measurements
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/measure.py", line 237, in measure
+    return get_measurement_function(measurementprocess, state)(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        measurementprocess, state, is_state_batched
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/measure.py", line 71, in state_diagonalizing_gates
+    return measurementprocess.process_state(flattened_state, wires)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/measurements/expval.py", line 90, in process_state
+    probabilities = probs(wires=self.wires).process_state(
+        state=state, wire_order=wire_order
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/measurements/probs.py", line 119, in process_state
+    desired_axes = np.argsort(np.argsort(mapped_wires))
+                              ~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/numpy/_core/fromnumeric.py", line 1213, in argsort
+    return _wrapfunc(
+        a, 'argsort', axis=axis, kind=kind, order=order, stable=stable
+    )
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/numpy/_core/fromnumeric.py", line 51, in _wrapfunc
+    return _wrapit(obj, method, *args, **kwds)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/numpy/_core/fromnumeric.py", line 39, in _wrapit
+    conv = _array_converter(obj)
+KeyboardInterrupt

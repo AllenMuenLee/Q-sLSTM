@@ -137,3 +137,41 @@ run directory: results/solar_generation/paper-overridden/4b2483d38e30/seed_20365
 [qlstm seed 2036585866] epoch 012 train 0.02872 val 0.03291 (scaled) gnorm 0.186 (4639.5s)
 [qlstm seed 2036585866] epoch 013 train 0.02935 val 0.02834 (scaled) gnorm 0.211 (4662.2s)
 [qlstm seed 2036585866] epoch 014 train 0.02880 val 0.02580 (scaled) gnorm 0.195 (4669.2s) *
+[qlstm seed 2036585866] epoch 015 train 0.02871 val 0.02698 (scaled) gnorm 0.193 (4698.6s)
+[qlstm seed 2036585866] epoch 016 train 0.02806 val 0.02819 (scaled) gnorm 0.188 (8980.1s)
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 48, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/solar_generation/train_solar_generation.py", line 42, in main
+    run_dir = run_experiment(config, resume=args.resume, overwrite=args.overwrite)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 559, in run_experiment
+    result = train_model(model, train_ds, val_ds, config, run_dir, resume_state)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py", line 309, in train_model
+    loss.backward()
+    ~~~~~~~~~~~~~^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/_tensor.py", line 631, in backward
+    torch.autograd.backward(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, gradient, retain_graph, create_graph, inputs=inputs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/__init__.py", line 381, in backward
+    _engine_run_backward(
+    ~~~~~~~~~~~~~~~~~~~~^
+        tensors,
+        ^^^^^^^^
+    ...<5 lines>...
+        accumulate_grad=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/graph.py", line 869, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        t_outputs, *args, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # Calls into the C++ engine to run the backward pass
+    ^
+KeyboardInterrupt

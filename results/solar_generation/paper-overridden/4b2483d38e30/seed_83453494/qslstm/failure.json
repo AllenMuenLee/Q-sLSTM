@@ -1,0 +1,8 @@
+{
+  "elapsed_seconds": 11337.928485833108,
+  "error": "",
+  "error_type": "KeyboardInterrupt",
+  "model": "qslstm",
+  "run_seed": 83453494,
+  "traceback": "Traceback (most recent call last):\n  File \"/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py\", line 559, in run_experiment\n    result = train_model(model, train_ds, val_ds, config, run_dir, resume_state)\n  File \"/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/solar_generation.py\", line 309, in train_model\n    loss.backward()\n    ~~~~~~~~~~~~~^^\n  File \"/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/_tensor.py\", line 631, in backward\n    torch.autograd.backward(\n    ~~~~~~~~~~~~~~~~~~~~~~~^\n        self, gradient, retain_graph, create_graph, inputs=inputs\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/__init__.py\", line 381, in backward\n    _engine_run_backward(\n    ~~~~~~~~~~~~~~~~~~~~^\n        tensors,\n        ^^^^^^^^\n    ...<5 lines>...\n        accumulate_grad=True,\n        ^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/graph.py\", line 869, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        t_outputs, *args, **kwargs\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )  # Calls into the C++ engine to run the backward pass\n    ^\nKeyboardInterrupt\n"
+}

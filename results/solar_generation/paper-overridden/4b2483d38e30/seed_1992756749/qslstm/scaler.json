@@ -1,0 +1,109 @@
+{
+  "columns": {
+    "cloud_cover": {
+      "mean": 64.51153688019077,
+      "scale": 29.647784986798673,
+      "std": 29.647784986798673,
+      "zero_variance": false
+    },
+    "day_cos": {
+      "mean": 0.0,
+      "scale": 1.0,
+      "std": null,
+      "unscaled": true,
+      "zero_variance": false
+    },
+    "day_sin": {
+      "mean": 0.0,
+      "scale": 1.0,
+      "std": null,
+      "unscaled": true,
+      "zero_variance": false
+    },
+    "diffuse_radiation": {
+      "mean": 58.7946221527835,
+      "scale": 76.6193324330252,
+      "std": 76.6193324330252,
+      "zero_variance": false
+    },
+    "direct_radiation": {
+      "mean": 100.88588109530468,
+      "scale": 169.6761486293279,
+      "std": 169.6761486293279,
+      "zero_variance": false
+    },
+    "hour_cos": {
+      "mean": 0.0,
+      "scale": 1.0,
+      "std": null,
+      "unscaled": true,
+      "zero_variance": false
+    },
+    "hour_sin": {
+      "mean": 0.0,
+      "scale": 1.0,
+      "std": null,
+      "unscaled": true,
+      "zero_variance": false
+    },
+    "precipitation": {
+      "mean": 0.11658745168982813,
+      "scale": 0.2815100743913283,
+      "std": 0.2815100743913283,
+      "zero_variance": false
+    },
+    "relative_humidity_2m": {
+      "mean": 73.69094646821809,
+      "scale": 13.129624956295658,
+      "std": 13.129624956295658,
+      "zero_variance": false
+    },
+    "shortwave_radiation": {
+      "mean": 159.68050324808817,
+      "scale": 228.6100545513335,
+      "std": 228.6100545513335,
+      "zero_variance": false
+    },
+    "solar_generation": {
+      "mean": 75.15837513362388,
+      "scale": 114.94868626663744,
+      "std": 114.94868626663744,
+      "zero_variance": false
+    },
+    "temperature_2m": {
+      "mean": 7.913118986925419,
+      "scale": 10.349442981875784,
+      "std": 10.349442981875784,
+      "zero_variance": false
+    },
+    "wind_speed_10m": {
+      "mean": 13.414712605871228,
+      "scale": 5.251162027711201,
+      "std": 5.251162027711201,
+      "zero_variance": false
+    }
+  },
+  "feature_order": [
+    "solar_generation",
+    "shortwave_radiation",
+    "direct_radiation",
+    "diffuse_radiation",
+    "cloud_cover",
+    "temperature_2m",
+    "relative_humidity_2m",
+    "wind_speed_10m",
+    "precipitation",
+    "hour_sin",
+    "hour_cos",
+    "day_sin",
+    "day_cos"
+  ],
+  "fit_row_index_sha256": "9c1ca29517ce85582df090865d19873fe8d0d76b2fb83f50d81fcf9c4b159432",
+  "method": "standardize physical columns with training mean and population std (ddof=0); cyclic columns unchanged; zero variance uses scale 1",
+  "n_fit_rows": 12161,
+  "target": {
+    "mean": 75.15837513362388,
+    "scale": 114.94868626663744
+  },
+  "target_column": "solar_generation"
+}
