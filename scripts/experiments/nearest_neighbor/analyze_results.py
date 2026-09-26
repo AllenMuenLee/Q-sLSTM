@@ -24,6 +24,7 @@ import pandas as pd  # noqa: E402
 
 from q_slstm.experiments import nearest_neighbor_metrics as nnm  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import verify_pairing  # noqa: E402
+from q_slstm.models.vqc import config_vqc  # noqa: E402
 
 QSLSTM_MODELS = ("qslstm", "qslstm_log")
 MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)",
@@ -64,7 +65,8 @@ def discover_runs(runs_dir, models=None):
     """Completed runs under `runs_dir` as {(run_seed, model): (run_dir, config)}.
 
     Only runs of `models` are kept (default: every model). The recurrence check covers the
-    Q-sLSTM runs only, since QLSTM does not use a Q-sLSTM recurrence.
+    Q-sLSTM runs only, since QLSTM does not use a Q-sLSTM recurrence. Runs of different VQC
+    variants are never analyzed together.
     """
     runs, incomplete = {}, []
     for cfg_path in sorted(Path(runs_dir).rglob("config.json")):
@@ -77,6 +79,10 @@ def discover_runs(runs_dir, models=None):
         if not (run_dir / "complete.json").exists():
             incomplete.append(run_dir)
             continue
+        vqcs = {config_vqc(cfg) for _, cfg in runs.values()} | {config_vqc(config)}
+        if len(vqcs) > 1:
+            raise SystemExit(f"runs with different VQCs {sorted(vqcs)} found under {runs_dir}; "
+                             "point --runs-dir at one sweep folder of a single VQC")
         key = (config["seeds"]["run_seed"], config["model"])
         if key in runs:
             raise SystemExit(f"seed {key[0]} {key[1]} was run more than once under {runs_dir} "

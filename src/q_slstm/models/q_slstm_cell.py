@@ -8,7 +8,7 @@ import torch
 import torch.nn as nn
 
 from .diagnostics import write_proportion
-from .vqc import VQC
+from .vqc import DEFAULT_VQC, get_vqc_class
 
 torch.set_default_dtype(torch.float32)
 
@@ -179,7 +179,8 @@ def binary_scaled_memory_update(a, b, d, z_t, c_prev, n_prev, scale_prev, *, ret
 class CustomQsLSTMCell(nn.Module):
     """Q-sLSTM cell with recurrent state (h, c, n, m)."""
 
-    def __init__(self, input_size, hidden_size, output_size, vqc_depth, gate_epsilon=DEFAULT_GATE_EPSILON):
+    def __init__(self, input_size, hidden_size, output_size, vqc_depth, gate_epsilon=DEFAULT_GATE_EPSILON,
+                 vqc=DEFAULT_VQC):
         super().__init__()
         if not 0.0 < gate_epsilon < 1.0:
             raise ValueError(f"gate_epsilon must satisfy 0 < epsilon < 1, got {gate_epsilon}")
@@ -191,6 +192,8 @@ class CustomQsLSTMCell(nn.Module):
         self.recurrence = QSLSTM_RECURRENCE
 
         # Four independently parameterized VQCs, each returning `hidden_size` expectations.
+        self.vqc = vqc
+        VQC = get_vqc_class(vqc)
         self.input_gate = VQC(vqc_depth=vqc_depth, n_qubits=self.n_qubits, n_class=hidden_size)
         self.forget_gate = VQC(vqc_depth=vqc_depth, n_qubits=self.n_qubits, n_class=hidden_size)
         self.cell_gate = VQC(vqc_depth=vqc_depth, n_qubits=self.n_qubits, n_class=hidden_size)

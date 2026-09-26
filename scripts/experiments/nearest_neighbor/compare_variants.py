@@ -30,6 +30,7 @@ from scipy import stats  # noqa: E402
 import analyze_results as ar  # noqa: E402
 from analyze_results import COLORS, COMPARISON_METRICS, MODEL_LABELS, SPLIT_TITLES  # noqa: E402
 from q_slstm.experiments import nearest_neighbor_metrics as nnm  # noqa: E402
+from q_slstm.models.vqc import config_vqc  # noqa: E402
 
 VARIANTS = ("qlstm", "qslstm", "qslstm_log")
 # (a, b): differences are a - b, so negative = a has the lower value.
@@ -61,6 +62,9 @@ def collect_runs(runs_dirs):
                 _require_same_run(runs[key][0], value[0])
                 continue
             runs[key] = value
+    vqcs = {config_vqc(cfg) for _, cfg in runs.values()}
+    if len(vqcs) > 1:
+        raise SystemExit(f"sweeps {runs_dirs} use different VQCs {sorted(vqcs)}; compare one VQC at a time")
     missing = [m for m in VARIANTS if not any(model == m for _, model in runs)]
     if missing:
         raise SystemExit(f"no completed runs of {missing} under {runs_dirs}")
