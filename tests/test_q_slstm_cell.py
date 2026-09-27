@@ -73,9 +73,13 @@ def test_single_step_matches_hand_calculation():
     def log_ratio(q):
         return math.log((1 + q) / (1 - q))
 
+    def log_sigmoid(q):
+        return math.log(1 / (1 + math.exp(-q)))
+
     for b in range(2):
         for k in range(hidden):
-            ell_i, ell_f = log_ratio(q_i[k]), log_ratio(q_f[k])
+            # amplified input gate, sigmoid forget gate
+            ell_i, ell_f = log_ratio(q_i[k]), log_sigmoid(q_f[k])
             m = max(ell_f + m_prev[b, k].item(), ell_i)
             i_p = math.exp(ell_i - m)
             f_p = math.exp(ell_f + m_prev[b, k].item() - m)
@@ -101,7 +105,7 @@ def test_normalizer_denominator_uses_epsilon_floor():
     gates = [FixedGate([[0.0]]), FixedGate([[0.0]]), FixedGate([[0.9]]), FixedGate([[0.0]])]
     cell = make_cell(1, 1, gates=gates, gate_epsilon=0.5, dtype=torch.float64)
     zero = t([[0.0]])
-    # i' = f' = 1 with m_prev = 0 (ell = 0); n_prev = -3 gives n_t = -2, below the floor
-    _, h_t, c_t, n_t, _ = cell(t([[0.0]]), (zero, zero, t([[-3.0]]), zero))
+    # m_prev = 0, ell_i = 0, ell_f = log(sigmoid(0)): i' = 1, f' = 0.5; n_prev = -6 gives n_t = -2, below the floor
+    _, h_t, c_t, n_t, _ = cell(t([[0.0]]), (zero, zero, t([[-6.0]]), zero))
     assert n_t.item() == pytest.approx(-2.0)
     assert h_t.item() == pytest.approx(0.5 * c_t.item() / 0.5)

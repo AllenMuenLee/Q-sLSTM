@@ -1,11 +1,12 @@
 # Q-sLSTM cell (stabilized): four independent VQC gates feeding the normalized, xLSTM-stabilized
-# (h, c, n, m) recurrence.
+# (h, c, n, m) recurrence. Only the input gate is amplified; the forget gate is a sigmoid.
 #
 # 2025 06 19: QLSTM with Pennylane Batch support
 # 2024 11 24: Modern QLSTM version
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from .diagnostics import write_proportion
 from .vqc import VQC
@@ -15,7 +16,9 @@ torch.set_default_dtype(torch.float32)
 DEFAULT_GATE_EPSILON = 1e-6
 # The unclipped polynomial recurrence was reverted: c and n still depend on the direct
 # input/forget gate values, so it did not remove the need to clip q.
-QSLSTM_RECURRENCE = "xlstm_stabilized_v1"
+QSLSTM_RECURRENCE = "xlstm_stabilized_sigmoid_forget_v1"
+# Tag of runs whose forget gate was amplified like the input gate (kept for tracing those runs).
+QSLSTM_AMPLIFIED_FORGET_RECURRENCE = "xlstm_stabilized_v1"
 # Tag of runs trained with the reverted polynomial recurrence (kept for tracing those runs).
 QSLSTM_POLYNOMIAL_RECURRENCE = "polynomial_binary_scale_v2"
 
@@ -56,6 +59,13 @@ def bounded_log_ratio(q, epsilon=DEFAULT_GATE_EPSILON):
     eps = effective_epsilon(epsilon, q.dtype)
     q_safe = torch.clamp(q, -1.0 + eps, 1.0 - eps)
     return torch.log1p(q_safe) - torch.log1p(-q_safe)
+
+
+def sigmoid_log_forget(q):
+    """log(sigmoid(q)): the sigmoid forget gate expressed in the stabilizer's log domain."""
+    if not torch.isfinite(q).all():
+        raise ValueError("VQC expectation values contain NaN or infinity")
+    return F.logsigmoid(q)
 
 
 def stabilize_gates(ell_i, ell_f, m_prev):
@@ -212,7 +222,7 @@ class CustomQsLSTMCell(nn.Module):
         q_o = self.output_gate(combined)
 
         ell_i = bounded_log_ratio(q_i, self.gate_epsilon)
-        ell_f = bounded_log_ratio(q_f, self.gate_epsilon)
+        ell_f = sigmoid_log_forget(q_f)
 
         m_t, i_prime, f_prime = stabilize_gates(ell_i, ell_f, m_prev)
 

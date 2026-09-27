@@ -43,7 +43,7 @@ def test_qslstm_diagnostics_use_actual_stabilized_gates_and_normalizer():
     alpha = diag["alpha"][0].numpy()
 
     ell_i = np.array([_bounded_log(q) for q in qi])
-    ell_f = np.array([_bounded_log(q) for q in qf])
+    ell_f = np.log(1 / (1 + np.exp(-np.array(qf))))  # sigmoid forget gate in the log domain
     m_prev, n_prev = np.zeros(HID), np.zeros(HID)
     for t in range(3):
         m = np.maximum(ell_f + m_prev, ell_i)

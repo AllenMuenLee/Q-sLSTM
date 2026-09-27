@@ -43,9 +43,12 @@ from analyze_results import COLORS, MODEL_LABELS, discover_runs  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import make_datasets  # noqa: E402
 from q_slstm.models.factory import build_quantum_model  # noqa: E402
 from q_slstm.models.q_slstm_cell import (  # noqa: E402
-    QSLSTM_POLYNOMIAL_RECURRENCE, bounded_log_ratio, polynomial_memory_update, stabilize_gates,
+    QSLSTM_POLYNOMIAL_RECURRENCE, QSLSTM_RECURRENCE, bounded_log_ratio, polynomial_memory_update, sigmoid_log_forget,
+    stabilize_gates,
 )
-from q_slstm.models.q_slstm_log_cell import logarithmic_gate, logarithmic_memory_update  # noqa: E402
+from q_slstm.models.q_slstm_log_cell import (  # noqa: E402
+    QSLSTM_LOG_RECURRENCE, logarithmic_gate, logarithmic_memory_update, sigmoid_forget_gate,
+)
 
 GAP_FLOOR = 1e-6  # |z - c/n| below this leaves k undefined rather than dividing by ~0
 KINDS = ("event", "near_best_distractor", "other_distractor")
@@ -81,6 +84,9 @@ def trace_run(run_dir, config, split, n_sequences):
     log_gates = config["model"] == "qslstm_log"
     polynomial = config["model"] == "qslstm" and config.get("qslstm_recurrence") == QSLSTM_POLYNOMIAL_RECURRENCE
     binary_scale = polynomial or log_gates
+    # Runs before the sigmoid forget gate (tagged QSLSTM_AMPLIFIED_FORGET_RECURRENCE,
+    # QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE, or untagged) amplified the forget gate like the input gate.
+    amplified_forget = config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, QSLSTM_LOG_RECURRENCE)
 
     idx = torch.arange(min(n_sequences, len(ds)))
     x = ds.tensors["inputs"][idx]
@@ -98,15 +104,16 @@ def trace_run(run_dir, config, split, n_sequences):
             o = torch.sigmoid(cell.output_gate(comb))
             if log_gates:
                 c_t, n_t, m_t, i_gate, f_gate = logarithmic_memory_update(
-                    q_i, q_f, z, c, n, m, return_forget_weight=True)
-                i_raw, f_raw = logarithmic_gate(q_i), logarithmic_gate(q_f)
+                    q_i, q_f, z, c, n, m, return_forget_weight=True, amplified_forget=amplified_forget)
+                i_raw = logarithmic_gate(q_i)
+                f_raw = logarithmic_gate(q_f) if amplified_forget else sigmoid_forget_gate(q_f)
             elif polynomial:
                 c_t, n_t, m_t, i_gate, f_gate = polynomial_memory_update(
                     q_i, q_f, z, c, n, m, return_forget_weight=True)
                 i_raw, f_raw = (1 + q_i) / (1 - q_i), (1 + q_f) / (1 - q_f)
             elif qslstm:
                 ell_i = bounded_log_ratio(q_i, cell.gate_epsilon)
-                ell_f = bounded_log_ratio(q_f, cell.gate_epsilon)
+                ell_f = bounded_log_ratio(q_f, cell.gate_epsilon) if amplified_forget else sigmoid_log_forget(q_f)
                 m_t, i_gate, f_gate = stabilize_gates(ell_i, ell_f, m)
                 i_raw, f_raw = torch.exp(ell_i), torch.exp(ell_f)
             else:

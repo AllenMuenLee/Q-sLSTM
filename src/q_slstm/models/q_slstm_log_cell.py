@@ -1,4 +1,4 @@
-"""Q-sLSTM variant using ln(2/(1-q)) as the input and forget gate values."""
+"""Q-sLSTM variant using ln(2/(1-q)) as the input gate and sigmoid(q) as the forget gate."""
 
 import math
 
@@ -10,7 +10,9 @@ from .q_slstm_cell import (
     binary_scaled_memory_update,
 )
 
-QSLSTM_LOG_RECURRENCE = "log_gate_binary_scale_v1"
+QSLSTM_LOG_RECURRENCE = "log_input_sigmoid_forget_binary_scale_v1"
+# Tag of runs whose forget gate was also ln(2/(1-q)) (kept for tracing those runs).
+QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE = "log_gate_binary_scale_v1"
 
 
 def logarithmic_gate(q):
@@ -32,10 +34,22 @@ def logarithmic_gate(q):
     return torch.where(q <= 0, lower, upper)
 
 
-def logarithmic_memory_update(q_i, q_f, z_t, c_prev, n_prev, scale_prev, *, return_forget_weight=False):
-    """C'=f*C+i*z, N'=f*N+i with i,f=ln(2/(1-q)) and binary scaling."""
+def sigmoid_forget_gate(q):
+    """sigmoid(q) for a finite VQC expectation."""
+    if not torch.isfinite(q).all():
+        raise ValueError("VQC expectation values contain NaN or infinity")
+    return torch.sigmoid(q)
+
+
+def logarithmic_memory_update(q_i, q_f, z_t, c_prev, n_prev, scale_prev, *, return_forget_weight=False,
+                              amplified_forget=False):
+    """C'=f*C+i*z, N'=f*N+i with i=ln(2/(1-q_i)), f=sigmoid(q_f), and binary scaling.
+
+    `amplified_forget` uses f=ln(2/(1-q_f)) instead, as in runs tagged
+    QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE.
+    """
     i = logarithmic_gate(q_i)
-    f = logarithmic_gate(q_f)
+    f = logarithmic_gate(q_f) if amplified_forget else sigmoid_forget_gate(q_f)
     return binary_scaled_memory_update(
         f, i, torch.ones_like(i), z_t, c_prev, n_prev, scale_prev,
         return_forget_weight=return_forget_weight,
@@ -43,7 +57,7 @@ def logarithmic_memory_update(q_i, q_f, z_t, c_prev, n_prev, scale_prev, *, retu
 
 
 class CustomQsLSTMLogCell(CustomQsLSTMCell):
-    """Logarithmic gates with the same VQCs and (h,c,n,binary_scale) contract.
+    """Logarithmic input gate, sigmoid forget gate, same VQCs and (h,c,n,binary_scale) contract.
 
     gate_epsilon is accepted for API compatibility only; gates are not clipped.
     The VQCs and output projection are inherited; the memory update is its own.

@@ -47,7 +47,7 @@ def test_multistep_values_states_diagnostics_and_gradients_match_direct_recurren
     direct_c = direct_n = torch.zeros_like(c)
     actual, expected = [], []
     for t in range(len(qi)):
-        i, f = torch.log(2 / (1 - qi[t])), torch.log(2 / (1 - qf[t]))
+        i, f = torch.log(2 / (1 - qi[t])), torch.sigmoid(qf[t])
         direct_c, direct_n = f * direct_c + i * z[t], f * direct_n + i
         old_c, old_n = c, n
         c, n, scale, iw, fw = logarithmic_memory_update(
@@ -72,7 +72,7 @@ def test_zero_gate_boundary_preserves_correct_values_and_gradients(qi, qf):
     qi, qf = (torch.tensor([v], dtype=torch.float64, requires_grad=True) for v in (qi, qf))
     c, n, z, scale = (torch.tensor([v], dtype=torch.float64) for v in (.3, .8, -.7, 3.))
     ct, nt, _, _ = logarithmic_memory_update(qi, qf, z, c, n, scale)
-    i, f = torch.log(2 / (1 - qi)), torch.log(2 / (1 - qf))
+    i, f = torch.log(2 / (1 - qi)), torch.sigmoid(qf)
     direct = (f * c * 8 + i * z) / (f * n * 8 + i)
     torch.testing.assert_close(ct / nt, direct)
     got = torch.autograd.grad((ct / nt).sum(), (qi, qf))
@@ -89,10 +89,11 @@ def test_empty_memory_with_zero_write_raises():
 
 @pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
 def test_long_amplification_keeps_stored_states_bounded(dtype):
+    # Runs tagged QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE grow N without bound; binary scaling carries it.
     qi, qf, z = (torch.tensor([v], dtype=dtype) for v in (.2, .99, .25))
     c = n = scale = torch.zeros(1, dtype=dtype)
     for _ in range(600):
-        c, n, scale, _ = logarithmic_memory_update(qi, qf, z, c, n, scale)
+        c, n, scale, _ = logarithmic_memory_update(qi, qf, z, c, n, scale, amplified_forget=True)
         assert .5 <= n.item() < 1
         torch.testing.assert_close(c / n, z)
     assert scale.item() > 1024
@@ -130,3 +131,23 @@ def test_real_vqc_rollout_chunking_and_backward():
     assert ((diag["alpha"] >= 0) & (diag["alpha"] <= 1)).all()
     outputs.square().mean().backward()
     assert all(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters())
+
+
+@pytest.mark.parametrize("dtype", [torch.float32, torch.float64])
+def test_sigmoid_forget_normalizer_converges_to_input_over_one_minus_forget(dtype):
+    qi, qf, z = (torch.tensor([v], dtype=dtype) for v in (.2, .99, .25))
+    c = n = scale = torch.zeros(1, dtype=dtype)
+    for _ in range(200):
+        c, n, scale, _ = logarithmic_memory_update(qi, qf, z, c, n, scale)
+        torch.testing.assert_close(c / n, z)
+    i, f = torch.log(2 / (1 - qi)), torch.sigmoid(qf)
+    torch.testing.assert_close(torch.ldexp(n, scale.long()), i / (1 - f))
+
+
+def test_forget_gate_is_sigmoid_and_input_gate_is_amplified():
+    qi, qf = torch.tensor([.9]), torch.tensor([.9])
+    c, n, scale = torch.tensor([.5]), torch.tensor([1.]), torch.zeros(1)
+    z = torch.tensor([0.])
+    ct, nt, st, iw, fw = logarithmic_memory_update(qi, qf, z, c, n, scale, return_forget_weight=True)
+    torch.testing.assert_close(torch.ldexp(fw, st.long()), torch.sigmoid(qf))
+    torch.testing.assert_close(torch.ldexp(iw, st.long()), torch.log(2 / (1 - qi)))

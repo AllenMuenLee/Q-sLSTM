@@ -1,0 +1,215 @@
+"""Replay the exact sources of a comparison and plot unscaled input gates by gap.
+
+Uses all test sequences and the same eligible steps/bins as plot_key_results.
+Hooks observe the real forward pass; saved predictions validate checkpoint replay.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import torch
+
+from analyze_results import COLORS
+from compare_variants import VARIANTS
+from gate_trace import load_model
+from plot_key_results import SIGNED_BINS
+from q_slstm.experiments.nearest_neighbor import make_datasets
+from q_slstm.models.q_slstm_cell import bounded_log_ratio
+from q_slstm.models.q_slstm_log_cell import logarithmic_gate
+
+LABELS = {
+    "qlstm": "QLSTM: sigmoid(q)",
+    "qslstm": "QsLSTM: (1+q)/(1-q), before stabilization",
+    "qslstm_log": "QsLSTM_LOG: ln(2/(1-q)), before scaling",
+}
+
+
+def trace(run_dir, config, batch_size):
+    ds = make_datasets({**config, "run_extrapolation": False})["test"]
+    model = load_model(run_dir, config)
+    captured = []
+
+    def observe(_module, _inputs, q):
+        if config["model"] == "qlstm":
+            gate = torch.sigmoid(q)
+        elif config["model"] == "qslstm":
+            gate = torch.exp(bounded_log_ratio(q, config["gate_epsilon"]))
+        else:
+            gate = logarithmic_gate(q)
+        captured.append(gate.detach().double().mean(dim=-1).cpu())
+
+    handle = model.cell.input_gate.register_forward_hook(observe)
+    gates, predictions = [], []
+    try:
+        with torch.no_grad():
+            for start in range(0, len(ds), batch_size):
+                captured.clear()
+                x = ds.tensors["inputs"][start:start + batch_size]
+                pred, _ = model(x)
+                assert len(captured) == x.shape[1]
+                gates.append(torch.stack(captured, dim=1).numpy())
+                predictions.append(pred[..., 0].cpu().numpy())
+    finally:
+        handle.remove()
+    gates, predictions = np.concatenate(gates), np.concatenate(predictions)
+    n, length = predictions.shape
+    replay = pd.DataFrame({
+        "sequence_id": np.repeat(ds.sequence_ids.numpy(), length),
+        "timestep": np.tile(np.arange(length), n),
+        "input_gate": gates.ravel(), "replayed_prediction": predictions.ravel(),
+        "replayed_target": ds.tensors["targets"].numpy().reshape(-1),
+    })
+    saved = pd.read_csv(run_dir / "predictions_test.csv").sort_values(["sequence_id", "timestep"])
+    group = saved.groupby("sequence_id")
+    saved["signed_gap"] = saved["similarity"] - group["running_best_similarity"].shift()
+    previous_metric = group["is_metric_step"].shift().eq(True)
+    saved["eligible"] = saved["is_metric_step"] & previous_metric
+    steps = saved.merge(replay, on=["sequence_id", "timestep"], validate="one_to_one")
+    assert len(steps) == n * length
+    candidates = steps["timestep"] > 0  # Saved reference-token targets are deliberately NaN.
+    np.testing.assert_allclose(steps.loc[candidates, "target"], steps.loc[candidates, "replayed_target"],
+                               atol=1e-7, rtol=0)
+    np.testing.assert_allclose(steps["prediction"], steps["replayed_prediction"], atol=2e-5, rtol=0)
+    max_error = float((steps["prediction"] - steps["replayed_prediction"]).abs().max())
+    steps = steps[steps["eligible"]].copy()
+    assert np.isfinite(steps["input_gate"]).all()
+    steps["bin"] = pd.cut(steps["signed_gap"], SIGNED_BINS, include_lowest=True)
+    assert steps["bin"].notna().all()
+    bins = steps.groupby("bin", observed=True).agg(
+        value=("input_gate", "mean"), gap=("signed_gap", "mean"), n_steps=("input_gate", "size")
+    ).reset_index()
+    bins["bin"] = bins["bin"].astype(str)
+    bins["model"], bins["run_seed"] = config["model"], config["seeds"]["run_seed"]
+    bins["prediction_max_abs_difference"] = max_error
+    return bins
+
+
+def trace_source(key, source, batch_size, threads):
+    torch.set_num_threads(threads)
+    start = time.perf_counter()
+    run_dir = ROOT / source
+    config = json.loads((run_dir / "config.json").read_text())
+    assert key == f"{config['seeds']['run_seed']}/{config['model']}"
+    return key, trace(run_dir, config, batch_size), time.perf_counter() - start
+
+
+def plot(summary, path):
+    fig, ax = plt.subplots(figsize=(10, 5.5))
+    ax.axvspan(0, 2, color="0.93", zorder=0)
+    ax.axvline(0, color="black", lw=0.8, ls=":")
+    for model in VARIANTS:
+        rows = summary[summary["model"] == model].sort_values("gap")
+        ax.plot(rows["gap"], rows["mean"], marker="o", lw=2, color=COLORS[model], label=LABELS[model])
+        ax.fill_between(rows["gap"], rows["mean"] - rows["sd"], rows["mean"] + rows["sd"],
+                        color=COLORS[model], alpha=0.15)
+    ax.set_xscale("symlog", linthresh=0.02)
+    ax.set_xlim(-2, 2)
+    ax.set_ylim(bottom=0)
+    ax.set_xlabel("current similarity - running best before the step (symlog)")
+    ax.set_ylabel("Input gate value (before numerical rescaling)")
+    ax.set_title("Input gate vs similarity gap\nMean over hidden units and steps within each seed; band = +/-1 SD across seeds")
+    ax.text(0.02, 0.97, "Not a record (gap < 0)", transform=ax.transAxes, va="top", color="0.3")
+    ax.text(0.98, 0.97, "New record (gap > 0)", transform=ax.transAxes, va="top", ha="right", color="0.3")
+    ax.legend(fontsize=9, loc="best")
+    ax.grid(alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(path, dpi=180)
+    plt.close(fig)
+
+    # Native gate scales differ substantially; individual axes reveal each curve's shape.
+    fig, axes = plt.subplots(1, 3, figsize=(14, 4.7), sharex=True)
+    for ax, model in zip(axes, VARIANTS):
+        rows = summary[summary["model"] == model].sort_values("gap")
+        ax.axvspan(0, 2, color="0.93", zorder=0)
+        ax.axvline(0, color="black", lw=0.8, ls=":")
+        ax.plot(rows["gap"], rows["mean"], marker="o", lw=2, color=COLORS[model])
+        ax.fill_between(rows["gap"], rows["mean"] - rows["sd"], rows["mean"] + rows["sd"],
+                        color=COLORS[model], alpha=0.15)
+        ax.set_xscale("symlog", linthresh=0.02)
+        ax.set_xlim(-2, 2)
+        ax.set_title(LABELS[model].replace(": ", "\n").replace(", before", "\nbefore"), fontsize=10)
+        ax.set_xlabel("current similarity - prior running best")
+        ax.set_ylabel("Input gate value")
+        ax.grid(alpha=0.3)
+    fig.suptitle("Input gate vs similarity gap (separate y-scales)\nMean +/-1 SD across seeds; shaded right side = new records")
+    fig.tight_layout()
+    fig.savefig(path.with_name("input_gate_vs_gap_by_model.png"), dpi=180)
+    plt.close(fig)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--analysis-dir", type=Path, required=True)
+    parser.add_argument("--batch-size", type=int, default=256)
+    parser.add_argument("--threads", type=int, default=1)
+    parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--plot-only", action="store_true", help="Redraw figures from the completed summary CSV")
+    args = parser.parse_args()
+    if args.plot_only:
+        out = args.analysis_dir / "key_plots"
+        plot(pd.read_csv(out / "input_gate_vs_gap.csv"), out / "input_gate_vs_gap.png")
+        return
+    torch.set_num_threads(args.threads)
+    sources = json.loads((args.analysis_dir / "sources.json").read_text())
+    keys = {(int(key.split("/")[0]), key.split("/")[1]) for key in sources}
+    seeds = {seed for seed, _ in keys}
+    assert keys == {(seed, model) for seed in seeds for model in VARIANTS}
+    out = args.analysis_dir / "key_plots"
+    out.mkdir(parents=True, exist_ok=True)
+    frames = []
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        futures = [pool.submit(trace_source, key, source, args.batch_size, args.threads)
+                   for key, source in sources.items()]
+        for count, future in enumerate(as_completed(futures), 1):
+            key, frame, elapsed = future.result()
+            frames.append(frame)
+            pd.concat(frames, ignore_index=True).to_csv(out / "input_gate_vs_gap_per_seed.csv", index=False)
+            print(f"[{count}/{len(sources)}] {key}: {elapsed:.1f}s; "
+                  f"max prediction difference={frame['prediction_max_abs_difference'].max():.2e}", flush=True)
+    per_seed = pd.concat(frames, ignore_index=True)
+    summary = per_seed.groupby(["model", "bin"], observed=True).agg(
+        mean=("value", "mean"), sd=("value", "std"), gap=("gap", "mean"),
+        n_seeds=("value", "size"), steps_per_seed=("n_steps", "mean")
+    ).reset_index().sort_values(["model", "gap"])
+    # Identical bin membership and seed coverage to the existing revision plot.
+    expected = pd.read_csv(out / "revision_gain_vs_gap.csv").sort_values(["model", "gap"])
+    pd.testing.assert_frame_equal(summary[["model", "bin", "n_seeds", "steps_per_seed"]].reset_index(drop=True),
+                                  expected[["model", "bin", "n_seeds", "steps_per_seed"]].reset_index(drop=True))
+    summary.to_csv(out / "input_gate_vs_gap.csv", index=False)
+    plot(summary, out / "input_gate_vs_gap.png")
+    notes = (
+        "# Input gate vs signed similarity gap\n\n"
+        f"All {len(seeds)} paired seeds, all test sequences, best-validation checkpoints from ../sources.json.\n\n"
+        "Gap = current similarity minus the running best BEFORE the current step. "
+        "Eligibility and bins match revision_gain_vs_gap.csv: both this step and its predecessor must be metric steps.\n\n"
+        "The plotted quantity is the transformed input gate before numerical stabilization/scaling, "
+        "not the raw circuit expectation q and not the effective write fraction alpha. "
+        "QLSTM: sigmoid(q); QsLSTM: exp(log(1+q)-log(1-q)) with the saved epsilon clamp; "
+        "QsLSTM_LOG: ln(2/(1-q)). Different gate scales do not directly imply different realized memory writes.\n\n"
+        "Average over hidden units per step, then eligible steps per bin within each seed. "
+        "Lines average these seed means; bands show sample standard deviation across seeds.\n\n"
+        "Checkpoint replay used the actual model forward pass with an observation-only input-gate hook. "
+        "All regenerated targets and saved predictions were checked. "
+        f"Maximum prediction difference: {per_seed['prediction_max_abs_difference'].max():.9g} "
+        "(absolute tolerance 2e-5). Bin counts match the existing revision plot.\n"
+    )
+    (out / "input_gate_vs_gap.md").write_text(notes, encoding="utf-8")
+    print(f"Written to {out}", flush=True)
+
+
+if __name__ == "__main__":
+    main()
