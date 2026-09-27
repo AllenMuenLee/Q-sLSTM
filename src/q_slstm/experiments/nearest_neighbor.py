@@ -36,7 +36,6 @@ from q_slstm.experiments import nearest_neighbor_metrics as nnm
 from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
-from q_slstm.models.vqc import DEFAULT_VQC, VQC_VARIANTS, config_vqc
 from q_slstm.utils.seeds import stable_seed
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -89,9 +88,6 @@ def add_run_arguments(parser):
     a("--input-size", type=int, default=None, help=f"fixed to {INPUT_SIZE}; conflicting values are rejected")
     a("--output-size", type=int, default=None, help=f"fixed to {OUTPUT_SIZE}; conflicting values are rejected")
     a("--gate-epsilon", type=float, default=DEFAULT_GATE_EPSILON, help="legacy compatibility setting; polynomial qslstm has no gate clipping or denominator floor")
-    a("--vqc", choices=sorted(VQC_VARIANTS), default=DEFAULT_VQC,
-      help="VQC circuit of all four gates (default: original). Non-original runs are saved under "
-        "a separate vqc_<name> folder and never mix with original results")
     a("--batch-size", type=int, default=None)
     a("--epochs", type=int, default=None)
     a("--lr", type=float, default=None, help="overrides the preset learning rate")
@@ -137,9 +133,6 @@ def resolve_config(args):
         raise ValueError(f"input_size is fixed to {INPUT_SIZE} for this task, got {a['input_size']}")
     if a.get("output_size") not in (None, OUTPUT_SIZE):
         raise ValueError(f"output_size is fixed to {OUTPUT_SIZE} for this task, got {a['output_size']}")
-    vqc = a.get("vqc") or DEFAULT_VQC
-    if vqc not in VQC_VARIANTS:
-        raise ValueError(f"--vqc must be one of {tuple(VQC_VARIANTS)}, got {vqc!r}")
 
     preset = a.get("scale", "paper")
     if preset not in PRESETS:
@@ -171,7 +164,6 @@ def resolve_config(args):
     config = {
         "kind": "nearest_neighbor_run",
         "model": a["model"],
-        "vqc": vqc,
         "scale_preset": preset,
         "scale_label": preset if not overrides else f"{preset}-overridden",
         "preset_overrides": overrides,
@@ -211,15 +203,8 @@ def resolve_config(args):
 
 
 def sweep_directory(config):
-    """<save_dir>/<scale>/<run date>: one dated folder per sweep, so later sweeps never overwrite it.
-
-    Runs with a non-original VQC go to <save_dir>/<scale>/vqc_<name>/<run date>, apart from original ones.
-    """
-    root = Path(config["save_dir"]) / config["scale_label"]
-    vqc = config_vqc(config)
-    if vqc != DEFAULT_VQC:
-        root = root / f"vqc_{vqc}"
-    return root / config["run_date"]
+    """<save_dir>/<scale>/<run date>: one dated folder per sweep, so later sweeps never overwrite it."""
+    return Path(config["save_dir"]) / config["scale_label"] / config["run_date"]
 
 
 def run_directory(config):
@@ -527,9 +512,6 @@ def run_experiment(config, run_dir=None):
         previous = json.loads(previous_config.read_text(encoding="utf-8"))
         if previous.get("qslstm_recurrence") != config.get("qslstm_recurrence"):
             raise ValueError("Existing run uses a different Q-sLSTM recurrence; choose a new --save-dir")
-        if config_vqc(previous) != config_vqc(config):
-            raise ValueError(f"Existing run uses VQC {config_vqc(previous)!r}, not {config_vqc(config)!r}; "
-                             "choose a new --save-dir")
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "complete.json").unlink(missing_ok=True)
     _write_json(run_dir / "config.json", config)
@@ -547,11 +529,11 @@ def run_experiment(config, run_dir=None):
         model = build_quantum_model(
             config["model"], config["input_size"], config["hidden_size"], config["output_size"],
             config["qnn_depth"], gate_epsilon=config["gate_epsilon"], device=config["device"],
-            seed=config["seeds"]["model"], vqc=config_vqc(config))
+            seed=config["seeds"]["model"])
         n_params = count_trainable_parameters(model)
         _write_json(run_dir / "parameters.json", {
             "trainable_parameters": n_params, "n_qubits": config["n_qubits"],
-            "hidden_size": config["hidden_size"], "qnn_depth": config["qnn_depth"], "vqc": config_vqc(config),
+            "hidden_size": config["hidden_size"], "qnn_depth": config["qnn_depth"],
             "parameter_shapes": {k: list(v.shape) for k, v in model.state_dict().items()},
         })
         _write_json(run_dir / "init_parameters.json", {
@@ -605,7 +587,6 @@ def verify_pairing(run_dir_a, run_dir_b):
     shared = sorted(set(ia["checksums"]) & set(ib["checksums"]))
     return {
         "recurrence_version_equal": ca.get("qslstm_recurrence") == cb.get("qslstm_recurrence"),
-        "vqc_equal": config_vqc(ca) == config_vqc(cb),
         "dataset_checksums_equal": ma["splits"] == mb["splits"],
         "seed_map_equal": ma["seeds"] == mb["seeds"],
         "loader_order_equal": sa["loader_order_checksum_epoch1"] == sb["loader_order_checksum_epoch1"],

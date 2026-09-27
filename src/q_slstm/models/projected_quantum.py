@@ -8,7 +8,6 @@ import torch.nn as nn
 
 from .factory import build_quantum_model
 from .q_slstm_cell import DEFAULT_GATE_EPSILON
-from .vqc import DEFAULT_VQC
 
 PROJECTION_ACTIVATION = "tanh"
 
@@ -33,7 +32,7 @@ class ProjectedQuantumModel(nn.Module):
 
 def build_projected_quantum_model(model, raw_input_size, projection_size, hidden_size, output_size, qnn_depth,
                                   gate_epsilon=DEFAULT_GATE_EPSILON, device="cpu", model_seed=None,
-                                  projection_seed=None, vqc=DEFAULT_VQC):
+                                  projection_seed=None):
     """`qlstm` or `qslstm` behind a Linear+tanh projection.
 
     The core is built by `build_quantum_model(seed=model_seed)` and the projection under its own
@@ -41,7 +40,7 @@ def build_projected_quantum_model(model, raw_input_size, projection_size, hidden
     for equal seeds without touching global RNG state.
     """
     core = build_quantum_model(model, projection_size, hidden_size, output_size, qnn_depth,
-                               gate_epsilon=gate_epsilon, device="cpu", seed=model_seed, vqc=vqc)
+                               gate_epsilon=gate_epsilon, device="cpu", seed=model_seed)
     if projection_seed is None:
         projection = nn.Linear(raw_input_size, projection_size)
     else:

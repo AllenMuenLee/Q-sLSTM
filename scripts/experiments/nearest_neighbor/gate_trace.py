@@ -46,7 +46,6 @@ from q_slstm.models.q_slstm_cell import (  # noqa: E402
     QSLSTM_POLYNOMIAL_RECURRENCE, bounded_log_ratio, polynomial_memory_update, stabilize_gates,
 )
 from q_slstm.models.q_slstm_log_cell import logarithmic_gate, logarithmic_memory_update  # noqa: E402
-from q_slstm.models.vqc import config_vqc  # noqa: E402
 
 GAP_FLOOR = 1e-6  # |z - c/n| below this leaves k undefined rather than dividing by ~0
 KINDS = ("event", "near_best_distractor", "other_distractor")
@@ -55,7 +54,7 @@ KINDS = ("event", "near_best_distractor", "other_distractor")
 def load_model(run_dir, config):
     model = build_quantum_model(config["model"], config["input_size"], config["hidden_size"],
                                 config["output_size"], config["qnn_depth"],
-                                gate_epsilon=config["gate_epsilon"], vqc=config_vqc(config))
+                                gate_epsilon=config["gate_epsilon"])
     state = torch.load(run_dir / "checkpoints" / "best.pt", map_location="cpu")["model_state_dict"]
     model.load_state_dict(state)
     model.eval()

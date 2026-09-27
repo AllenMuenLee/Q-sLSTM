@@ -9,7 +9,6 @@ from .q_slstm_cell import (
     CustomQsLSTMCell,
     binary_scaled_memory_update,
 )
-from .vqc import DEFAULT_VQC
 
 QSLSTM_LOG_RECURRENCE = "log_gate_binary_scale_v1"
 
@@ -52,9 +51,8 @@ class CustomQsLSTMLogCell(CustomQsLSTMCell):
 
     memory_update = staticmethod(logarithmic_memory_update)
 
-    def __init__(self, input_size, hidden_size, output_size, vqc_depth, gate_epsilon=DEFAULT_GATE_EPSILON,
-                 vqc=DEFAULT_VQC):
-        super().__init__(input_size, hidden_size, output_size, vqc_depth, gate_epsilon, vqc=vqc)
+    def __init__(self, input_size, hidden_size, output_size, vqc_depth, gate_epsilon=DEFAULT_GATE_EPSILON):
+        super().__init__(input_size, hidden_size, output_size, vqc_depth, gate_epsilon)
         self.recurrence = QSLSTM_LOG_RECURRENCE
 
     def forward(self, x, hidden, return_diagnostics=False):

@@ -27,7 +27,6 @@ from q_slstm.models.factory import QUANTUM_MODELS, count_trainable_parameters
 from q_slstm.models.projected_quantum import PROJECTION_ACTIVATION, build_projected_quantum_model
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
-from q_slstm.models.vqc import DEFAULT_VQC, VQC_VARIANTS, config_vqc
 from q_slstm.utils.seeds import epoch_permutation, stable_seed
 
 from q_slstm.data_sources.cache import atomic_write_json, canonical_json, sha256_bytes, sha256_file
@@ -83,9 +82,6 @@ def add_run_arguments(parser):
     a("--hidden-size", type=int, default=None)
     a("--qnn-depth", type=int, default=None)
     a("--gate-epsilon", type=float, default=DEFAULT_GATE_EPSILON, help="legacy compatibility setting; polynomial qslstm has no gate clipping or denominator floor")
-    a("--vqc", choices=sorted(VQC_VARIANTS), default=DEFAULT_VQC,
-      help="VQC circuit of all four gates (default: original). Non-original runs form their own "
-        "study under a separate vqc_<name> folder and never mix with original results")
     a("--batch-size", type=int, default=None)
     a("--epochs", type=int, default=None)
     a("--lr", type=float, default=None)
@@ -136,9 +132,6 @@ def resolve_config(args):
         raise ValueError(f"horizon is fixed to {HORIZON_HOURS} hour for this experiment, got {a['horizon']}")
     if a.get("raw_input_size") not in (None, RAW_INPUT_SIZE):
         raise ValueError(f"raw input width is fixed to {RAW_INPUT_SIZE}, got {a['raw_input_size']}")
-    vqc = a.get("vqc") or DEFAULT_VQC
-    if vqc not in VQC_VARIANTS:
-        raise ValueError(f"--vqc must be one of {tuple(VQC_VARIANTS)}, got {vqc!r}")
     scale = a.get("scale") or "paper"
     if scale not in PRESETS:
         raise ValueError(f"unknown scale preset {scale!r}")
@@ -203,34 +196,23 @@ def resolve_config(args):
         "loss": "MSE on the standardized final output step only (outputs[:, -1, :] vs target [B, 1])",
         "selection": "lowest validation MSE (earliest epoch on exact ties); no early stopping",
     }
-    if vqc != DEFAULT_VQC:
-        # Only non-original circuits enter the study (and so its id and the config hash); original
-        # studies keep the ids they had before the VQC option existed.
-        study["vqc"] = vqc
     study_id = short_hash(study)
     run_seed = int(a.get("seed", 0))
     config = {
         "kind": "solar_generation_run",
         "model": a["model"],
-        "vqc": vqc,
         "study_id": study_id,
         "study": study,
         "seeds": derive_seeds(run_seed),
         "dataset_manifest": str(manifest_path),
         "save_dir": str(a.get("save_dir") or "results/solar_generation"),
     }
-    config["config_hash"] = short_hash({k: v for k, v in config.items()
-                                        if k not in ("dataset_manifest", "save_dir", "vqc")}, 16)
+    config["config_hash"] = short_hash({k: v for k, v in config.items() if k not in ("dataset_manifest", "save_dir")}, 16)
     return config
 
 
 def study_directory(config):
-    """<save_dir>/<scale>/<study id>; non-original VQCs add a vqc_<name> level before the study id."""
-    root = Path(config["save_dir"]) / config["study"]["scale_label"]
-    vqc = config_vqc(config["study"])
-    if vqc != DEFAULT_VQC:
-        root = root / f"vqc_{vqc}"
-    return root / config["study_id"]
+    return Path(config["save_dir"]) / config["study"]["scale_label"] / config["study_id"]
 
 
 def run_directory(config):
@@ -554,14 +536,14 @@ def run_experiment(config, run_dir=None, resume=False, overwrite=False):
         model = build_projected_quantum_model(
             config["model"], RAW_INPUT_SIZE, s["projection_size"], s["hidden_size"], OUTPUT_SIZE, s["qnn_depth"],
             gate_epsilon=s["gate_epsilon"], device=s["device"], model_seed=config["seeds"]["model"],
-            projection_seed=config["seeds"]["projection"], vqc=config_vqc(s))
+            projection_seed=config["seeds"]["projection"])
         n_params = count_trainable_parameters(model)
         _write_json(run_dir / "parameters.json", {
             "trainable_parameters": n_params,
             "projection_parameters": sum(p.numel() for p in model.projection.parameters()),
             "raw_input_size": RAW_INPUT_SIZE, "quantum_input_size": s["projection_size"],
             "projection_activation": PROJECTION_ACTIVATION, "n_qubits": model.n_qubits,
-            "hidden_size": s["hidden_size"], "qnn_depth": s["qnn_depth"], "vqc": config_vqc(s),
+            "hidden_size": s["hidden_size"], "qnn_depth": s["qnn_depth"],
             "parameter_shapes": {k: list(v.shape) for k, v in model.state_dict().items()},
         })
         _write_json(run_dir / "init_parameters.json", {

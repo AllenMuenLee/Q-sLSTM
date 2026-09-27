@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 
 from .diagnostics import write_proportion
-from .vqc import DEFAULT_VQC, get_vqc_class
+from .vqc import VQC
 
 torch.set_default_dtype(torch.float32)
 
@@ -14,15 +14,13 @@ torch.set_default_dtype(torch.float32)
 class CustomQLSTMCell(nn.Module):
     """Conventional QLSTM cell with recurrent state (h, c)."""
 
-    def __init__(self, input_size, hidden_size, output_size, vqc_depth, vqc=DEFAULT_VQC):
+    def __init__(self, input_size, hidden_size, output_size, vqc_depth):
         super().__init__()
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.n_qubits = input_size + hidden_size
 
         # Same construction order as CustomQsLSTMCell, so equal seeds give equal initial parameters.
-        self.vqc = vqc
-        VQC = get_vqc_class(vqc)
         self.input_gate = VQC(vqc_depth=vqc_depth, n_qubits=self.n_qubits, n_class=hidden_size)
         self.forget_gate = VQC(vqc_depth=vqc_depth, n_qubits=self.n_qubits, n_class=hidden_size)
         self.cell_gate = VQC(vqc_depth=vqc_depth, n_qubits=self.n_qubits, n_class=hidden_size)
