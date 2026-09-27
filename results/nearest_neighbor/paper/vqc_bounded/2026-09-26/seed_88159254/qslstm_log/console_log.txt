@@ -1,1 +1,76 @@
 scale=paper model=qslstm_log seed=88159254 L=32 (31 candidates) train/val/test=3500/500/1000 qubits=9 depth=3
+[qslstm_log seed 88159254] epoch 001 train 0.08365 val 0.08477 gnorm 0.0586 (1289.4s) *
+[qslstm_log seed 88159254] epoch 002 train 0.08149 val 0.08294 gnorm 0.0501 (1331.7s) *
+[qslstm_log seed 88159254] epoch 003 train 0.07886 val 0.08097 gnorm 0.0493 (1347.4s) *
+[qslstm_log seed 88159254] epoch 004 train 0.07814 val 0.08040 gnorm 0.0876 (1347.2s) *
+[qslstm_log seed 88159254] epoch 005 train 0.07607 val 0.08069 gnorm 0.055 (1366.4s)
+[qslstm_log seed 88159254] epoch 006 train 0.07527 val 0.08107 gnorm 0.063 (1359.9s)
+[qslstm_log seed 88159254] epoch 007 train 0.07489 val 0.08065 gnorm 0.0706 (1364.0s)
+[qslstm_log seed 88159254] epoch 008 train 0.07449 val 0.07966 gnorm 0.0708 (1361.9s) *
+[qslstm_log seed 88159254] epoch 009 train 0.07445 val 0.08022 gnorm 0.0787 (1360.9s)
+[qslstm_log seed 88159254] epoch 010 train 0.07453 val 0.08062 gnorm 0.086 (1001.3s)
+[qslstm_log seed 88159254] epoch 011 train 0.07385 val 0.07910 gnorm 0.061 (970.9s) *
+[qslstm_log seed 88159254] epoch 012 train 0.07375 val 0.07901 gnorm 0.0681 (974.8s) *
+[qslstm_log seed 88159254] epoch 013 train 0.07352 val 0.07914 gnorm 0.0639 (974.8s)
+[qslstm_log seed 88159254] epoch 014 train 0.07334 val 0.07941 gnorm 0.0624 (980.0s)
+[qslstm_log seed 88159254] epoch 015 train 0.07329 val 0.08041 gnorm 0.0594 (985.1s)
+[qslstm_log seed 88159254] epoch 016 train 0.07359 val 0.07916 gnorm 0.0747 (982.1s)
+[qslstm_log seed 88159254] epoch 017 train 0.07305 val 0.07972 gnorm 0.0599 (978.2s)
+[qslstm_log seed 88159254] epoch 018 train 0.07330 val 0.07885 gnorm 0.0714 (988.5s) *
+[qslstm_log seed 88159254] epoch 019 train 0.07350 val 0.07869 gnorm 0.082 (986.1s) *
+[qslstm_log seed 88159254] epoch 020 train 0.07309 val 0.07894 gnorm 0.0682 (974.5s)
+[qslstm_log seed 88159254] epoch 021 train 0.07321 val 0.07873 gnorm 0.0705 (982.3s)
+[qslstm_log seed 88159254] epoch 022 train 0.07328 val 0.07917 gnorm 0.081 (985.9s)
+[qslstm_log seed 88159254] epoch 023 train 0.07310 val 0.07956 gnorm 0.0699 (982.4s)
+[qslstm_log seed 88159254] epoch 024 train 0.07297 val 0.07863 gnorm 0.0654 (974.8s) *
+[qslstm_log seed 88159254] epoch 025 train 0.07291 val 0.07892 gnorm 0.0725 (983.5s)
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/nearest_neighbor.py", line 564, in run_experiment
+    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/nearest_neighbor.py", line 430, in train_model
+    loss.backward()
+    ~~~~~~~~~~~~~^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/_tensor.py", line 631, in backward
+    torch.autograd.backward(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, gradient, retain_graph, create_graph, inputs=inputs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/__init__.py", line 381, in backward
+    _engine_run_backward(
+    ~~~~~~~~~~~~~~~~~~~~^
+        tensors,
+        ^^^^^^^^
+    ...<5 lines>...
+        accumulate_grad=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/graph.py", line 869, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        t_outputs, *args, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # Calls into the C++ engine to run the backward pass
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/function.py", line 302, in apply
+    def apply(self, *args):
+    
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/nearest_neighbor/train_nearest_neighbor.py", line 39, in <module>
+    main()
+    ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/nearest_neighbor/train_nearest_neighbor.py", line 34, in main
+    run_dir = run_experiment(config)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/nearest_neighbor.py", line 590, in run_experiment
+    _write_json(run_dir / "failure.json", {
+                ~~~~~~~~^~~~~~~~~~~~~~~~
+  File "/Users/peculab/miniconda3/lib/python3.13/pathlib/_local.py", line 148, in __truediv__
+    def __truediv__(self, key):
+    
+KeyboardInterrupt

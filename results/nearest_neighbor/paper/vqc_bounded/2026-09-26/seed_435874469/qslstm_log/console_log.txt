@@ -1,1 +1,80 @@
 scale=paper model=qslstm_log seed=435874469 L=32 (31 candidates) train/val/test=3500/500/1000 qubits=9 depth=3
+[qslstm_log seed 435874469] epoch 001 train 0.09547 val 0.08058 gnorm 0.143 (959.7s) *
+[qslstm_log seed 435874469] epoch 002 train 0.08269 val 0.07978 gnorm 0.0482 (949.9s) *
+[qslstm_log seed 435874469] epoch 003 train 0.08171 val 0.07886 gnorm 0.0487 (960.6s) *
+[qslstm_log seed 435874469] epoch 004 train 0.08057 val 0.07758 gnorm 0.0396 (951.6s) *
+[qslstm_log seed 435874469] epoch 005 train 0.07919 val 0.07562 gnorm 0.0483 (951.6s) *
+[qslstm_log seed 435874469] epoch 006 train 0.07827 val 0.07441 gnorm 0.0721 (957.2s) *
+[qslstm_log seed 435874469] epoch 007 train 0.07717 val 0.07392 gnorm 0.063 (956.0s) *
+[qslstm_log seed 435874469] epoch 008 train 0.07645 val 0.07285 gnorm 0.051 (949.3s) *
+[qslstm_log seed 435874469] epoch 009 train 0.07563 val 0.07283 gnorm 0.0511 (958.0s) *
+[qslstm_log seed 435874469] epoch 010 train 0.07509 val 0.07205 gnorm 0.0473 (948.2s) *
+[qslstm_log seed 435874469] epoch 011 train 0.07473 val 0.07182 gnorm 0.0637 (945.5s) *
+[qslstm_log seed 435874469] epoch 012 train 0.07448 val 0.07164 gnorm 0.0664 (958.6s) *
+[qslstm_log seed 435874469] epoch 013 train 0.07402 val 0.07172 gnorm 0.0559 (953.5s)
+[qslstm_log seed 435874469] epoch 014 train 0.07394 val 0.07111 gnorm 0.0585 (960.6s) *
+[qslstm_log seed 435874469] epoch 015 train 0.07403 val 0.07309 gnorm 0.0724 (968.2s)
+[qslstm_log seed 435874469] epoch 016 train 0.07357 val 0.07139 gnorm 0.0526 (973.4s)
+[qslstm_log seed 435874469] epoch 017 train 0.07392 val 0.07072 gnorm 0.0674 (974.8s) *
+[qslstm_log seed 435874469] epoch 018 train 0.07391 val 0.07066 gnorm 0.0807 (970.8s) *
+[qslstm_log seed 435874469] epoch 019 train 0.07380 val 0.07080 gnorm 0.073 (984.6s)
+[qslstm_log seed 435874469] epoch 020 train 0.07350 val 0.07092 gnorm 0.0725 (982.3s)
+[qslstm_log seed 435874469] epoch 021 train 0.07354 val 0.07078 gnorm 0.0703 (974.2s)
+[qslstm_log seed 435874469] epoch 022 train 0.07321 val 0.07184 gnorm 0.0623 (975.1s)
+[qslstm_log seed 435874469] epoch 023 train 0.07321 val 0.07064 gnorm 0.0504 (978.7s) *
+[qslstm_log seed 435874469] epoch 024 train 0.07338 val 0.07160 gnorm 0.0718 (978.1s)
+[qslstm_log seed 435874469] epoch 025 train 0.07301 val 0.07113 gnorm 0.0593 (974.1s)
+[qslstm_log seed 435874469] epoch 026 train 0.07326 val 0.07154 gnorm 0.0686 (977.2s)
+[qslstm_log seed 435874469] epoch 027 train 0.07398 val 0.07194 gnorm 0.0886 (982.8s)
+[qslstm_log seed 435874469] epoch 028 train 0.07339 val 0.07054 gnorm 0.0767 (959.5s) *
+[qslstm_log seed 435874469] epoch 029 train 0.07314 val 0.07036 gnorm 0.061 (981.0s) *
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/nearest_neighbor.py", line 564, in run_experiment
+    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/nearest_neighbor.py", line 430, in train_model
+    loss.backward()
+    ~~~~~~~~~~~~~^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/_tensor.py", line 631, in backward
+    torch.autograd.backward(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        self, gradient, retain_graph, create_graph, inputs=inputs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/__init__.py", line 381, in backward
+    _engine_run_backward(
+    ~~~~~~~~~~~~~~~~~~~~^
+        tensors,
+        ^^^^^^^^
+    ...<5 lines>...
+        accumulate_grad=True,
+        ^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/graph.py", line 869, in _engine_run_backward
+    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        t_outputs, *args, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )  # Calls into the C++ engine to run the backward pass
+    ^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/autograd/function.py", line 302, in apply
+    def apply(self, *args):
+    
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/nearest_neighbor/train_nearest_neighbor.py", line 39, in <module>
+    main()
+    ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/nearest_neighbor/train_nearest_neighbor.py", line 34, in main
+    run_dir = run_experiment(config)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/nearest_neighbor.py", line 590, in run_experiment
+    _write_json(run_dir / "failure.json", {
+                ~~~~~~~~^~~~~~~~~~~~~~~~
+  File "/Users/peculab/miniconda3/lib/python3.13/pathlib/_local.py", line 148, in __truediv__
+    def __truediv__(self, key):
+    
+KeyboardInterrupt
