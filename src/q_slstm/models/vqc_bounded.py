@@ -29,6 +29,7 @@ def q_function(x, q_weights, n_class):
 
     # Sequence of trainable variational layers
     for k in range(n_dep):
+        entangling_layer(n_qub)
         w = q_weights[k]
         norm = torch.linalg.vector_norm(w)
 
