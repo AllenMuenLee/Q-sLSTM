@@ -22,6 +22,7 @@
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import sys
 from pathlib import Path
@@ -43,11 +44,11 @@ from analyze_results import COLORS, MODEL_LABELS, discover_runs  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import make_datasets  # noqa: E402
 from q_slstm.models.factory import build_quantum_model  # noqa: E402
 from q_slstm.models.q_slstm_cell import (  # noqa: E402
-    QSLSTM_POLYNOMIAL_RECURRENCE, QSLSTM_RECURRENCE, bounded_log_ratio, polynomial_memory_update, sigmoid_log_forget,
+    QSLSTM_AMPLIFIED_FORGET_RECURRENCE, QSLSTM_POLYNOMIAL_RECURRENCE, QSLSTM_RECURRENCE, bounded_log_ratio, polynomial_memory_update, sigmoid_log_forget,
     stabilize_gates,
 )
 from q_slstm.models.q_slstm_log_cell import (  # noqa: E402
-    QSLSTM_LOG_RECURRENCE, logarithmic_gate, logarithmic_memory_update, sigmoid_forget_gate,
+    QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE, QSLSTM_LOG_RECURRENCE, logarithmic_gate, logarithmic_memory_update, sigmoid_forget_gate,
 )
 
 GAP_FLOOR = 1e-6  # |z - c/n| below this leaves k undefined rather than dividing by ~0
@@ -61,6 +62,12 @@ def load_model(run_dir, config):
     state = torch.load(run_dir / "checkpoints" / "best.pt", map_location="cpu")["model_state_dict"]
     model.load_state_dict(state)
     model.eval()
+    # Runs trained before the sigmoid forget gate amplified it like the input gate; replay that recurrence.
+    recurrence, cell = config.get("qslstm_recurrence"), model.cell
+    if config["model"] == "qslstm" and recurrence in (None, QSLSTM_AMPLIFIED_FORGET_RECURRENCE):
+        cell.log_forget = functools.partial(bounded_log_ratio, epsilon=cell.gate_epsilon)
+    elif config["model"] == "qslstm_log" and recurrence in (None, QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE):
+        cell.memory_update = functools.partial(logarithmic_memory_update, amplified_forget=True)
     return model
 
 

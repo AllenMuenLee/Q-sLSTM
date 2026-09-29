@@ -209,6 +209,8 @@ class CustomQsLSTMCell(nn.Module):
         self.output_post_processing = nn.Linear(hidden_size, output_size)
 
     supports_alpha_diagnostics = True
+    # log forget gate; replays of QSLSTM_AMPLIFIED_FORGET_RECURRENCE runs swap in bounded_log_ratio.
+    log_forget = staticmethod(sigmoid_log_forget)
 
     def forward(self, x, hidden, return_diagnostics=False):
         h_prev, c_prev, n_prev, m_prev = hidden
@@ -222,7 +224,7 @@ class CustomQsLSTMCell(nn.Module):
         q_o = self.output_gate(combined)
 
         ell_i = bounded_log_ratio(q_i, self.gate_epsilon)
-        ell_f = sigmoid_log_forget(q_f)
+        ell_f = self.log_forget(q_f)
 
         m_t, i_prime, f_prime = stabilize_gates(ell_i, ell_f, m_prev)
 

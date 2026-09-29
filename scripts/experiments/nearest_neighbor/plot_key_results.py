@@ -11,6 +11,8 @@
 #   error_vs_gap           MSE / MAE / RMSE of p[t] against the true target y[t], against the same signed gap
 #   test_metrics           MSE / MAE / RMSE of the best-validation checkpoint
 #   train_loss             training loss per epoch
+#   generalization_gap     val loss - train loss per epoch, and per seed at the best-validation checkpoint:
+#                          test MSE - train loss, test MSE - best val MSE, extrapolation MSE - test MSE
 #
 # Only steps whose predecessor is a metric step are used, as for revision_gain in nearest_neighbor_metrics.
 # Every value is first averaged within a seed; bands and error bars are over seeds.
@@ -34,8 +36,10 @@ import pandas as pd  # noqa: E402
 
 import analyze_results as ar  # noqa: E402
 import false_revision as fr  # noqa: E402
+import plot_model_comparison as pmc  # noqa: E402
+from scipy import stats  # noqa: E402
 from analyze_results import COLORS, MODEL_LABELS  # noqa: E402
-from compare_variants import SHORT, VARIANTS, collect_runs, load_history, paired_seeds  # noqa: E402
+from compare_variants import PAIRS, SHORT, VARIANTS, collect_runs, load_history, paired_seeds  # noqa: E402
 
 SIGNED_BINS = [-2.0, -1.0, -0.5, -0.2, -0.1, -0.05, -0.02, 0.0, 0.02, 0.05, 0.1, 0.2, 0.5, 2.0]
 SPLIT = "test"
@@ -181,10 +185,54 @@ def plot_train_loss(hist, path):
     plt.close(fig)
 
 
+def plot_generalization_gap(hist, table, path, first_epoch=2):
+    """Epoch gap bands plus one panel per checkpoint gap; grey lines join each seed's three runs."""
+    gaps = [g for g in pmc.GAPS if g in table]
+    fig, axes = plt.subplots(1, 1 + len(gaps), figsize=(4.4 * (1 + len(gaps)), 4.6),
+                             gridspec_kw={"width_ratios": [1.4] + [1] * len(gaps)})
+    ax = axes[0]
+    for model in VARIANTS:
+        g = hist[(hist["model"] == model) & (hist["epoch"] >= first_epoch)].groupby("epoch")["epoch_gap"]
+        mean, sd = g.mean(), g.std(ddof=1)
+        ax.plot(mean.index, mean.values, color=COLORS[model], lw=2, label=MODEL_LABELS[model])
+        ax.fill_between(mean.index, mean - sd, mean + sd, color=COLORS[model], alpha=0.15)
+    ax.axhline(0, color="black", lw=0.8)
+    ax.set_xlabel("epoch")
+    ax.set_ylabel("gap (mean ± sd over seeds)")
+    ax.set_title(f"val loss − train loss through training (epochs ≥ {first_epoch})", fontsize=9)
+    ax.legend(fontsize=8)
+    ax.grid(alpha=0.3)
+
+    x = np.arange(len(VARIANTS))
+    for ax, gap in zip(axes[1:], gaps):
+        w = table.pivot(index="run_seed", columns="model", values=gap)[list(VARIANTS)].dropna()
+        for _, row in w.iterrows():
+            ax.plot(x, row.values, color="grey", alpha=0.35, lw=0.8, zorder=1)
+        for k, model in enumerate(VARIANTS):
+            ax.bar(k, w[model].mean(), 0.6, yerr=w[model].std(ddof=1), capsize=5, color=COLORS[model], alpha=0.6)
+            ax.scatter(np.full(len(w), k), w[model], color=COLORS[model], edgecolor="k", s=14, zorder=3)
+        tests = []
+        for a, b in PAIRS:
+            d = w[a] - w[b]
+            p = stats.wilcoxon(d).pvalue if (d != 0).any() else np.nan
+            tests.append(f"{SHORT[a]}−{SHORT[b]}: {d.mean():+.4f}, p={p:.2g}")
+        ax.axhline(0, color="black", lw=0.8)
+        ax.set_xticks(x, [SHORT[m] for m in VARIANTS], fontsize=8)
+        ax.set_title(f"{pmc.GAPS[gap]} (n={len(w)})\n" + "\n".join(tests), fontsize=8)
+        ax.grid(axis="y", alpha=0.3)
+    fig.suptitle("Generalization gap (best-validation checkpoint; bar = mean ± sd over seeds, Wilcoxon signed-rank)",
+                 y=1.0)
+    fig.tight_layout()
+    fig.savefig(path, dpi=150, bbox_inches="tight")
+    plt.close(fig)
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Headline figures for QLSTM / Q-sLSTM / Q-sLSTM-log.")
     parser.add_argument("--runs-dirs", nargs="+", required=True)
     parser.add_argument("--out-dir", required=True)
+    parser.add_argument("--min-timestep", type=int, default=None,
+                        help="only redraw revision gain / drift from steps t >= this, as *_t<N> files")
     args = parser.parse_args(argv)
     out = Path(args.out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -195,18 +243,30 @@ def main(argv=None):
     seeds = set(metrics["run_seed"])
 
     steps = load_steps(runs, seeds)
+    # Early steps write large fractions (small normalizer) and hold most large records; --min-timestep drops them.
+    suffix, note = "", ""
+    if args.min_timestep is not None:
+        steps = steps[steps["timestep"] >= args.min_timestep]
+        suffix, note = f"_t{args.min_timestep}", f"\n(steps t ≥ {args.min_timestep} only)"
     gain = binned(steps, "pull")
-    gain.to_csv(out / "revision_gain_vs_gap.csv", index=False)
+    gain.to_csv(out / f"revision_gain_vs_gap{suffix}.csv", index=False)
     plot_vs_signed_gap(gain, "move toward the candidate's value",
-                       "Revision gain for every candidate vs its similarity to the current best",
+                       f"Revision gain for every candidate vs its similarity to the current best{note}",
                        "← not a record\nshould ignore (≈ 0)", "new record →\nshould move to its value",
-                       out / "revision_gain_vs_gap.png")
+                       out / f"revision_gain_vs_gap{suffix}.png")
     drift = binned(steps, "drift")
-    drift.to_csv(out / "drift_vs_gap.csv", index=False)
+    drift.to_csv(out / f"drift_vs_gap{suffix}.csv", index=False)
     plot_vs_signed_gap(drift, "move away from the best held before the step",
-                       "Drift from the current best for every candidate vs its similarity to the current best",
+                       f"Drift from the current best for every candidate vs its similarity to the current best{note}",
                        "← not a record\nshould stay on the best (≈ 0)", "new record →\nshould leave the old best",
-                       out / "drift_vs_gap.png")
+                       out / f"drift_vs_gap{suffix}.png")
+    if args.min_timestep is not None:
+        for name, table in (("revision gain", gain), ("drift", drift)):
+            print(f"== {name} ==")
+            print(table.pivot(index="gap", columns="model", values="mean").round(4).to_string())
+        print(gain.pivot(index="gap", columns="model", values="steps_per_seed").round(1).to_string())
+        print(f"figures written to {out}")
+        return 0
     errors = error_by_gap(steps)
     errors.to_csv(out / "error_vs_gap.csv", index=False)
     plot_error_vs_signed_gap(errors, out / "error_vs_gap.png")
@@ -218,6 +278,12 @@ def main(argv=None):
 
     hist = load_history({k: v for k, v in runs.items() if k[0] in seeds})
     plot_train_loss(hist, out / "train_loss.png")
+
+    gap_hist = pmc.load_history({k: v for k, v in runs.items() if k[0] in seeds})
+    gap_table = pmc.seed_table({k: v for k, v in runs.items() if k[0] in seeds}, gap_hist)
+    gap_cols = ["run_seed", "model", "best_epoch", *[g for g in pmc.GAPS if g in gap_table]]
+    gap_table[gap_cols].to_csv(out / "generalization_gap_per_seed.csv", index=False)
+    plot_generalization_gap(gap_hist, gap_table, out / "generalization_gap.png")
     print(summary.round(5).to_string())
     print(f"figures written to {out}")
     return 0
