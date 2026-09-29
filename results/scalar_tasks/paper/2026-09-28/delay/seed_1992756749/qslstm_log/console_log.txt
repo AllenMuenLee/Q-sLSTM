@@ -1,20 +1,20 @@
 scale=paper task=delay model=qslstm_log seed=1992756749 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[delay qslstm_log seed 1992756749] epoch 001 train 0.32721 val 0.31746 gnorm 0.0712 (17.0s) *
-[delay qslstm_log seed 1992756749] epoch 002 train 0.31363 val 0.30263 gnorm 0.0504 (16.7s) *
-[delay qslstm_log seed 1992756749] epoch 003 train 0.29765 val 0.28758 gnorm 0.0396 (17.1s) *
-[delay qslstm_log seed 1992756749] epoch 004 train 0.28485 val 0.27836 gnorm 0.0359 (17.0s) *
-[delay qslstm_log seed 1992756749] epoch 005 train 0.27804 val 0.27360 gnorm 0.0257 (16.9s) *
-[delay qslstm_log seed 1992756749] epoch 006 train 0.27468 val 0.27071 gnorm 0.0289 (17.0s) *
-[delay qslstm_log seed 1992756749] epoch 007 train 0.27212 val 0.26882 gnorm 0.0485 (16.9s) *
-[delay qslstm_log seed 1992756749] epoch 008 train 0.27025 val 0.26656 gnorm 0.0507 (17.0s) *
-[delay qslstm_log seed 1992756749] epoch 009 train 0.26892 val 0.26548 gnorm 0.0348 (16.9s) *
-[delay qslstm_log seed 1992756749] epoch 010 train 0.26811 val 0.26460 gnorm 0.0412 (17.0s) *
-[delay qslstm_log seed 1992756749] epoch 011 train 0.26749 val 0.26403 gnorm 0.0495 (16.9s) *
-[delay qslstm_log seed 1992756749] epoch 012 train 0.26683 val 0.26348 gnorm 0.0406 (16.8s) *
-[delay qslstm_log seed 1992756749] epoch 013 train 0.26640 val 0.26311 gnorm 0.0399 (17.0s) *
-[delay qslstm_log seed 1992756749] epoch 014 train 0.26616 val 0.26333 gnorm 0.0516 (16.9s)
-[delay qslstm_log seed 1992756749] epoch 015 train 0.26590 val 0.26287 gnorm 0.0463 (16.9s) *
-[delay qslstm_log seed 1992756749] epoch 016 train 0.26568 val 0.26251 gnorm 0.0509 (16.9s) *
+[delay qslstm_log seed 1992756749] epoch 001 train 0.32721 val 0.31746 gnorm 0.0712 (16.7s) *
+[delay qslstm_log seed 1992756749] epoch 002 train 0.31363 val 0.30263 gnorm 0.0504 (16.5s) *
+[delay qslstm_log seed 1992756749] epoch 003 train 0.29765 val 0.28758 gnorm 0.0396 (16.6s) *
+[delay qslstm_log seed 1992756749] epoch 004 train 0.28485 val 0.27836 gnorm 0.0359 (16.5s) *
+[delay qslstm_log seed 1992756749] epoch 005 train 0.27804 val 0.27360 gnorm 0.0257 (16.6s) *
+[delay qslstm_log seed 1992756749] epoch 006 train 0.27468 val 0.27071 gnorm 0.0289 (16.3s) *
+[delay qslstm_log seed 1992756749] epoch 007 train 0.27212 val 0.26882 gnorm 0.0485 (16.4s) *
+[delay qslstm_log seed 1992756749] epoch 008 train 0.27025 val 0.26656 gnorm 0.0507 (16.4s) *
+[delay qslstm_log seed 1992756749] epoch 009 train 0.26892 val 0.26548 gnorm 0.0348 (16.3s) *
+[delay qslstm_log seed 1992756749] epoch 010 train 0.26811 val 0.26460 gnorm 0.0412 (16.6s) *
+[delay qslstm_log seed 1992756749] epoch 011 train 0.26749 val 0.26403 gnorm 0.0495 (16.3s) *
+[delay qslstm_log seed 1992756749] epoch 012 train 0.26683 val 0.26348 gnorm 0.0406 (16.6s) *
+[delay qslstm_log seed 1992756749] epoch 013 train 0.26640 val 0.26311 gnorm 0.0399 (16.6s) *
+[delay qslstm_log seed 1992756749] epoch 014 train 0.26616 val 0.26333 gnorm 0.0516 (16.5s)
+[delay qslstm_log seed 1992756749] epoch 015 train 0.26590 val 0.26287 gnorm 0.0463 (16.4s) *
+[delay qslstm_log seed 1992756749] epoch 016 train 0.26568 val 0.26251 gnorm 0.0509 (16.2s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
     main()
