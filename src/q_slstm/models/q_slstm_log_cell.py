@@ -9,10 +9,33 @@ from .q_slstm_cell import (
     CustomQsLSTMCell,
     binary_scaled_memory_update,
 )
+from .vqc import VQC
 
-QSLSTM_LOG_RECURRENCE = "log_input_sigmoid_forget_binary_scale_v1"
+# Gates are evaluated on float64 VQC expectations, then cast to the state dtype.
+QSLSTM_LOG_RECURRENCE = "log_input_sigmoid_forget_binary_scale_f64_gates_v2"
+# Same recurrence on float32 expectations: complex64 simulation overshoots |q| <= 1 and the float32
+# cast rounds q within ~3e-8 of +-1 onto +-1, so training crashed at q=1 (singular) or q=-1 (N=0).
+QSLSTM_LOG_FLOAT32_GATES_RECURRENCE = "log_input_sigmoid_forget_binary_scale_v1"
+# Log-gate recurrences whose forget gate is sigmoid(q_f).
+QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES = (QSLSTM_LOG_RECURRENCE, QSLSTM_LOG_FLOAT32_GATES_RECURRENCE)
 # Tag of runs whose forget gate was also ln(2/(1-q)) (kept for tracing those runs).
 QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE = "log_gate_binary_scale_v1"
+
+
+def float64_expectations(gate, X):
+    """The gate's expectations [batch, n_class] simulated and returned in float64.
+
+    VQC.forward simulates at its inputs' precision (float32 gives a complex64 statevector whose
+    |<Z>| can exceed 1 by ~3e-7) and casts back to X.dtype, rounding q within ~3e-8 of +-1 onto +-1.
+    Here the circuit runs on float64 inputs and weights; gradients still reach the float32 weights.
+    Gates without a `VQC` circuit (torch stand-ins in tests) are evaluated on float64 inputs.
+    """
+    if isinstance(gate, VQC):
+        expvals = torch.stack(gate.VQC(X.double(), gate.weights.double(), gate.n_class)).movedim(0, -1)
+        if expvals.shape != (X.shape[0], gate.n_class):
+            raise ValueError(f"VQC expected output [batch, {gate.n_class}], got {tuple(expvals.shape)}")
+        return expvals
+    return gate(X.double())
 
 
 def logarithmic_gate(q):
@@ -48,8 +71,10 @@ def logarithmic_memory_update(q_i, q_f, z_t, c_prev, n_prev, scale_prev, *, retu
     `amplified_forget` uses f=ln(2/(1-q_f)) instead, as in runs tagged
     QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE.
     """
-    i = logarithmic_gate(q_i)
-    f = logarithmic_gate(q_f) if amplified_forget else sigmoid_forget_gate(q_f)
+    # Gates are evaluated in the expectations' dtype (float64 from the cell) and only then cast to
+    # the state dtype: cast first, q within ~3e-8 of +-1 would become exactly +-1.
+    i = logarithmic_gate(q_i).to(z_t.dtype)
+    f = (logarithmic_gate(q_f) if amplified_forget else sigmoid_forget_gate(q_f)).to(z_t.dtype)
     return binary_scaled_memory_update(
         f, i, torch.ones_like(i), z_t, c_prev, n_prev, scale_prev,
         return_forget_weight=return_forget_weight,
@@ -69,13 +94,16 @@ class CustomQsLSTMLogCell(CustomQsLSTMCell):
         super().__init__(input_size, hidden_size, output_size, vqc_depth, gate_epsilon)
         self.recurrence = QSLSTM_LOG_RECURRENCE
 
+    def gate_expectations(self, combined):
+        """Float64 input/forget expectations; the log gate is singular at q=1, so no float32 rounding."""
+        return float64_expectations(self.input_gate, combined), float64_expectations(self.forget_gate, combined)
+
     def forward(self, x, hidden, return_diagnostics=False):
         h_prev, c_prev, n_prev, scale_prev = hidden
 
         combined = torch.cat((x, h_prev), dim=-1)
 
-        q_i = self.input_gate(combined)
-        q_f = self.forget_gate(combined)
+        q_i, q_f = self.gate_expectations(combined)
         z_t = torch.tanh(self.cell_gate(combined))
         o_t = torch.sigmoid(self.output_gate(combined))
 

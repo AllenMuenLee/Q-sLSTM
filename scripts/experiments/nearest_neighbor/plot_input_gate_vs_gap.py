@@ -29,7 +29,7 @@ from gate_trace import load_model
 from plot_key_results import SIGNED_BINS
 from q_slstm.experiments.nearest_neighbor import make_datasets
 from q_slstm.models.q_slstm_cell import QSLSTM_RECURRENCE, bounded_log_ratio
-from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE, logarithmic_gate
+from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES, logarithmic_gate
 
 GATES = ("input", "forget")
 
@@ -47,7 +47,7 @@ SIGMOID_LABELS = {
 
 def amplified(config, gate):
     """Input gates are always amplified; forget gates only in runs predating the sigmoid-forget recurrences."""
-    return gate == "input" or config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, QSLSTM_LOG_RECURRENCE)
+    return gate == "input" or config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
 
 
 def gate_value(q, config, gate):

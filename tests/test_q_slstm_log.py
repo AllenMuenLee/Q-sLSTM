@@ -9,6 +9,7 @@ from q_slstm.models.factory import build_quantum_model
 from q_slstm.models.q_slstm_log_cell import (
     QSLSTM_LOG_RECURRENCE,
     CustomQsLSTMLogCell,
+    float64_expectations,
     logarithmic_gate,
     logarithmic_memory_update,
 )
@@ -151,3 +152,40 @@ def test_forget_gate_is_sigmoid_and_input_gate_is_amplified():
     ct, nt, st, iw, fw = logarithmic_memory_update(qi, qf, z, c, n, scale, return_forget_weight=True)
     torch.testing.assert_close(torch.ldexp(fw, st.long()), torch.sigmoid(qf))
     torch.testing.assert_close(torch.ldexp(iw, st.long()), torch.log(2 / (1 - qi)))
+
+
+def _boundary_input_gate(cell):
+    """Input-gate weights whose t=0 expectations lie within float32 rounding of +-1.
+
+    With h_prev = 0 the hidden qubits stay in |+>, so their q depends only on the last rotation;
+    offsets of 1e-5 / 3e-4 from +-pi/2 make the float32 simulation return exactly +-1 or overshoot
+    to +-1.0000001. Unit 0 is entangled with the input and stays away from the boundary.
+    """
+    with torch.no_grad():
+        w = cell.input_gate.weights
+        w.zero_()
+        w[-1, 1:4] = torch.tensor([math.pi / 2 + 1e-5, -math.pi / 2 - 1e-5, math.pi / 2 + 3e-4])
+
+
+def test_float32_expectations_hit_the_boundary_that_crashed_training():
+    cell = build_quantum_model("qslstm_log", 1, 4, 1, 2, seed=0).cell
+    _boundary_input_gate(cell)
+    combined = torch.cat((torch.full((8, 1), .3), torch.zeros(8, 4)), dim=-1)
+    q32 = cell.input_gate(combined)
+    assert (q32.abs() >= 1).any(), "float32 path should land on or past +-1 (the old failure mode)"
+    with pytest.raises(ValueError):
+        logarithmic_gate(q32)
+    q64 = float64_expectations(cell.input_gate, combined)
+    assert q64.dtype == torch.float64
+    assert (q64.abs() < 1).all()
+
+
+def test_cell_trains_through_boundary_expectations():
+    model = build_quantum_model("qslstm_log", 1, 4, 1, 2, seed=0)
+    _boundary_input_gate(model.cell)
+    outputs, (h, c, n, scale) = model(torch.full((8, 5, 1), .3))
+    assert outputs.dtype == h.dtype == c.dtype == n.dtype == torch.float32
+    assert torch.isfinite(outputs).all() and (n > 0).all()
+    outputs.sum().backward()
+    for name, p in model.named_parameters():
+        assert torch.isfinite(p.grad).all(), name
