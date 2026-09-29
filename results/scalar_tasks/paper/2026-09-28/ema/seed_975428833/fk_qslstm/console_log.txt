@@ -1,0 +1,23 @@
+scale=paper task=ema model=fk_qslstm seed=975428833 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[ema fk_qslstm seed 975428833] epoch 001 train 0.24975 val 0.12956 gnorm 0.405 (16.9s) *
+[ema fk_qslstm seed 975428833] epoch 002 train 0.04662 val 0.01860 gnorm 0.232 (16.9s) *
+[ema fk_qslstm seed 975428833] epoch 003 train 0.00877 val 0.00395 gnorm 0.101 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 004 train 0.00319 val 0.00265 gnorm 0.0593 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 005 train 0.00221 val 0.00192 gnorm 0.0355 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 006 train 0.00167 val 0.00148 gnorm 0.047 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 007 train 0.00128 val 0.00116 gnorm 0.0345 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 008 train 0.00100 val 0.00094 gnorm 0.0247 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 009 train 0.00080 val 0.00074 gnorm 0.0245 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 010 train 0.00065 val 0.00061 gnorm 0.0276 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 011 train 0.00054 val 0.00059 gnorm 0.0302 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 012 train 0.00047 val 0.00043 gnorm 0.0515 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 013 train 0.00038 val 0.00036 gnorm 0.0319 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 014 train 0.00037 val 0.00054 gnorm 0.0629 (16.8s)
+[ema fk_qslstm seed 975428833] epoch 015 train 0.00036 val 0.00035 gnorm 0.0877 (16.7s) *
+[ema fk_qslstm seed 975428833] epoch 016 train 0.00026 val 0.00023 gnorm 0.045 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 017 train 0.00022 val 0.00024 gnorm 0.0433 (17.0s)
+[ema fk_qslstm seed 975428833] epoch 018 train 0.00020 val 0.00017 gnorm 0.0462 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 019 train 0.00016 val 0.00014 gnorm 0.03 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 020 train 0.00015 val 0.00022 gnorm 0.0424 (16.8s)
+[ema fk_qslstm seed 975428833] epoch 021 train 0.00016 val 0.00013 gnorm 0.0675 (17.0s) *
+[ema fk_qslstm seed 975428833] epoch 022 train 0.00011 val 0.00010 gnorm 0.0311 (16.8s) *

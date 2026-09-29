@@ -1,0 +1,23 @@
+scale=paper task=ema model=fk_qslstm seed=435874469 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[ema fk_qslstm seed 435874469] epoch 001 train 0.18085 val 0.03790 gnorm 0.375 (16.7s) *
+[ema fk_qslstm seed 435874469] epoch 002 train 0.02531 val 0.00952 gnorm 0.197 (16.7s) *
+[ema fk_qslstm seed 435874469] epoch 003 train 0.00724 val 0.00438 gnorm 0.104 (16.7s) *
+[ema fk_qslstm seed 435874469] epoch 004 train 0.00383 val 0.00265 gnorm 0.0541 (16.9s) *
+[ema fk_qslstm seed 435874469] epoch 005 train 0.00257 val 0.00184 gnorm 0.108 (17.1s) *
+[ema fk_qslstm seed 435874469] epoch 006 train 0.00193 val 0.00161 gnorm 0.146 (17.1s) *
+[ema fk_qslstm seed 435874469] epoch 007 train 0.00149 val 0.00106 gnorm 0.144 (17.0s) *
+[ema fk_qslstm seed 435874469] epoch 008 train 0.00115 val 0.00077 gnorm 0.143 (16.7s) *
+[ema fk_qslstm seed 435874469] epoch 009 train 0.00083 val 0.00061 gnorm 0.0963 (16.8s) *
+[ema fk_qslstm seed 435874469] epoch 010 train 0.00062 val 0.00046 gnorm 0.0589 (16.9s) *
+[ema fk_qslstm seed 435874469] epoch 011 train 0.00048 val 0.00035 gnorm 0.0464 (17.2s) *
+[ema fk_qslstm seed 435874469] epoch 012 train 0.00042 val 0.00039 gnorm 0.0855 (17.1s)
+[ema fk_qslstm seed 435874469] epoch 013 train 0.00042 val 0.00064 gnorm 0.14 (17.1s)
+[ema fk_qslstm seed 435874469] epoch 014 train 0.00053 val 0.00022 gnorm 0.197 (17.0s) *
+[ema fk_qslstm seed 435874469] epoch 015 train 0.00037 val 0.00034 gnorm 0.15 (16.9s)
+[ema fk_qslstm seed 435874469] epoch 016 train 0.00027 val 0.00013 gnorm 0.119 (17.0s) *
+[ema fk_qslstm seed 435874469] epoch 017 train 0.00019 val 0.00016 gnorm 0.0785 (16.9s)
+[ema fk_qslstm seed 435874469] epoch 018 train 0.00025 val 0.00013 gnorm 0.119 (17.1s) *
+[ema fk_qslstm seed 435874469] epoch 019 train 0.00036 val 0.00019 gnorm 0.193 (16.8s)
+[ema fk_qslstm seed 435874469] epoch 020 train 0.00030 val 0.00010 gnorm 0.166 (16.7s) *
+[ema fk_qslstm seed 435874469] epoch 021 train 0.00014 val 0.00019 gnorm 0.0712 (16.7s)
+[ema fk_qslstm seed 435874469] epoch 022 train 0.00015 val 0.00019 gnorm 0.0882 (17.0s)
