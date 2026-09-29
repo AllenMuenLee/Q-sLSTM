@@ -26,9 +26,23 @@ import numpy as np  # noqa: E402
 from q_slstm.experiments import solar_generation_metrics as sm  # noqa: E402
 from q_slstm.experiments.solar_generation import run_status, verify_pairing  # noqa: E402
 
-MODELS = ("qlstm", "qslstm")
-MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)"}
-COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "persistence": "#555555", "truth": "#000000"}
+COMPARE_MODELS = ("qslstm", "qslstm_log", "fk_qslstm")
+MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)",
+                "qslstm_log": "Q-sLSTM-log (ln(2/(1-q)) input gate)",
+                "fk_qslstm": "Q-sLSTM (fk reference: exp gates, classical encoders)"}
+SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)"}
+COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868", "fk_qslstm": "#C44E52",
+          "persistence": "#555555", "truth": "#000000"}
+# The model compared against QLSTM; set with --compare-model (use_compare_model).
+COMPARE = "qslstm"
+MODELS = ("qlstm", COMPARE)
+
+
+def use_compare_model(model):
+    global COMPARE, MODELS
+    if model not in COMPARE_MODELS:
+        raise ValueError(f"compare model must be one of {COMPARE_MODELS}, got {model!r}")
+    COMPARE, MODELS = model, ("qlstm", model)
 COMPARISONS = [  # (subset, group_type, group, metric)
     ("all_eligible", "overall", "all", "mse"),
     ("all_eligible", "overall", "all", "mae"),
@@ -118,8 +132,8 @@ def plot_paired_differences(table, path):
         ax.legend(fontsize=8)
     ax.axhline(0, color="gray", ls=":")
     ax.set_xlabel("run seed")
-    ax.set_ylabel("MSE(Q-sLSTM) - MSE(QLSTM)  (MWh$^2$)")
-    ax.set_title("Paired seed-level differences (negative favors Q-sLSTM)", fontsize=10)
+    ax.set_ylabel(f"MSE({SHORT[COMPARE]}) - MSE(QLSTM)  (MWh$^2$)")
+    ax.set_title(f"Paired seed-level differences (negative favors {SHORT[COMPARE]})", fontsize=10)
     _finish(fig, path)
 
 
@@ -220,7 +234,7 @@ def write_summary(path, ctx):
     prim = ctx["primary_summary"]
     pilot_note = ("**This is a pilot study: a pipeline and cost check, not evidence about forecast performance.**"
                   if s["scale_preset"] == "pilot" else "")
-    leaning = "Q-sLSTM" if prim["mean_difference"] < 0 else "QLSTM"
+    leaning = SHORT[COMPARE] if prim["mean_difference"] < 0 else "QLSTM"
     if prim["n_paired_seeds"] < 2:
         verdict = "inconclusive (fewer than two paired seeds)"
     elif prim["ci95_low"] <= 0 <= prim["ci95_high"]:
@@ -246,7 +260,7 @@ def write_summary(path, ctx):
         f"batch {s['batch_size']}, {s['epochs']} epochs (no early stopping), weight decay {s['weight_decay']}, "
         f"grad clip {s['grad_clip'] or 'off'}.",
         f"- Overrides: training `{json.dumps(s['training_overrides'])}`, dataset `{json.dumps(s['dataset_overrides'])}`.",
-        f"- Seeds requested: qlstm {ctx['requested']['qlstm']}, qslstm {ctx['requested']['qslstm']}; "
+        f"- Seeds requested: qlstm {ctx['requested']['qlstm']}, {COMPARE} {ctx['requested'][COMPARE]}; "
         f"completed and accepted pairs: {prim['n_paired_seeds']}.",
         f"- Source revision: {ctx['revision']}.",
         "",
@@ -258,9 +272,9 @@ def write_summary(path, ctx):
         f"`{json.dumps({k: v['best_lag'] for k, v in q['alignment_diagnostic'].items()})}`.",
         "",
         "## Primary outcome: held-out next-hour MSE (MWh^2)",
-        f"- Paired Q-sLSTM - QLSTM: mean {_fmt(prim['mean_difference'])} (sd {_fmt(prim['sd_difference'])}), "
+        f"- Paired {SHORT[COMPARE]} - QLSTM: mean {_fmt(prim['mean_difference'])} (sd {_fmt(prim['sd_difference'])}), "
         f"95% CI [{_fmt(prim['ci95_low'])}, {_fmt(prim['ci95_high'])}] ({prim['ci_method']}); "
-        f"Q-sLSTM lower in {prim['seeds_a_lower']} of {prim['n_paired_seeds']} seeds. Reading: {verdict}.",
+        f"{SHORT[COMPARE]} lower in {prim['seeds_a_lower']} of {prim['n_paired_seeds']} seeds. Reading: {verdict}.",
         "",
         _md(ctx["primary_table"]),
         "",
@@ -270,7 +284,7 @@ def write_summary(path, ctx):
         "## Persistence references on the common subset (daily persistence available)",
         _md(ctx["baseline_table"]),
         "",
-        "## Paired differences (Q-sLSTM - QLSTM)",
+        f"## Paired differences ({SHORT[COMPARE]} - QLSTM)",
         _md(ctx["paired"][["subset", "group_type", "group", "metric", "n_paired_seeds", "mean_difference",
                            "sd_difference", "ci95_low", "ci95_high", "seeds_a_lower"]]),
         "",
@@ -318,8 +332,8 @@ def analyze(runs_dir, out_dir=None):
     seeds = sorted({s for s, _ in runs})
     pairing, unpaired = {}, []
     for seed in seeds:
-        if (seed, "qlstm") in runs and (seed, "qslstm") in runs:
-            pairing[seed] = verify_pairing(runs[(seed, "qlstm")][0], runs[(seed, "qslstm")][0])
+        if (seed, "qlstm") in runs and (seed, COMPARE) in runs:
+            pairing[seed] = verify_pairing(runs[(seed, "qlstm")][0], runs[(seed, COMPARE)][0])
         else:
             unpaired.append(seed)
     (out_dir / "pairing_checks.json").write_text(json.dumps(pairing, indent=2), encoding="utf-8")
@@ -335,7 +349,7 @@ def analyze(runs_dir, out_dir=None):
     per_seed.to_csv(out_dir / "combined_seed_metrics.csv", index=False)
     paired_rows, primary_table, primary = [], None, None
     for subset, group_type, group, metric in COMPARISONS:
-        table, summary = sm.paired_difference(per_seed, metric, subset, group_type, group)
+        table, summary = sm.paired_difference(per_seed, metric, subset, group_type, group, model_a=COMPARE)
         paired_rows.append(summary)
         if (subset, group_type, metric) == ("all_eligible", "overall", "mse"):
             primary_table, primary = table, summary
@@ -404,8 +418,13 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description="Analyze one solar-generation study.")
     parser.add_argument("--runs-dir", required=True, help="the study directory printed by run_sweep.py")
     parser.add_argument("--out-dir", default=None, help="default: <runs-dir>/analysis")
+    parser.add_argument("--compare-model", choices=COMPARE_MODELS, default="qslstm",
+                        help="model compared against QLSTM (default: qslstm); run once per variant")
     args = parser.parse_args(argv)
-    analyze(args.runs_dir, args.out_dir)
+    use_compare_model(args.compare_model)
+    out_dir = args.out_dir or (None if args.compare_model == "qslstm"
+                               else str(Path(args.runs_dir) / f"analysis_{args.compare_model}"))
+    analyze(args.runs_dir, out_dir)
     return 0
 
 

@@ -20,9 +20,8 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from q_slstm.datasets.scalar_tasks import TASKS  # noqa: E402
 from q_slstm.experiments import scalar_tasks_metrics as stm  # noqa: E402
-from q_slstm.experiments.scalar_tasks import MODELS  # noqa: E402
+from q_slstm.experiments.scalar_tasks import ALL_TASKS as TASKS, MODELS  # noqa: E402
 
 MODEL_LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log",
                 "fk_qslstm": "Q-sLSTM (fk reference)", "lstm": "LSTM (classical)"}

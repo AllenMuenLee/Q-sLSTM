@@ -25,10 +25,11 @@ import pandas as pd  # noqa: E402
 from q_slstm.experiments import nearest_neighbor_metrics as nnm  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import verify_pairing  # noqa: E402
 
-QSLSTM_MODELS = ("qslstm", "qslstm_log")
+QSLSTM_MODELS = ("qslstm", "qslstm_log", "fk_qslstm")
 MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)",
-                "qslstm_log": "Q-sLSTM-log (ln(2/(1-q)) gates)"}
-COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868"}
+                "qslstm_log": "Q-sLSTM-log (ln(2/(1-q)) gates)",
+                "fk_qslstm": "Q-sLSTM (fk reference: exp gates, classical encoders)"}
+COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868", "fk_qslstm": "#C44E52"}
 
 
 def model_pair(qslstm_model):
@@ -269,7 +270,7 @@ def write_summary(path, runs, cfg, comparisons, pairing, param_table, incomplete
         "- Every metric excludes the reference token and the first candidate (`metric_mask`).",
         "- The best-validation checkpoint was evaluated once on held-out data; no held-out selection.",
         "",
-        "## Parameter matching",
+        "## Parameter counts (same configuration; counts are not matched)",
         _markdown_table(param_table),
         "",
         f"## Pairing verification (same seed, QLSTM vs {MODEL_LABELS[QSLSTM]})",

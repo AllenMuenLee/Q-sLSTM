@@ -1,4 +1,3 @@
-import pytest
 import torch
 
 from q_slstm.experiments.scalar_tasks import MODELS, build_model, resolve_config
@@ -29,16 +28,28 @@ def test_gradients_reach_vqcs_and_classical_encoders():
         assert p.grad is not None and p.grad.abs().sum() > 0, name
 
 
-def test_available_in_scalar_tasks_only():
-    assert "fk_qslstm" in MODELS
-    assert "fk_qslstm" not in QUANTUM_MODELS  # nearest-neighbor / solar need diagnostics it lacks
+def test_available_in_every_experiment_with_the_shared_configuration():
+    from q_slstm.experiments import nearest_neighbor, solar_generation  # noqa: F401  (import check)
+    from q_slstm.experiments.nearest_neighbor import resolve_config as nn_config
+
+    assert "fk_qslstm" in QUANTUM_MODELS and "fk_qslstm" in MODELS
     config = resolve_config({"model": "fk_qslstm", "task": "ema", "seed": 1, "scale": "pilot"})
+    reference = resolve_config({"model": "qslstm", "task": "ema", "seed": 1, "scale": "pilot"})
+    for key in ("hidden_size", "qnn_depth", "n_qubits", "lr", "epochs", "batch_size", "sequence_length", "seeds"):
+        assert config[key] == reference[key], key
+    nn = nn_config({"model": "fk_qslstm", "scale": "pilot", "seed": 0})
+    assert nn["qslstm_recurrence"] == FK_QSLSTM_RECURRENCE
     assert config["qslstm_recurrence"] == FK_QSLSTM_RECURRENCE
     assert config["n_qubits"] == 1 + config["hidden_size"]
     assert isinstance(build_model(config).cell, CustomFkQsLSTMCell)
 
 
-def test_rejected_by_diagnostics():
+def test_write_proportion_diagnostics_leave_outputs_unchanged():
     model = build_quantum_model("fk_qslstm", 1, 2, 1, 1, seed=0)
-    with pytest.raises(ValueError):
-        model(torch.randn(2, 3, 1), return_diagnostics=True)
+    x = torch.randn(2, 3, 1)
+    with torch.no_grad():
+        plain, _ = model(x)
+        outputs, _, diag = model(x, return_diagnostics=True)
+    torch.testing.assert_close(outputs, plain)
+    assert diag["alpha"].shape == (2, 3, 2)
+    assert ((diag["alpha"] > 0) & (diag["alpha"] <= 1)).all()

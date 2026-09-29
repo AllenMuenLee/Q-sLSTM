@@ -24,6 +24,7 @@ ROOT = SCRIPT_DIR.parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
 from q_slstm.datasets.scalar_tasks import TASKS  # noqa: E402
+from q_slstm.experiments.scalar_tasks import ALL_TASKS  # noqa: E402
 from q_slstm.experiments.scalar_tasks import (  # noqa: E402
     MODELS, PRESETS, add_run_arguments, resolve_config, run_directory, sweep_directory,
 )
@@ -35,8 +36,9 @@ SWEEP_ONLY = {"model", "tasks", "seeds", "n_seeds", "master_seed", "workers", "r
 def build_parser():
     parser = argparse.ArgumentParser(description="Run one model over many seeds and tasks.")
     parser.add_argument("--model", choices=MODELS, required=True, help="the single model to run")
-    parser.add_argument("--tasks", choices=TASKS, nargs="+", default=list(TASKS),
-                        help="tasks to run (default: all)")
+    parser.add_argument("--tasks", choices=ALL_TASKS, nargs="+", default=list(TASKS),
+                        help="tasks to run (default: all synthetic tasks; real-data tasks such as "
+                             "solar_next only when listed)")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--n-seeds", type=int, default=None,
                        help="number of random seeds, drawn reproducibly from --master-seed "

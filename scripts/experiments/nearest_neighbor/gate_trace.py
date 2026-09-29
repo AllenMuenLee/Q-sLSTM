@@ -87,7 +87,8 @@ def trace_run(run_dir, config, split, n_sequences):
     ds = make_datasets(cfg)[split]
     model = load_model(run_dir, config)
     cell = model.cell
-    qslstm = config["model"] in ar.QSLSTM_MODELS
+    fk = config["model"] == "fk_qslstm"  # exp gates behind classical encoders; unnormalized like QLSTM
+    qslstm = config["model"] in ("qslstm", "qslstm_log")
     log_gates = config["model"] == "qslstm_log"
     polynomial = config["model"] == "qslstm" and config.get("qslstm_recurrence") == QSLSTM_POLYNOMIAL_RECURRENCE
     binary_scale = polynomial or log_gates
@@ -106,10 +107,19 @@ def trace_run(run_dir, config, split, n_sequences):
     with torch.no_grad():
         for t in range(L):
             comb = torch.cat((x[:, t], h), dim=-1)
-            q_i, q_f = cell.gate_expectations(comb) if log_gates else (cell.input_gate(comb), cell.forget_gate(comb))
-            z = torch.tanh(cell.cell_gate(comb))
-            o = torch.sigmoid(cell.output_gate(comb))
-            if log_gates:
+            if fk:
+                enc = lambda gate, name: getattr(cell, f"Elayer_out_{name}")(
+                    getattr(cell, f"{gate}_gate")(getattr(cell, f"Elayer_in_{name}")(comb)))
+                z, o = torch.tanh(enc("cell", "update")), torch.sigmoid(enc("output", "output"))
+            else:
+                q_i, q_f = cell.gate_expectations(comb) if log_gates else (cell.input_gate(comb), cell.forget_gate(comb))
+                z = torch.tanh(cell.cell_gate(comb))
+                o = torch.sigmoid(cell.output_gate(comb))
+            if fk:
+                m_t = torch.zeros_like(m)
+                i_gate = i_raw = torch.exp(enc("input", "input"))
+                f_gate = f_raw = torch.exp(enc("forget", "forget"))
+            elif log_gates:
                 c_t, n_t, m_t, i_gate, f_gate = logarithmic_memory_update(
                     q_i, q_f, z, c, n, m, return_forget_weight=True, amplified_forget=amplified_forget)
                 i_raw = logarithmic_gate(q_i).float()

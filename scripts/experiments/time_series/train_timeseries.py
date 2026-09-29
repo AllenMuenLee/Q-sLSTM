@@ -30,6 +30,7 @@ from q_slstm.utils.experiment import build_result_path
 from q_slstm.utils.experiment import generate_experiment_readme
 from q_slstm.utils.experiment import Tee
 
+from q_slstm.models.fk_q_slstm_cell import CustomFkQsLSTMCell
 from q_slstm.models.qlstm_cell import CustomQLSTMCell
 from q_slstm.models.q_slstm_cell import CustomQsLSTMCell, DEFAULT_GATE_EPSILON
 from q_slstm.models.q_slstm_log_cell import CustomQsLSTMLogCell
@@ -68,7 +69,7 @@ def make_model(args):
     Move your existing model-creation if/elif here.
     """
     use_input_projection = (
-        args.model in ("qlstm", "qslstm", "qslstm_log", "lstm")
+        args.model in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "lstm")
         and args.input_projection_size > 0
         and args.input_size > args.input_projection_size
     )
@@ -86,6 +87,19 @@ def make_model(args):
             effective_input_size, args.hidden_size, args.output_size, args.qnn_depth
         ).float()
         base_model = CustomLSTM(effective_input_size, args.hidden_size, qlstm_cell).float()
+        model = (
+            InputProjectionWrapper(args.input_size, effective_input_size, base_model)
+            if use_input_projection
+            else base_model
+        )
+        return model.to(args.device).float()
+    elif args.model == "fk_qslstm":
+        # Reference Q-sLSTM: exp gates behind classical encoders, (h, c) state; same configuration.
+        print("OPERATING MODEL {}".format(args.model))
+        fk_cell = CustomFkQsLSTMCell(
+            effective_input_size, args.hidden_size, args.output_size, args.qnn_depth
+        ).float()
+        base_model = CustomLSTM(effective_input_size, args.hidden_size, fk_cell).float()
         model = (
             InputProjectionWrapper(args.input_size, effective_input_size, base_model)
             if use_input_projection
@@ -147,6 +161,7 @@ def main():
             "qlstm",
             "qslstm",
             "qslstm_log",
+            "fk_qslstm",
             "lstm",
             "self_modulating_qfwp",
             "self_modulating_qfwp_only_new_params",

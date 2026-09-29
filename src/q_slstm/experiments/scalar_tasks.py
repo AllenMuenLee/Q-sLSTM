@@ -30,6 +30,7 @@ from q_slstm.datasets.scalar_tasks import (
     generate_dataset,
     split_train_val,
 )
+from q_slstm.datasets.solar_scalar import REAL_TASKS, load_solar_next, reference_mse
 from q_slstm.experiments import scalar_tasks_metrics as stm
 from q_slstm.experiments.nearest_neighbor import (
     _require_finite,
@@ -40,16 +41,16 @@ from q_slstm.experiments.nearest_neighbor import (
     parameter_checksums,
     source_revision,
 )
-from q_slstm.models.factory import (
-    QUANTUM_MODELS, REFERENCE_MODELS, build_quantum_model, count_trainable_parameters,
-)
+from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
 from q_slstm.models.fk_q_slstm_cell import FK_QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
 
 CLASSICAL_MODELS = ("lstm",)
-VQC_MODELS = QUANTUM_MODELS + REFERENCE_MODELS
+VQC_MODELS = QUANTUM_MODELS
 MODELS = VQC_MODELS + CLASSICAL_MODELS
+# Synthetic tasks plus real-data tasks (q_slstm.datasets.solar_scalar).
+ALL_TASKS = TASKS + REAL_TASKS
 
 # The paper preset keeps the nearest-neighbor model size (hidden 6, depth 3) and length (32) so the
 # two experiments are comparable; tasks are simpler, so the data and epoch budgets are smaller.
@@ -113,8 +114,8 @@ def resolve_config(args):
     a = dict(vars(args)) if not isinstance(args, dict) else dict(args)
     if a.get("model") not in MODELS:
         raise ValueError(f"--model must be one of {MODELS}, got {a.get('model')!r}")
-    if a.get("task") not in TASKS:
-        raise ValueError(f"--task must be one of {TASKS}, got {a.get('task')!r}")
+    if a.get("task") not in ALL_TASKS:
+        raise ValueError(f"--task must be one of {ALL_TASKS}, got {a.get('task')!r}")
 
     preset = a.get("scale", "paper")
     if preset not in PRESETS:
@@ -133,9 +134,10 @@ def resolve_config(args):
         flip_probability=a.get("flip_probability", d.flip_probability),
         narma_order=a.get("narma_order", d.narma_order),
     )
-    generation.validate(a["task"], resolved["sequence_length"])
-    if a.get("run_extrapolation"):
-        generation.validate(a["task"], resolved["extrapolation_length"])
+    if a["task"] in TASKS:  # real-data tasks have no generation parameters
+        generation.validate(a["task"], resolved["sequence_length"])
+        if a.get("run_extrapolation"):
+            generation.validate(a["task"], resolved["extrapolation_length"])
 
     val_size = int(round(resolved["train_size"] * resolved["val_fraction"]))
     if not 0 < val_size < resolved["train_size"]:
@@ -195,6 +197,8 @@ def run_directory(config):
 def make_datasets(config):
     """Materialize every split for one run; identical for all models given the same seeds and task."""
     gen, seeds, task = generation_config(config), config["seeds"], config["task"]
+    if task in REAL_TASKS:
+        return load_solar_next(config, seeds["data"])
     pool = generate_dataset(task, config["train_size"], config["sequence_length"], seeds["data"], "train_pool", gen)
     train, val, _, _ = split_train_val(pool, config["val_size"], seeds["split"])
     datasets = {
@@ -216,6 +220,9 @@ def dataset_manifest(config, datasets):
                           "warmup_steps": ds.metadata["warmup_steps"], "checksums": ds.checksums()}
                    for name, ds in datasets.items()},
         "checksum_method": "sha256 over dtype, shape, and little-endian tensor bytes",
+        **({"source": datasets["test"].metadata["source"],
+            "reference_mse": {name: reference_mse(ds) for name, ds in datasets.items()}}
+           if config["task"] in REAL_TASKS else {}),
     }
 
 

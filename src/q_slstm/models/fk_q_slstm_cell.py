@@ -12,6 +12,7 @@
 import torch
 import torch.nn as nn
 
+from .diagnostics import write_proportion
 from .vqc import VQC
 
 torch.set_default_dtype(torch.float32)
@@ -22,7 +23,7 @@ FK_QSLSTM_RECURRENCE = "fk_exp_gates_classical_encoders_v1"
 class CustomFkQsLSTMCell(nn.Module):
     """Reference Q-sLSTM cell with recurrent state (h, c)."""
 
-    supports_alpha_diagnostics = False
+    supports_alpha_diagnostics = True
 
     def __init__(self, input_size, hidden_size, output_size, vqc_depth):
         super().__init__()
@@ -51,7 +52,13 @@ class CustomFkQsLSTMCell(nn.Module):
         self.Elayer_out_update = nn.Linear(self.n_qubits, hidden_size)
         self.Elayer_out_output = nn.Linear(self.n_qubits, hidden_size)
 
-    def forward(self, x, hidden):
+    def forward(self, x, hidden, return_diagnostics=False, n_diag=None):
+        """One step. `return_diagnostics` adds an analysis-only write proportion.
+
+        Like the QLSTM baseline, the cell has no normalizer, so the diagnostic keeps a separate
+        accumulator n_diag_after = f_t * n_diag_before + i_t (zero-initialized when `n_diag` is None)
+        from detached gates. It never influences the state, output, loss, or gradients.
+        """
         h_prev, c_prev = hidden
 
         # Concatenate input and hidden state
@@ -66,4 +73,9 @@ class CustomFkQsLSTMCell(nn.Module):
         h_t = o_t * torch.tanh(c_t)
 
         out = self.output_post_processing(h_t)
+
+        if return_diagnostics:
+            n_before = torch.zeros_like(c_t) if n_diag is None else n_diag
+            alpha, n_after = write_proportion(i_t, f_t, n_before)
+            return out, h_t, c_t, {"alpha": alpha, "n_diag": n_after}
         return out, h_t, c_t

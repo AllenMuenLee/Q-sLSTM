@@ -33,7 +33,7 @@ from q_slstm.datasets.nearest_neighbor import (
     split_train_val,
 )
 from q_slstm.experiments import nearest_neighbor_metrics as nnm
-from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
+from q_slstm.models.factory import QUANTUM_MODELS, recurrence_tag, build_quantum_model, count_trainable_parameters
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
 from q_slstm.utils.seeds import stable_seed
@@ -183,7 +183,7 @@ def resolve_config(args):
         "input_projection": False,
         "n_qubits": INPUT_SIZE + resolved["hidden_size"],
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
-        "qslstm_recurrence": QSLSTM_LOG_RECURRENCE if a["model"] == "qslstm_log" else QSLSTM_RECURRENCE,
+        "qslstm_recurrence": recurrence_tag(a["model"]),
         "weight_decay": a.get("weight_decay", 0.0),
         "grad_clip": a.get("grad_clip", 0.0),
         "device": a.get("device", "cpu"),

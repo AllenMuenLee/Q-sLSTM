@@ -24,7 +24,7 @@ import pandas as pd
 import torch
 
 from analyze_results import COLORS
-from compare_variants import VARIANTS
+import compare_variants as cv
 from gate_trace import load_model
 from plot_key_results import SIGNED_BINS
 from q_slstm.experiments.nearest_neighbor import make_datasets
@@ -37,8 +37,9 @@ LABELS = {
     "qlstm": "QLSTM: sigmoid(q)",
     "qslstm": "QsLSTM: (1+q)/(1-q), before stabilization",
     "qslstm_log": "QsLSTM_LOG: ln(2/(1-q)), before scaling",
+    "fk_qslstm": "QsLSTM_FK: exp(Linear(VQC)), unstabilized",
 }
-SHORT_NAMES = {"qlstm": "QLSTM", "qslstm": "QsLSTM", "qslstm_log": "QsLSTM_LOG"}
+SHORT_NAMES = {"qlstm": "QLSTM", "qslstm": "QsLSTM", "qslstm_log": "QsLSTM_LOG", "fk_qslstm": "QsLSTM_FK"}
 SIGMOID_LABELS = {
     "qslstm": "QsLSTM: sigmoid(q)",
     "qslstm_log": "QsLSTM_LOG: sigmoid(q)",
@@ -46,11 +47,15 @@ SIGMOID_LABELS = {
 
 
 def amplified(config, gate):
-    """Input gates are always amplified; forget gates only in runs predating the sigmoid-forget recurrences."""
-    return gate == "input" or config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
+    """Input gates are always amplified; forget gates only in runs predating the sigmoid-forget recurrences
+    (fk_qslstm: both are exp gates)."""
+    return gate == "input" or config["model"] == "fk_qslstm" or config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
 
 
 def gate_value(q, config, gate):
+    """Gate from the observed value: the VQC expectation q, or for fk_qslstm its output encoder's value."""
+    if config["model"] == "fk_qslstm":
+        return torch.exp(q)
     if config["model"] == "qlstm" or not amplified(config, gate):
         return torch.sigmoid(q)
     if config["model"] == "qslstm":
@@ -63,10 +68,24 @@ def trace(run_dir, config, batch_size, gate):
     model = load_model(run_dir, config)
     captured = []
 
-    def observe(_module, _inputs, q):
+    def record(q):
         captured.append(gate_value(q, config, gate).detach().double().mean(dim=-1).cpu())
 
-    handle = getattr(model.cell, f"{gate}_gate").register_forward_hook(observe)
+    cell = model.cell
+    if config["model"] == "qslstm_log":
+        # The log cell simulates its input/forget VQCs in float64 without calling the VQC modules.
+        original = cell.gate_expectations
+
+        def gate_expectations(combined):
+            q_i, q_f = original(combined)
+            record(q_i if gate == "input" else q_f)
+            return q_i, q_f
+
+        cell.gate_expectations = gate_expectations
+        handle = type("Restore", (), {"remove": staticmethod(lambda: delattr(cell, "gate_expectations"))})
+    else:
+        module = getattr(cell, f"Elayer_out_{gate}" if config["model"] == "fk_qslstm" else f"{gate}_gate")
+        handle = module.register_forward_hook(lambda _module, _inputs, q: record(q))
     gates, predictions = [], []
     try:
         with torch.no_grad():
@@ -134,7 +153,7 @@ def plot(summary, path, gate="input"):
     fig, ax = plt.subplots(figsize=(10, 5.5))
     ax.axvspan(0, 2, color="0.93", zorder=0)
     ax.axvline(0, color="black", lw=0.8, ls=":")
-    for model in VARIANTS:
+    for model in cv.VARIANTS:
         rows = summary[summary["model"] == model].sort_values("gap")
         ax.plot(rows["gap"], rows["mean"], marker="o", lw=2, color=COLORS[model], label=model_label(summary, model))
         ax.fill_between(rows["gap"], rows["mean"] - rows["sd"], rows["mean"] + rows["sd"],
@@ -154,8 +173,8 @@ def plot(summary, path, gate="input"):
     plt.close(fig)
 
     # Native gate scales differ substantially; individual axes reveal each curve's shape.
-    fig, axes = plt.subplots(1, 3, figsize=(14, 4.7), sharex=True)
-    for ax, model in zip(axes, VARIANTS):
+    fig, axes = plt.subplots(1, len(cv.VARIANTS), figsize=(4.7 * len(cv.VARIANTS), 4.7), sharex=True, squeeze=False)
+    for ax, model in zip(axes[0], cv.VARIANTS):
         rows = summary[summary["model"] == model].sort_values("gap")
         ax.axvspan(0, 2, color="0.93", zorder=0)
         ax.axvline(0, color="black", lw=0.8, ls=":")
@@ -179,8 +198,8 @@ def plot_combined(out):
     since single seeds with saturated q dominate the QsLSTM mean and SD."""
     per_seed = {gate: pd.read_csv(out / f"{gate}_gate_vs_gap_per_seed.csv") for gate in GATES}
     styles = {"input": dict(ls="-", marker="o"), "forget": dict(ls="--", marker="s", mfc="white")}
-    fig, axes = plt.subplots(1, len(VARIANTS), figsize=(14, 4.9), sharex=True)
-    for ax, model in zip(axes, VARIANTS):
+    fig, axes = plt.subplots(1, len(cv.VARIANTS), figsize=(4.7 * len(cv.VARIANTS), 4.9), sharex=True, squeeze=False)
+    for ax, model in zip(axes[0], cv.VARIANTS):
         ax.axvspan(0, 2, color="0.93", zorder=0)
         ax.axvline(0, color="black", lw=0.8, ls=":")
         labels = []
@@ -221,18 +240,23 @@ def main():
                         help="Draw input and forget gates together from both completed per-seed CSVs")
     args = parser.parse_args()
     if args.combine:
-        plot_combined(args.analysis_dir / "key_plots")
+        out = args.analysis_dir / "key_plots"
+        cv.use_variants(set(pd.read_csv(out / "input_gate_vs_gap_per_seed.csv")["model"]))
+        plot_combined(out)
         return
     stem = f"{args.gate}_gate_vs_gap"
     if args.plot_only:
         out = args.analysis_dir / "key_plots"
-        plot(pd.read_csv(out / f"{stem}.csv"), out / f"{stem}.png", args.gate)
+        summary = pd.read_csv(out / f"{stem}.csv")
+        cv.use_variants(set(summary["model"]))
+        plot(summary, out / f"{stem}.png", args.gate)
         return
     torch.set_num_threads(args.threads)
     sources = json.loads((args.analysis_dir / "sources.json").read_text())
     keys = {(int(key.split("/")[0]), key.split("/")[1]) for key in sources}
     seeds = {seed for seed, _ in keys}
-    assert keys == {(seed, model) for seed in seeds for model in VARIANTS}
+    cv.use_variants({model for _, model in keys})
+    assert keys == {(seed, model) for seed in seeds for model in cv.VARIANTS}
     out = args.analysis_dir / "key_plots"
     out.mkdir(parents=True, exist_ok=True)
     frames = []
@@ -264,7 +288,8 @@ def main():
         f"The plotted quantity is the transformed {args.gate} gate before numerical stabilization/scaling, "
         "not the raw circuit expectation q and not the effective (stabilized/scaled) weight the recurrence applies. "
         "QLSTM: sigmoid(q); amplified QsLSTM: exp(log(1+q)-log(1-q)) with the saved epsilon clamp; "
-        "amplified QsLSTM_LOG: ln(2/(1-q)); runs with a sigmoid-forget recurrence: sigmoid(q). "
+        "amplified QsLSTM_LOG: ln(2/(1-q)); QsLSTM_FK: exp of its output encoder (both gates); "
+        "runs with a sigmoid-forget recurrence: sigmoid(q). "
         f"Amplified per model: {per_seed.groupby('model')['amplified'].all().to_dict()}. "
         "Different gate scales do not directly imply different realized memory writes.\n\n"
         "Average over hidden units per step, then eligible steps per bin within each seed. "

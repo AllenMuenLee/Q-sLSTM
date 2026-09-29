@@ -31,10 +31,19 @@ import analyze_results as ar  # noqa: E402
 from analyze_results import COLORS, COMPARISON_METRICS, MODEL_LABELS, SPLIT_TITLES  # noqa: E402
 from q_slstm.experiments import nearest_neighbor_metrics as nnm  # noqa: E402
 
-VARIANTS = ("qlstm", "qslstm", "qslstm_log")
+VARIANTS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm")
 # (a, b): differences are a - b, so negative = a has the lower value.
-PAIRS = (("qslstm", "qlstm"), ("qslstm_log", "qlstm"), ("qslstm_log", "qslstm"))
-SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log"}
+ALL_PAIRS = (("qslstm", "qlstm"), ("qslstm_log", "qlstm"), ("qslstm_log", "qslstm"),
+             ("fk_qslstm", "qlstm"), ("fk_qslstm", "qslstm"))
+PAIRS = ALL_PAIRS
+
+
+def use_variants(variants):
+    """Restrict the comparison to `variants` (e.g. older sweeps that predate fk_qslstm)."""
+    global VARIANTS, PAIRS
+    VARIANTS = tuple(m for m in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm") if m in variants)
+    PAIRS = tuple((a, b) for a, b in ALL_PAIRS if a in VARIANTS and b in VARIANTS)
+SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)"}
 CASES = ("all", *nnm.CASE_ORDER)
 PANEL_METRICS = {
     "mse": "MSE", "mae": "MAE", "final_mse": "final-step MSE", "event_mse": "event-step MSE",
@@ -360,13 +369,16 @@ def compare(runs_dirs, out_dir, splits=("test",)):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="QLSTM vs Q-sLSTM vs Q-sLSTM-log over several sweeps.")
+    parser = argparse.ArgumentParser(description="QLSTM vs the Q-sLSTM variants over several sweeps.")
     parser.add_argument("--runs-dirs", nargs="+", required=True,
-                        help="sweep directories; together they must contain all three models")
+                        help="sweep directories; together they must contain every compared model")
+    parser.add_argument("--variants", nargs="+", choices=VARIANTS, default=list(VARIANTS),
+                        help="models to compare (default: all four; list three for sweeps without fk_qslstm)")
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--splits", nargs="+", choices=["test", "extrapolation"], default=["test"],
                         help="evaluation splits to compare (default: test only)")
     args = parser.parse_args(argv)
+    use_variants(args.variants)
     compare(args.runs_dirs, args.out_dir, args.splits)
     return 0
 

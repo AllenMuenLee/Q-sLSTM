@@ -1,6 +1,6 @@
 # scripts/experiments/solar_generation/run_sweep.py
 #
-# Run ONE model (qlstm or qslstm) over many seeds with a chosen number of parallel workers; run the
+# Run ONE model (qlstm, qslstm, qslstm_log, or fk_qslstm) over many seeds with a chosen number of parallel workers; run the
 # script once per model with the same seeds, then combine with analyze_results.py. The dataset and
 # chronological split are fixed, so seeds only change initialization and training order. Each run is
 # an isolated train_solar_generation.py subprocess with its own console_log.txt.
@@ -31,7 +31,7 @@ SWEEP_ONLY = {"model", "seeds", "n_seeds", "master_seed", "workers", "resume", "
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(description="Run one model (qlstm or qslstm) over many seeds.")
+    parser = argparse.ArgumentParser(description="Run one model over many seeds.")
     parser.add_argument("--model", choices=QUANTUM_MODELS, required=True, help="the single model to run")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--n-seeds", type=int, default=None,

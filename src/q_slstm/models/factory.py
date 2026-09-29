@@ -8,9 +8,9 @@ from .q_slstm_log_cell import CustomQsLSTMLogCell
 from .qlstm_cell import CustomQLSTMCell
 from .sequence_wrappers import CustomLSTM, CustomQsLSTM
 
-QUANTUM_MODELS = ("qlstm", "qslstm", "qslstm_log")
-# Reference port without write-proportion diagnostics; only the scalar-task pipeline accepts it.
-REFERENCE_MODELS = ("fk_qslstm",)
+# Every experiment runs all four with the same configuration (hidden size, depth, qubits, training);
+# parameter counts are not matched (fk_qslstm adds classical encoders around its VQCs).
+QUANTUM_MODELS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm")
 
 
 def build_quantum_model(model, input_size, hidden_size, output_size, qnn_depth,
@@ -21,8 +21,8 @@ def build_quantum_model(model, input_size, hidden_size, output_size, qnn_depth,
     four VQCs and the output layer in the same order, so an equal
     `seed` gives equal initial parameters. Global RNG state is left untouched when `seed` is given.
     """
-    if model not in QUANTUM_MODELS + REFERENCE_MODELS:
-        raise ValueError(f"model must be one of {QUANTUM_MODELS + REFERENCE_MODELS}, got {model!r}")
+    if model not in QUANTUM_MODELS:
+        raise ValueError(f"model must be one of {QUANTUM_MODELS}, got {model!r}")
 
     def build():
         if model == "qlstm":
@@ -46,3 +46,12 @@ def build_quantum_model(model, input_size, hidden_size, output_size, qnn_depth,
 
 def count_trainable_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+def recurrence_tag(model):
+    """Recurrence version recorded in run configs (`qslstm_recurrence`); qlstm keeps the Q-sLSTM tag."""
+    from .fk_q_slstm_cell import FK_QSLSTM_RECURRENCE
+    from .q_slstm_cell import QSLSTM_RECURRENCE
+    from .q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
+
+    return {"qslstm_log": QSLSTM_LOG_RECURRENCE, "fk_qslstm": FK_QSLSTM_RECURRENCE}.get(model, QSLSTM_RECURRENCE)

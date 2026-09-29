@@ -23,7 +23,7 @@ import pandas as pd
 import torch
 
 from q_slstm.experiments.nearest_neighbor import environment_info, parameter_checksums
-from q_slstm.models.factory import QUANTUM_MODELS, count_trainable_parameters
+from q_slstm.models.factory import QUANTUM_MODELS, recurrence_tag, count_trainable_parameters
 from q_slstm.models.projected_quantum import PROJECTION_ACTIVATION, build_projected_quantum_model
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
@@ -185,7 +185,9 @@ def resolve_config(args):
         "n_qubits": preset["projection_size"] + preset["hidden_size"],
         "n_vqcs_per_cell": 4,
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
-        "qslstm_recurrence": QSLSTM_LOG_RECURRENCE if a["model"] == "qslstm_log" else QSLSTM_RECURRENCE,
+        # Every model's recurrence version, so all models of one code version share this study (and its
+        # study_id) while a change to any recurrence starts a new study. The run's own tag is in the config.
+        "recurrences": {m: recurrence_tag(m) for m in QUANTUM_MODELS},
         "weight_decay": a.get("weight_decay", 0.0) or 0.0,
         "grad_clip": a.get("grad_clip", 0.0) or 0.0,
         "optimizer": "Adam",
@@ -201,6 +203,7 @@ def resolve_config(args):
     config = {
         "kind": "solar_generation_run",
         "model": a["model"],
+        "qslstm_recurrence": recurrence_tag(a["model"]),
         "study_id": study_id,
         "study": study,
         "seeds": derive_seeds(run_seed),
@@ -597,7 +600,11 @@ def run_experiment(config, run_dir=None, resume=False, overwrite=False):
 
 
 def verify_pairing(run_dir_a, run_dir_b):
-    """Checks that two runs of one seed differ only in the recurrent architecture."""
+    """Checks that two runs of one seed differ only in the recurrent architecture.
+
+    Models share one configuration but not a parameter count (fk_qslstm adds classical encoders), so
+    parameter counts and names are recorded, not required; shared parameters must start equal.
+    """
     load = lambda d, f: json.loads((Path(d) / f).read_text(encoding="utf-8"))
     ca, cb = load(run_dir_a, "config.json"), load(run_dir_b, "config.json")
     ia, ib = load(run_dir_a, "init_parameters.json"), load(run_dir_b, "init_parameters.json")
@@ -605,6 +612,7 @@ def verify_pairing(run_dir_a, run_dir_b):
     pa, pb = load(run_dir_a, "parameters.json"), load(run_dir_b, "parameters.json")
     da, db = load(run_dir_a, "complete.json"), load(run_dir_b, "complete.json")
     names_equal = set(ia["checksums"]) == set(ib["checksums"])
+    shared = set(ia["checksums"]) & set(ib["checksums"])
     checks = {
         "study_settings_equal": ca["study"] == cb["study"],
         "study_id_equal": ca["study_id"] == cb["study_id"],
@@ -612,11 +620,12 @@ def verify_pairing(run_dir_a, run_dir_b):
         "seed_map_equal": ca["seeds"] == cb["seeds"],
         "scaler_equal": sha256_file(Path(run_dir_a) / "scaler.json") == sha256_file(Path(run_dir_b) / "scaler.json"),
         "epoch_orders_equal": sa["epoch_order_sha256"] == sb["epoch_order_sha256"],
-        "all_parameter_names_shared": names_equal,
-        "initial_parameters_equal": names_equal and all(ia["checksums"][k] == ib["checksums"][k] for k in ia["checksums"]),
-        "parameter_counts_equal": pa["trainable_parameters"] == pb["trainable_parameters"],
+        "initial_shared_parameters_equal": bool(shared) and all(ia["checksums"][k] == ib["checksums"][k]
+                                                                for k in shared),
         "test_target_sets_equal": da["test_window_ids_sha256"] == db["test_window_ids_sha256"],
         "models_differ": ca["model"] != cb["model"],
     }
     checks["accepted"] = all(checks.values())
+    checks["all_parameter_names_shared"] = names_equal
+    checks["parameter_counts_equal"] = pa["trainable_parameters"] == pb["trainable_parameters"]
     return checks

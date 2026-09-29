@@ -1,6 +1,6 @@
 # scripts/experiments/nearest_neighbor/run_sweep.py
 #
-# Run ONE model (qlstm or qslstm) over many seeds, with a chosen number of parallel workers.
+# Run ONE model (qlstm, qslstm, qslstm_log, or fk_qslstm) over many seeds, with a chosen number of parallel workers.
 # Run the script once per model; combine afterwards with analyze_results.py.
 #
 # Pairing across the two invocations comes from the seeds: the same seed always gives identical
@@ -29,7 +29,7 @@ sys.path.insert(0, str(SCRIPT_DIR))
 from q_slstm.experiments.nearest_neighbor import (  # noqa: E402
     PRESETS, add_run_arguments, resolve_config, run_directory, sweep_directory,
 )
-from q_slstm.models.factory import QUANTUM_MODELS  # noqa: E402
+from q_slstm.models.factory import QUANTUM_MODELS, recurrence_tag  # noqa: E402
 from q_slstm.models.q_slstm_cell import QSLSTM_RECURRENCE  # noqa: E402
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE  # noqa: E402
 from q_slstm.utils.seeds import draw_seeds  # noqa: E402
@@ -38,7 +38,7 @@ SWEEP_ONLY = {"model", "seeds", "n_seeds", "master_seed", "workers", "resume", "
 
 
 def build_parser():
-    parser = argparse.ArgumentParser(description="Run one model (qlstm or qslstm) over many seeds.")
+    parser = argparse.ArgumentParser(description="Run one model over many seeds.")
     parser.add_argument("--model", choices=QUANTUM_MODELS, required=True, help="the single model to run")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--n-seeds", type=int, default=None,
@@ -70,7 +70,7 @@ def run_one(job):
     if (run_dir / "config.json").exists():
         previous = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
         model_name = argv[argv.index("--model") + 1]
-        recurrence = QSLSTM_LOG_RECURRENCE if model_name == "qslstm_log" else QSLSTM_RECURRENCE
+        recurrence = recurrence_tag(model_name)
         if previous.get("qslstm_recurrence") != recurrence:
             return run_dir, "FAILED (different recurrence; choose a new --save-dir)", 0.0
     if resume and (run_dir / "complete.json").exists():

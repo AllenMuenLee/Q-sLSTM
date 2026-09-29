@@ -39,7 +39,8 @@ def test_log_variant_records_its_recurrence(synthetic_pointer, tmp_path):
     from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
 
     config = tiny_config(synthetic_pointer, tmp_path, "qslstm_log")
-    assert config["study"]["qslstm_recurrence"] == QSLSTM_LOG_RECURRENCE
+    assert config["qslstm_recurrence"] == QSLSTM_LOG_RECURRENCE
+    assert config["study_id"] == tiny_config(synthetic_pointer, tmp_path, "fk_qslstm")["study_id"]
     assert ex.run_directory(config).name == "qslstm_log"
 
 
