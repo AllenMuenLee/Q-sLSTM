@@ -1,14 +1,32 @@
 scale=paper task=ema model=qslstm_log seed=435874469 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[ema qslstm_log seed 435874469] epoch 001 train 0.35782 val 0.31723 gnorm 0.249 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 002 train 0.30737 val 0.28358 gnorm 0.112 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 003 train 0.26187 val 0.22147 gnorm 0.136 (16.6s) *
-[ema qslstm_log seed 435874469] epoch 004 train 0.19262 val 0.15455 gnorm 0.126 (16.3s) *
-[ema qslstm_log seed 435874469] epoch 005 train 0.12886 val 0.09397 gnorm 0.123 (16.3s) *
-[ema qslstm_log seed 435874469] epoch 006 train 0.07063 val 0.04450 gnorm 0.12 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 007 train 0.03692 val 0.02831 gnorm 0.0715 (16.3s) *
-[ema qslstm_log seed 435874469] epoch 008 train 0.02673 val 0.02328 gnorm 0.0413 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 009 train 0.02289 val 0.02044 gnorm 0.0368 (16.2s) *
-[ema qslstm_log seed 435874469] epoch 010 train 0.02000 val 0.01744 gnorm 0.0454 (16.4s) *
+[ema qslstm_log seed 435874469] epoch 001 train 0.35782 val 0.31723 gnorm 0.249 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 002 train 0.30737 val 0.28358 gnorm 0.112 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 003 train 0.26187 val 0.22147 gnorm 0.136 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 004 train 0.19262 val 0.15455 gnorm 0.126 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 005 train 0.12886 val 0.09397 gnorm 0.123 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 006 train 0.07063 val 0.04450 gnorm 0.12 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 007 train 0.03692 val 0.02831 gnorm 0.0715 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 008 train 0.02673 val 0.02328 gnorm 0.0413 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 009 train 0.02289 val 0.02044 gnorm 0.0368 (15.9s) *
+[ema qslstm_log seed 435874469] epoch 010 train 0.02000 val 0.01744 gnorm 0.0454 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 011 train 0.01743 val 0.01527 gnorm 0.0403 (15.8s) *
+[ema qslstm_log seed 435874469] epoch 012 train 0.01534 val 0.01362 gnorm 0.0464 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 013 train 0.01402 val 0.01243 gnorm 0.0657 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 014 train 0.01291 val 0.01150 gnorm 0.053 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 015 train 0.01192 val 0.01089 gnorm 0.0316 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 016 train 0.01111 val 0.00997 gnorm 0.033 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 017 train 0.01043 val 0.00937 gnorm 0.0379 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 018 train 0.00988 val 0.00890 gnorm 0.0377 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 019 train 0.00938 val 0.00854 gnorm 0.0329 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 020 train 0.00896 val 0.00817 gnorm 0.0265 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 021 train 0.00861 val 0.00789 gnorm 0.0243 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 022 train 0.00832 val 0.00763 gnorm 0.0322 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 023 train 0.00797 val 0.00704 gnorm 0.0461 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 024 train 0.00738 val 0.00675 gnorm 0.032 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 025 train 0.00716 val 0.00713 gnorm 0.0392 (16.1s)
+[ema qslstm_log seed 435874469] epoch 026 train 0.00713 val 0.00611 gnorm 0.047 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 027 train 0.00656 val 0.00598 gnorm 0.0428 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 028 train 0.00639 val 0.00586 gnorm 0.0453 (16.0s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
     main()
@@ -17,9 +35,13 @@ Traceback (most recent call last):
     run_dir = run_experiment(config)
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
     result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 348, in train_model
-    outputs = model(inputs)[0]
-              ~~~~~^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 364, in train_model
+    val = validation_mse(model, val_ds, config, epoch)
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 270, in validation_mse
+    outputs = model(batch["inputs"].to(device))[0]
+              ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
     return self._call_impl(*args, **kwargs)
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
@@ -36,88 +58,13 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
     return forward_call(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 78, in forward
-    q_f = self.forget_gate(combined)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/vqc.py", line 50, in forward
-    expvals = torch.stack(self.VQC(X, self.weights, self.n_class))
-                          ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 863, in __call__
-    return self._impl_call(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/qnode.py", line 836, in _impl_call
-    res = execute(
-        (tape,),
-    ...<5 lines>...
-        **self.execute_kwargs,
-    )
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/execution.py", line 238, in execute
-    results = run(tapes, device, config, inner_transform)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/run.py", line 298, in run
-    results = inner_execute(tapes)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/workflow/run.py", line 263, in inner_execute
-    results = device.execute(transformed_tapes, execution_config=execution_config)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/modifiers/simulator_tracking.py", line 30, in execute
-    results = untracked_execute(self, circuits, execution_config)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/modifiers/single_tape_support.py", line 32, in execute
-    results = batch_execute(self, circuits, execution_config)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
-    return func(*args, **kwargs)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 824, in execute
-    return tuple(
-        _simulate_wrapper(
-    ...<11 lines>...
-        for c, _key in zip(circuits, prng_keys)
-    )
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 825, in <genexpr>
-    _simulate_wrapper(
-    ~~~~~~~~~~~~~~~~~^
-        c,
-        ^^
-    ...<8 lines>...
-        },
-        ^^
-    )
-    ^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/default_qubit.py", line 1190, in _simulate_wrapper
-    return simulate(circuit, **kwargs)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
-    return func(*args, **kwargs)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 387, in simulate
-    state, is_state_batched = get_final_state(
-                              ~~~~~~~~~~~~~~~^
-        circuit, debugger=debugger, prng_key=ops_key, **execution_kwargs
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    )
-    ^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/logging/decorators.py", line 61, in wrapper_entry
-    return func(*args, **kwargs)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/simulate.py", line 218, in get_final_state
-    state = apply_operation(
-        op,
-    ...<5 lines>...
-        **execution_kwargs,
-    )
-  File "/Users/peculab/miniconda3/lib/python3.13/functools.py", line 934, in wrapper
-    return dispatch(args[0].__class__)(*args, **kw)
-           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/apply_operation.py", line 236, in apply_operation
-    return _apply_operation_default(op, state, is_state_batched, debugger)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/apply_operation.py", line 262, in _apply_operation_default
-    return apply_operation_einsum(op, state, is_state_batched=is_state_batched)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/devices/qubit/apply_operation.py", line 111, in apply_operation_einsum
-    return math.einsum(einsum_indices, reshaped_mat, state)
-           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/pennylane/math/multi_dispatch.py", line 591, in einsum
-    return np.einsum(indices, *operands, like=like)
-           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/autoray/autoray.py", line 94, in do
-    return func(*args, **kwargs)
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/functional.py", line 373, in einsum
-    return _VF.einsum(equation, operands)  # type: ignore[attr-defined]
-           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
-KeyboardInterrupt
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
+    c_t, n_t, scale_t, i_weight = self.memory_update(
+                                  ~~~~~~~~~~~~~~~~~~^
+        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
+    i = logarithmic_gate(q_i)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 29, in logarithmic_gate
+    raise ValueError("VQC expectation q=1: singular logarithmic gate; clipping is disabled")
+ValueError: VQC expectation q=1: singular logarithmic gate; clipping is disabled

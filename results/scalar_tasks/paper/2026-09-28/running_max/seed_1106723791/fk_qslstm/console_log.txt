@@ -1,0 +1,62 @@
+scale=paper task=running_max model=fk_qslstm seed=1106723791 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[running_max fk_qslstm seed 1106723791] epoch 001 train 0.16196 val 0.04250 gnorm 0.83 (17.3s) *
+[running_max fk_qslstm seed 1106723791] epoch 002 train 0.03389 val 0.02558 gnorm 0.385 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 003 train 0.01909 val 0.01451 gnorm 0.123 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 004 train 0.01136 val 0.01060 gnorm 0.0642 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 005 train 0.00958 val 0.00907 gnorm 0.064 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 006 train 0.00796 val 0.00765 gnorm 0.0353 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 007 train 0.00648 val 0.00614 gnorm 0.0372 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 008 train 0.00489 val 0.00487 gnorm 0.0493 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 009 train 0.00393 val 0.00349 gnorm 0.0841 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 010 train 0.00315 val 0.00313 gnorm 0.0739 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 011 train 0.00256 val 0.00259 gnorm 0.0588 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 012 train 0.00212 val 0.00214 gnorm 0.0401 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 013 train 0.00184 val 0.00186 gnorm 0.0444 (17.2s) *
+[running_max fk_qslstm seed 1106723791] epoch 014 train 0.00181 val 0.00179 gnorm 0.0835 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 015 train 0.00153 val 0.00133 gnorm 0.0569 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 016 train 0.00133 val 0.00125 gnorm 0.0517 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 017 train 0.00117 val 0.00116 gnorm 0.0469 (16.8s) *
+[running_max fk_qslstm seed 1106723791] epoch 018 train 0.00110 val 0.00103 gnorm 0.0557 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 019 train 0.00094 val 0.00090 gnorm 0.0301 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 020 train 0.00107 val 0.00134 gnorm 0.0762 (17.1s)
+[running_max fk_qslstm seed 1106723791] epoch 021 train 0.00093 val 0.00083 gnorm 0.0622 (17.1s) *
+[running_max fk_qslstm seed 1106723791] epoch 022 train 0.00079 val 0.00075 gnorm 0.0375 (17.2s) *
+[running_max fk_qslstm seed 1106723791] epoch 023 train 0.00073 val 0.00083 gnorm 0.0392 (17.0s)
+[running_max fk_qslstm seed 1106723791] epoch 024 train 0.00076 val 0.00069 gnorm 0.0665 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 025 train 0.00073 val 0.00068 gnorm 0.0639 (17.2s) *
+[running_max fk_qslstm seed 1106723791] epoch 026 train 0.00064 val 0.00064 gnorm 0.0418 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 027 train 0.00075 val 0.00092 gnorm 0.085 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 028 train 0.00069 val 0.00059 gnorm 0.0699 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 029 train 0.00063 val 0.00058 gnorm 0.0568 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 030 train 0.00063 val 0.00066 gnorm 0.06 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 031 train 0.00053 val 0.00055 gnorm 0.0317 (16.8s) *
+[running_max fk_qslstm seed 1106723791] epoch 032 train 0.00059 val 0.00058 gnorm 0.0612 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 033 train 0.00052 val 0.00053 gnorm 0.0429 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 034 train 0.00046 val 0.00048 gnorm 0.0279 (17.0s) *
+[running_max fk_qslstm seed 1106723791] epoch 035 train 0.00049 val 0.00052 gnorm 0.0473 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 036 train 0.00052 val 0.00055 gnorm 0.0532 (17.0s)
+[running_max fk_qslstm seed 1106723791] epoch 037 train 0.00045 val 0.00062 gnorm 0.0304 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 038 train 0.00050 val 0.00075 gnorm 0.065 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 039 train 0.00049 val 0.00044 gnorm 0.0554 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 040 train 0.00043 val 0.00041 gnorm 0.0367 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 041 train 0.00040 val 0.00040 gnorm 0.0351 (16.8s) *
+[running_max fk_qslstm seed 1106723791] epoch 042 train 0.00040 val 0.00066 gnorm 0.0401 (17.1s)
+[running_max fk_qslstm seed 1106723791] epoch 043 train 0.00059 val 0.00054 gnorm 0.0904 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 044 train 0.00042 val 0.00045 gnorm 0.0392 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 045 train 0.00045 val 0.00050 gnorm 0.0575 (16.7s)
+[running_max fk_qslstm seed 1106723791] epoch 046 train 0.00044 val 0.00051 gnorm 0.0467 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 047 train 0.00041 val 0.00036 gnorm 0.0446 (16.8s) *
+[running_max fk_qslstm seed 1106723791] epoch 048 train 0.00039 val 0.00053 gnorm 0.0399 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 049 train 0.00038 val 0.00044 gnorm 0.0428 (17.0s)
+[running_max fk_qslstm seed 1106723791] epoch 050 train 0.00047 val 0.00041 gnorm 0.0667 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 051 train 0.00043 val 0.00060 gnorm 0.0506 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 052 train 0.00037 val 0.00041 gnorm 0.0342 (16.9s)
+[running_max fk_qslstm seed 1106723791] epoch 053 train 0.00038 val 0.00042 gnorm 0.047 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 054 train 0.00036 val 0.00035 gnorm 0.0354 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 055 train 0.00032 val 0.00037 gnorm 0.0202 (16.7s)
+[running_max fk_qslstm seed 1106723791] epoch 056 train 0.00035 val 0.00040 gnorm 0.0378 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 057 train 0.00033 val 0.00032 gnorm 0.0275 (16.9s) *
+[running_max fk_qslstm seed 1106723791] epoch 058 train 0.00044 val 0.00044 gnorm 0.0674 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 059 train 0.00039 val 0.00033 gnorm 0.0508 (16.8s)
+[running_max fk_qslstm seed 1106723791] epoch 060 train 0.00035 val 0.00039 gnorm 0.0403 (16.6s)
+run complete: results/scalar_tasks/paper/2026-09-28/running_max/seed_1106723791/fk_qslstm

@@ -1,32 +1,32 @@
 scale=paper task=narma model=qslstm_log seed=1212609727 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[narma qslstm_log seed 1212609727] epoch 001 train 0.17097 val 0.02684 gnorm 0.781 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 002 train 0.01952 val 0.01490 gnorm 0.144 (16.3s) *
-[narma qslstm_log seed 1212609727] epoch 003 train 0.01295 val 0.01279 gnorm 0.0563 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 004 train 0.01160 val 0.01187 gnorm 0.0259 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 005 train 0.01097 val 0.01146 gnorm 0.0251 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 006 train 0.01055 val 0.01112 gnorm 0.02 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 007 train 0.01022 val 0.01081 gnorm 0.0198 (16.3s) *
-[narma qslstm_log seed 1212609727] epoch 008 train 0.00992 val 0.01057 gnorm 0.0129 (16.3s) *
-[narma qslstm_log seed 1212609727] epoch 009 train 0.00963 val 0.01020 gnorm 0.0172 (16.3s) *
-[narma qslstm_log seed 1212609727] epoch 010 train 0.00934 val 0.00991 gnorm 0.0162 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 011 train 0.00903 val 0.00959 gnorm 0.0173 (16.3s) *
-[narma qslstm_log seed 1212609727] epoch 012 train 0.00875 val 0.00932 gnorm 0.0138 (16.2s) *
-[narma qslstm_log seed 1212609727] epoch 013 train 0.00850 val 0.00907 gnorm 0.0167 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 014 train 0.00826 val 0.00881 gnorm 0.0142 (16.4s) *
-[narma qslstm_log seed 1212609727] epoch 015 train 0.00812 val 0.00863 gnorm 0.0207 (16.3s) *
+[narma qslstm_log seed 1212609727] epoch 001 train 0.17097 val 0.02684 gnorm 0.781 (16.1s) *
+[narma qslstm_log seed 1212609727] epoch 002 train 0.01952 val 0.01490 gnorm 0.144 (16.1s) *
+[narma qslstm_log seed 1212609727] epoch 003 train 0.01295 val 0.01279 gnorm 0.0563 (16.1s) *
+[narma qslstm_log seed 1212609727] epoch 004 train 0.01160 val 0.01187 gnorm 0.0259 (16.0s) *
+[narma qslstm_log seed 1212609727] epoch 005 train 0.01097 val 0.01146 gnorm 0.0251 (15.9s) *
+[narma qslstm_log seed 1212609727] epoch 006 train 0.01055 val 0.01112 gnorm 0.02 (16.1s) *
+[narma qslstm_log seed 1212609727] epoch 007 train 0.01022 val 0.01081 gnorm 0.0198 (16.0s) *
+[narma qslstm_log seed 1212609727] epoch 008 train 0.00992 val 0.01057 gnorm 0.0129 (16.1s) *
+[narma qslstm_log seed 1212609727] epoch 009 train 0.00963 val 0.01020 gnorm 0.0172 (15.9s) *
+[narma qslstm_log seed 1212609727] epoch 010 train 0.00934 val 0.00991 gnorm 0.0162 (16.0s) *
+[narma qslstm_log seed 1212609727] epoch 011 train 0.00903 val 0.00959 gnorm 0.0173 (15.9s) *
+[narma qslstm_log seed 1212609727] epoch 012 train 0.00875 val 0.00932 gnorm 0.0138 (16.0s) *
+[narma qslstm_log seed 1212609727] epoch 013 train 0.00850 val 0.00907 gnorm 0.0167 (16.1s) *
+[narma qslstm_log seed 1212609727] epoch 014 train 0.00826 val 0.00881 gnorm 0.0142 (16.0s) *
+[narma qslstm_log seed 1212609727] epoch 015 train 0.00812 val 0.00863 gnorm 0.0207 (16.0s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
     main()
     ~~~~^^
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
     run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
     result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 359, in train_model
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 364, in train_model
     val = validation_mse(model, val_ds, config, epoch)
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
     return func(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 265, in validation_mse
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 270, in validation_mse
     outputs = model(batch["inputs"].to(device))[0]
               ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
