@@ -1,0 +1,51 @@
+scale=paper task=sine_next model=qslstm_log seed=1716202887 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[sine_next qslstm_log seed 1716202887] epoch 001 train 0.50824 val 0.44213 gnorm 0.238 (16.4s) *
+[sine_next qslstm_log seed 1716202887] epoch 002 train 0.37265 val 0.28259 gnorm 0.229 (16.1s) *
+[sine_next qslstm_log seed 1716202887] epoch 003 train 0.22647 val 0.17897 gnorm 0.16 (16.4s) *
+[sine_next qslstm_log seed 1716202887] epoch 004 train 0.16094 val 0.14569 gnorm 0.0711 (16.2s) *
+[sine_next qslstm_log seed 1716202887] epoch 005 train 0.13818 val 0.13107 gnorm 0.0493 (16.2s) *
+[sine_next qslstm_log seed 1716202887] epoch 006 train 0.12673 val 0.12182 gnorm 0.0423 (16.3s) *
+[sine_next qslstm_log seed 1716202887] epoch 007 train 0.11786 val 0.11294 gnorm 0.0396 (16.3s) *
+[sine_next qslstm_log seed 1716202887] epoch 008 train 0.10765 val 0.10040 gnorm 0.0442 (16.3s) *
+[sine_next qslstm_log seed 1716202887] epoch 009 train 0.09217 val 0.08093 gnorm 0.0559 (16.2s) *
+[sine_next qslstm_log seed 1716202887] epoch 010 train 0.07101 val 0.05960 gnorm 0.0535 (16.4s) *
+[sine_next qslstm_log seed 1716202887] epoch 011 train 0.05241 val 0.04435 gnorm 0.0484 (16.3s) *
+[sine_next qslstm_log seed 1716202887] epoch 012 train 0.04052 val 0.03559 gnorm 0.045 (16.3s) *
+[sine_next qslstm_log seed 1716202887] epoch 013 train 0.03404 val 0.03101 gnorm 0.0449 (16.4s) *
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
+    main()
+    ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
+    run_dir = run_experiment(config)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+    outputs = model(inputs)[0]
+              ~~~~~^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 131, in forward
+    outputs, state = _unroll(self.cell, x, hidden)
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 36, in _unroll
+    y_t, *state = cell(x[:, t, :], tuple(state))
+                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
+    c_t, n_t, scale_t, i_weight = self.memory_update(
+                                  ~~~~~~~~~~~~~~~~~~^
+        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
+    i = logarithmic_gate(q_i)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 27, in logarithmic_gate
+    raise ValueError("VQC expectation outside [-1, 1]; clipping is disabled")
+ValueError: VQC expectation outside [-1, 1]; clipping is disabled

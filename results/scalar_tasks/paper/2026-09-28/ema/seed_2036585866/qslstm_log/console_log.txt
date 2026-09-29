@@ -1,0 +1,60 @@
+scale=paper task=ema model=qslstm_log seed=2036585866 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[ema qslstm_log seed 2036585866] epoch 001 train 0.34927 val 0.31337 gnorm 0.161 (16.5s) *
+[ema qslstm_log seed 2036585866] epoch 002 train 0.29620 val 0.27217 gnorm 0.141 (16.2s) *
+[ema qslstm_log seed 2036585866] epoch 003 train 0.24391 val 0.21637 gnorm 0.124 (16.2s) *
+[ema qslstm_log seed 2036585866] epoch 004 train 0.19184 val 0.16507 gnorm 0.145 (16.2s) *
+[ema qslstm_log seed 2036585866] epoch 005 train 0.14697 val 0.12198 gnorm 0.141 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 006 train 0.09942 val 0.06996 gnorm 0.14 (16.4s) *
+[ema qslstm_log seed 2036585866] epoch 007 train 0.04957 val 0.03256 gnorm 0.104 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 008 train 0.02426 val 0.01978 gnorm 0.0678 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 009 train 0.01764 val 0.01615 gnorm 0.0615 (16.1s) *
+[ema qslstm_log seed 2036585866] epoch 010 train 0.01462 val 0.01389 gnorm 0.0586 (16.4s) *
+[ema qslstm_log seed 2036585866] epoch 011 train 0.01263 val 0.01150 gnorm 0.111 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 012 train 0.01108 val 0.01028 gnorm 0.0849 (16.1s) *
+[ema qslstm_log seed 2036585866] epoch 013 train 0.00991 val 0.01005 gnorm 0.046 (16.4s) *
+[ema qslstm_log seed 2036585866] epoch 014 train 0.00924 val 0.00904 gnorm 0.0569 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 015 train 0.00884 val 0.00830 gnorm 0.0899 (16.2s) *
+[ema qslstm_log seed 2036585866] epoch 016 train 0.00819 val 0.00798 gnorm 0.0577 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 017 train 0.00773 val 0.00732 gnorm 0.0789 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 018 train 0.00701 val 0.00678 gnorm 0.0617 (16.3s) *
+[ema qslstm_log seed 2036585866] epoch 019 train 0.00660 val 0.00703 gnorm 0.0598 (16.3s)
+[ema qslstm_log seed 2036585866] epoch 020 train 0.00610 val 0.00577 gnorm 0.0913 (16.2s) *
+[ema qslstm_log seed 2036585866] epoch 021 train 0.00558 val 0.00538 gnorm 0.0757 (16.2s) *
+[ema qslstm_log seed 2036585866] epoch 022 train 0.00518 val 0.00498 gnorm 0.0706 (16.1s) *
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
+    main()
+    ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
+    run_dir = run_experiment(config)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+    outputs = model(inputs)[0]
+              ~~~~~^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 131, in forward
+    outputs, state = _unroll(self.cell, x, hidden)
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 36, in _unroll
+    y_t, *state = cell(x[:, t, :], tuple(state))
+                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
+    c_t, n_t, scale_t, i_weight = self.memory_update(
+                                  ~~~~~~~~~~~~~~~~~~^
+        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
+    i = logarithmic_gate(q_i)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 29, in logarithmic_gate
+    raise ValueError("VQC expectation q=1: singular logarithmic gate; clipping is disabled")
+ValueError: VQC expectation q=1: singular logarithmic gate; clipping is disabled
