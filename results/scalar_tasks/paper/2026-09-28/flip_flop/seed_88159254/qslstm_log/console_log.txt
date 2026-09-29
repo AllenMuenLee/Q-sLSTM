@@ -1,27 +1,27 @@
 scale=paper task=flip_flop model=qslstm_log seed=88159254 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[flip_flop qslstm_log seed 88159254] epoch 001 train 0.73461 val 0.70033 gnorm 0.186 (16.3s) *
+[flip_flop qslstm_log seed 88159254] epoch 001 train 0.73461 val 0.70033 gnorm 0.186 (16.2s) *
 [flip_flop qslstm_log seed 88159254] epoch 002 train 0.69183 val 0.64655 gnorm 0.171 (16.1s) *
-[flip_flop qslstm_log seed 88159254] epoch 003 train 0.60840 val 0.53541 gnorm 0.21 (16.3s) *
-[flip_flop qslstm_log seed 88159254] epoch 004 train 0.50143 val 0.45024 gnorm 0.427 (16.2s) *
-[flip_flop qslstm_log seed 88159254] epoch 005 train 0.43394 val 0.40284 gnorm 0.448 (16.2s) *
-[flip_flop qslstm_log seed 88159254] epoch 006 train 0.39417 val 0.37169 gnorm 0.564 (16.3s) *
-[flip_flop qslstm_log seed 88159254] epoch 007 train 0.36250 val 0.33235 gnorm 0.686 (16.2s) *
+[flip_flop qslstm_log seed 88159254] epoch 003 train 0.60840 val 0.53541 gnorm 0.21 (16.1s) *
+[flip_flop qslstm_log seed 88159254] epoch 004 train 0.50143 val 0.45024 gnorm 0.427 (16.0s) *
+[flip_flop qslstm_log seed 88159254] epoch 005 train 0.43394 val 0.40284 gnorm 0.448 (16.1s) *
+[flip_flop qslstm_log seed 88159254] epoch 006 train 0.39417 val 0.37169 gnorm 0.564 (16.4s) *
+[flip_flop qslstm_log seed 88159254] epoch 007 train 0.36250 val 0.33235 gnorm 0.686 (16.1s) *
 [flip_flop qslstm_log seed 88159254] epoch 008 train 0.32312 val 0.29924 gnorm 0.672 (16.4s) *
-[flip_flop qslstm_log seed 88159254] epoch 009 train 0.29150 val 0.27615 gnorm 0.404 (16.3s) *
-[flip_flop qslstm_log seed 88159254] epoch 010 train 0.27339 val 0.26632 gnorm 0.444 (16.2s) *
-[flip_flop qslstm_log seed 88159254] epoch 011 train 0.26503 val 0.25831 gnorm 0.63 (16.3s) *
-[flip_flop qslstm_log seed 88159254] epoch 012 train 0.25939 val 0.25582 gnorm 0.607 (16.3s) *
-[flip_flop qslstm_log seed 88159254] epoch 013 train 0.25871 val 0.25162 gnorm 0.668 (16.3s) *
-[flip_flop qslstm_log seed 88159254] epoch 014 train 0.25527 val 0.25036 gnorm 0.7 (16.2s) *
+[flip_flop qslstm_log seed 88159254] epoch 009 train 0.29150 val 0.27615 gnorm 0.404 (16.2s) *
+[flip_flop qslstm_log seed 88159254] epoch 010 train 0.27339 val 0.26632 gnorm 0.444 (16.3s) *
+[flip_flop qslstm_log seed 88159254] epoch 011 train 0.26503 val 0.25831 gnorm 0.63 (16.0s) *
+[flip_flop qslstm_log seed 88159254] epoch 012 train 0.25939 val 0.25582 gnorm 0.607 (16.0s) *
+[flip_flop qslstm_log seed 88159254] epoch 013 train 0.25871 val 0.25162 gnorm 0.668 (16.1s) *
+[flip_flop qslstm_log seed 88159254] epoch 014 train 0.25527 val 0.25036 gnorm 0.7 (16.0s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
     main()
     ~~~~^^
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
     run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
     result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 348, in train_model
     outputs = model(inputs)[0]
               ~~~~~^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl

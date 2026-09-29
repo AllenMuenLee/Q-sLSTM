@@ -1,0 +1,87 @@
+{
+  "hidden_size": 4,
+  "n_qubits": 5,
+  "parameter_shapes": {
+    "cell.Elayer_in_forget.bias": [
+      5
+    ],
+    "cell.Elayer_in_forget.weight": [
+      5,
+      5
+    ],
+    "cell.Elayer_in_input.bias": [
+      5
+    ],
+    "cell.Elayer_in_input.weight": [
+      5,
+      5
+    ],
+    "cell.Elayer_in_output.bias": [
+      5
+    ],
+    "cell.Elayer_in_output.weight": [
+      5,
+      5
+    ],
+    "cell.Elayer_in_update.bias": [
+      5
+    ],
+    "cell.Elayer_in_update.weight": [
+      5,
+      5
+    ],
+    "cell.Elayer_out_forget.bias": [
+      4
+    ],
+    "cell.Elayer_out_forget.weight": [
+      4,
+      5
+    ],
+    "cell.Elayer_out_input.bias": [
+      4
+    ],
+    "cell.Elayer_out_input.weight": [
+      4,
+      5
+    ],
+    "cell.Elayer_out_output.bias": [
+      4
+    ],
+    "cell.Elayer_out_output.weight": [
+      4,
+      5
+    ],
+    "cell.Elayer_out_update.bias": [
+      4
+    ],
+    "cell.Elayer_out_update.weight": [
+      4,
+      5
+    ],
+    "cell.cell_gate.weights": [
+      2,
+      5
+    ],
+    "cell.forget_gate.weights": [
+      2,
+      5
+    ],
+    "cell.input_gate.weights": [
+      2,
+      5
+    ],
+    "cell.output_gate.weights": [
+      2,
+      5
+    ],
+    "cell.output_post_processing.bias": [
+      1
+    ],
+    "cell.output_post_processing.weight": [
+      1,
+      4
+    ]
+  },
+  "qnn_depth": 2,
+  "trainable_parameters": 261
+}

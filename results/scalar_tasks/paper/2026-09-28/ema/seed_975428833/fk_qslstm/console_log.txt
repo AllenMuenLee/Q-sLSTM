@@ -1,0 +1,62 @@
+scale=paper task=ema model=fk_qslstm seed=975428833 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[ema fk_qslstm seed 975428833] epoch 001 train 0.24975 val 0.12956 gnorm 0.405 (16.9s) *
+[ema fk_qslstm seed 975428833] epoch 002 train 0.04662 val 0.01860 gnorm 0.232 (16.9s) *
+[ema fk_qslstm seed 975428833] epoch 003 train 0.00877 val 0.00395 gnorm 0.101 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 004 train 0.00319 val 0.00265 gnorm 0.0593 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 005 train 0.00221 val 0.00192 gnorm 0.0355 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 006 train 0.00167 val 0.00148 gnorm 0.047 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 007 train 0.00128 val 0.00116 gnorm 0.0345 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 008 train 0.00100 val 0.00094 gnorm 0.0247 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 009 train 0.00080 val 0.00074 gnorm 0.0245 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 010 train 0.00065 val 0.00061 gnorm 0.0276 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 011 train 0.00054 val 0.00059 gnorm 0.0302 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 012 train 0.00047 val 0.00043 gnorm 0.0515 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 013 train 0.00038 val 0.00036 gnorm 0.0319 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 014 train 0.00037 val 0.00054 gnorm 0.0629 (16.8s)
+[ema fk_qslstm seed 975428833] epoch 015 train 0.00036 val 0.00035 gnorm 0.0877 (16.7s) *
+[ema fk_qslstm seed 975428833] epoch 016 train 0.00026 val 0.00023 gnorm 0.045 (17.2s) *
+[ema fk_qslstm seed 975428833] epoch 017 train 0.00022 val 0.00024 gnorm 0.0433 (17.0s)
+[ema fk_qslstm seed 975428833] epoch 018 train 0.00020 val 0.00017 gnorm 0.0462 (17.1s) *
+[ema fk_qslstm seed 975428833] epoch 019 train 0.00016 val 0.00014 gnorm 0.03 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 020 train 0.00015 val 0.00022 gnorm 0.0424 (16.8s)
+[ema fk_qslstm seed 975428833] epoch 021 train 0.00016 val 0.00013 gnorm 0.0675 (17.0s) *
+[ema fk_qslstm seed 975428833] epoch 022 train 0.00011 val 0.00010 gnorm 0.0311 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 023 train 0.00009 val 0.00008 gnorm 0.0285 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 024 train 0.00009 val 0.00010 gnorm 0.0426 (16.7s)
+[ema fk_qslstm seed 975428833] epoch 025 train 0.00008 val 0.00008 gnorm 0.0388 (16.8s) *
+[ema fk_qslstm seed 975428833] epoch 026 train 0.00010 val 0.00007 gnorm 0.0652 (16.4s) *
+[ema fk_qslstm seed 975428833] epoch 027 train 0.00007 val 0.00005 gnorm 0.0444 (16.4s) *
+[ema fk_qslstm seed 975428833] epoch 028 train 0.00006 val 0.00010 gnorm 0.0419 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 029 train 0.00012 val 0.00020 gnorm 0.0815 (16.8s)
+[ema fk_qslstm seed 975428833] epoch 030 train 0.00011 val 0.00007 gnorm 0.0737 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 031 train 0.00007 val 0.00006 gnorm 0.0511 (16.4s)
+[ema fk_qslstm seed 975428833] epoch 032 train 0.00006 val 0.00006 gnorm 0.0565 (16.4s)
+[ema fk_qslstm seed 975428833] epoch 033 train 0.00004 val 0.00005 gnorm 0.0384 (16.2s)
+[ema fk_qslstm seed 975428833] epoch 034 train 0.00009 val 0.00003 gnorm 0.0742 (16.3s) *
+[ema fk_qslstm seed 975428833] epoch 035 train 0.00003 val 0.00003 gnorm 0.0217 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 036 train 0.00003 val 0.00006 gnorm 0.0258 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 037 train 0.00003 val 0.00003 gnorm 0.0225 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 038 train 0.00003 val 0.00003 gnorm 0.0318 (16.4s) *
+[ema fk_qslstm seed 975428833] epoch 039 train 0.00004 val 0.00002 gnorm 0.0425 (16.4s) *
+[ema fk_qslstm seed 975428833] epoch 040 train 0.00002 val 0.00007 gnorm 0.0226 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 041 train 0.00007 val 0.00027 gnorm 0.0657 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 042 train 0.00005 val 0.00002 gnorm 0.0319 (16.4s) *
+[ema fk_qslstm seed 975428833] epoch 043 train 0.00002 val 0.00002 gnorm 0.0217 (16.4s) *
+[ema fk_qslstm seed 975428833] epoch 044 train 0.00002 val 0.00003 gnorm 0.0306 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 045 train 0.00004 val 0.00020 gnorm 0.0457 (16.2s)
+[ema fk_qslstm seed 975428833] epoch 046 train 0.00009 val 0.00003 gnorm 0.076 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 047 train 0.00003 val 0.00002 gnorm 0.0407 (16.5s) *
+[ema fk_qslstm seed 975428833] epoch 048 train 0.00002 val 0.00002 gnorm 0.0258 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 049 train 0.00002 val 0.00006 gnorm 0.0212 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 050 train 0.00002 val 0.00002 gnorm 0.0178 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 051 train 0.00005 val 0.00010 gnorm 0.0438 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 052 train 0.00002 val 0.00002 gnorm 0.032 (16.3s)
+[ema fk_qslstm seed 975428833] epoch 053 train 0.00002 val 0.00001 gnorm 0.0243 (16.3s) *
+[ema fk_qslstm seed 975428833] epoch 054 train 0.00003 val 0.00013 gnorm 0.0345 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 055 train 0.00004 val 0.00002 gnorm 0.0448 (16.5s)
+[ema fk_qslstm seed 975428833] epoch 056 train 0.00004 val 0.00003 gnorm 0.0497 (16.4s)
+[ema fk_qslstm seed 975428833] epoch 057 train 0.00005 val 0.00007 gnorm 0.0513 (16.7s)
+[ema fk_qslstm seed 975428833] epoch 058 train 0.00021 val 0.00002 gnorm 0.122 (16.4s)
+[ema fk_qslstm seed 975428833] epoch 059 train 0.00008 val 0.00004 gnorm 0.0685 (16.4s)
+[ema fk_qslstm seed 975428833] epoch 060 train 0.00003 val 0.00003 gnorm 0.0407 (16.6s)
+run complete: results/scalar_tasks/paper/2026-09-28/ema/seed_975428833/fk_qslstm

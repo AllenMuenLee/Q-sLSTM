@@ -1,12 +1,12 @@
 scale=paper task=flip_flop model=qslstm_log seed=266064982 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[flip_flop qslstm_log seed 266064982] epoch 001 train 0.75533 val 0.73728 gnorm 0.173 (16.3s) *
-[flip_flop qslstm_log seed 266064982] epoch 002 train 0.72985 val 0.70538 gnorm 0.124 (16.2s) *
-[flip_flop qslstm_log seed 266064982] epoch 003 train 0.67842 val 0.62235 gnorm 0.202 (16.4s) *
-[flip_flop qslstm_log seed 266064982] epoch 004 train 0.59578 val 0.52439 gnorm 0.307 (16.3s) *
-[flip_flop qslstm_log seed 266064982] epoch 005 train 0.49564 val 0.41444 gnorm 0.283 (16.3s) *
-[flip_flop qslstm_log seed 266064982] epoch 006 train 0.40469 val 0.35470 gnorm 0.603 (16.4s) *
+[flip_flop qslstm_log seed 266064982] epoch 001 train 0.75533 val 0.73728 gnorm 0.173 (15.9s) *
+[flip_flop qslstm_log seed 266064982] epoch 002 train 0.72985 val 0.70538 gnorm 0.124 (16.0s) *
+[flip_flop qslstm_log seed 266064982] epoch 003 train 0.67842 val 0.62235 gnorm 0.202 (16.1s) *
+[flip_flop qslstm_log seed 266064982] epoch 004 train 0.59578 val 0.52439 gnorm 0.307 (16.0s) *
+[flip_flop qslstm_log seed 266064982] epoch 005 train 0.49564 val 0.41444 gnorm 0.283 (16.0s) *
+[flip_flop qslstm_log seed 266064982] epoch 006 train 0.40469 val 0.35470 gnorm 0.603 (16.0s) *
 [flip_flop qslstm_log seed 266064982] epoch 007 train 0.35713 val 0.31789 gnorm 0.574 (16.2s) *
-[flip_flop qslstm_log seed 266064982] epoch 008 train 0.32935 val 0.29688 gnorm 0.675 (16.2s) *
+[flip_flop qslstm_log seed 266064982] epoch 008 train 0.32935 val 0.29688 gnorm 0.675 (16.1s) *
 [flip_flop qslstm_log seed 266064982] epoch 009 train 0.30860 val 0.27868 gnorm 0.629 (16.1s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
@@ -14,9 +14,9 @@ Traceback (most recent call last):
     ~~~~^^
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
     run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
     result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 348, in train_model
     outputs = model(inputs)[0]
               ~~~~~^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl

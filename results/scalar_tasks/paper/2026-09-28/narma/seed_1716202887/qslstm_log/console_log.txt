@@ -1,14 +1,14 @@
 scale=paper task=narma model=qslstm_log seed=1716202887 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[narma qslstm_log seed 1716202887] epoch 001 train 0.10106 val 0.01935 gnorm 0.549 (16.1s) *
+[narma qslstm_log seed 1716202887] epoch 001 train 0.10106 val 0.01935 gnorm 0.549 (16.0s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
     main()
     ~~~~^^
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
     run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
     result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 348, in train_model
     outputs = model(inputs)[0]
               ~~~~~^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl

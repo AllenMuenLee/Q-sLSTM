@@ -1,62 +1,62 @@
 scale=paper task=narma model=qslstm_log seed=484324222 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[narma qslstm_log seed 484324222] epoch 001 train 0.07167 val 0.02710 gnorm 0.39 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 002 train 0.02112 val 0.01714 gnorm 0.0983 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 003 train 0.01462 val 0.01368 gnorm 0.0375 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 004 train 0.01257 val 0.01216 gnorm 0.0211 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 005 train 0.01145 val 0.01116 gnorm 0.0253 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 006 train 0.01061 val 0.01036 gnorm 0.0171 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 007 train 0.00999 val 0.00976 gnorm 0.0134 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 008 train 0.00952 val 0.00925 gnorm 0.0166 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 009 train 0.00914 val 0.00889 gnorm 0.0149 (16.0s) *
-[narma qslstm_log seed 484324222] epoch 010 train 0.00888 val 0.00865 gnorm 0.0147 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 011 train 0.00872 val 0.00852 gnorm 0.0121 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 012 train 0.00861 val 0.00839 gnorm 0.00918 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 013 train 0.00854 val 0.00831 gnorm 0.0152 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 014 train 0.00847 val 0.00824 gnorm 0.014 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 015 train 0.00843 val 0.00819 gnorm 0.0146 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 016 train 0.00836 val 0.00813 gnorm 0.0119 (16.1s) *
+[narma qslstm_log seed 484324222] epoch 001 train 0.07167 val 0.02710 gnorm 0.39 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 002 train 0.02112 val 0.01714 gnorm 0.0983 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 003 train 0.01462 val 0.01368 gnorm 0.0375 (16.1s) *
+[narma qslstm_log seed 484324222] epoch 004 train 0.01257 val 0.01216 gnorm 0.0211 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 005 train 0.01145 val 0.01116 gnorm 0.0253 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 006 train 0.01061 val 0.01036 gnorm 0.0171 (16.1s) *
+[narma qslstm_log seed 484324222] epoch 007 train 0.00999 val 0.00976 gnorm 0.0134 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 008 train 0.00952 val 0.00925 gnorm 0.0166 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 009 train 0.00914 val 0.00889 gnorm 0.0149 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 010 train 0.00888 val 0.00865 gnorm 0.0147 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 011 train 0.00872 val 0.00852 gnorm 0.0121 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 012 train 0.00861 val 0.00839 gnorm 0.00918 (15.7s) *
+[narma qslstm_log seed 484324222] epoch 013 train 0.00854 val 0.00831 gnorm 0.0152 (16.1s) *
+[narma qslstm_log seed 484324222] epoch 014 train 0.00847 val 0.00824 gnorm 0.014 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 015 train 0.00843 val 0.00819 gnorm 0.0146 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 016 train 0.00836 val 0.00813 gnorm 0.0119 (15.7s) *
 [narma qslstm_log seed 484324222] epoch 017 train 0.00832 val 0.00807 gnorm 0.016 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 018 train 0.00831 val 0.00804 gnorm 0.0206 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 019 train 0.00822 val 0.00801 gnorm 0.0153 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 020 train 0.00822 val 0.00790 gnorm 0.0222 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 021 train 0.00809 val 0.00783 gnorm 0.0108 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 022 train 0.00804 val 0.00776 gnorm 0.0144 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 023 train 0.00798 val 0.00769 gnorm 0.0157 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 024 train 0.00792 val 0.00766 gnorm 0.0153 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 025 train 0.00791 val 0.00755 gnorm 0.0257 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 026 train 0.00777 val 0.00747 gnorm 0.0166 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 027 train 0.00767 val 0.00738 gnorm 0.0152 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 028 train 0.00760 val 0.00729 gnorm 0.0158 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 029 train 0.00755 val 0.00721 gnorm 0.0219 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 030 train 0.00747 val 0.00742 gnorm 0.0202 (16.3s)
-[narma qslstm_log seed 484324222] epoch 031 train 0.00740 val 0.00712 gnorm 0.0196 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 032 train 0.00732 val 0.00710 gnorm 0.0194 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 033 train 0.00730 val 0.00699 gnorm 0.0261 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 034 train 0.00716 val 0.00684 gnorm 0.0222 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 035 train 0.00708 val 0.00680 gnorm 0.0154 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 036 train 0.00702 val 0.00670 gnorm 0.0163 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 037 train 0.00695 val 0.00663 gnorm 0.0136 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 038 train 0.00688 val 0.00659 gnorm 0.0101 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 039 train 0.00686 val 0.00654 gnorm 0.0192 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 040 train 0.00679 val 0.00646 gnorm 0.0171 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 041 train 0.00674 val 0.00641 gnorm 0.017 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 042 train 0.00669 val 0.00638 gnorm 0.0136 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 043 train 0.00665 val 0.00633 gnorm 0.0145 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 044 train 0.00658 val 0.00629 gnorm 0.00842 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 045 train 0.00656 val 0.00626 gnorm 0.0131 (16.2s) *
+[narma qslstm_log seed 484324222] epoch 018 train 0.00831 val 0.00804 gnorm 0.0206 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 019 train 0.00822 val 0.00801 gnorm 0.0153 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 020 train 0.00822 val 0.00790 gnorm 0.0222 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 021 train 0.00809 val 0.00783 gnorm 0.0108 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 022 train 0.00804 val 0.00776 gnorm 0.0144 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 023 train 0.00798 val 0.00769 gnorm 0.0157 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 024 train 0.00792 val 0.00766 gnorm 0.0153 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 025 train 0.00791 val 0.00755 gnorm 0.0257 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 026 train 0.00777 val 0.00747 gnorm 0.0166 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 027 train 0.00767 val 0.00738 gnorm 0.0152 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 028 train 0.00760 val 0.00729 gnorm 0.0158 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 029 train 0.00755 val 0.00721 gnorm 0.0219 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 030 train 0.00747 val 0.00742 gnorm 0.0202 (16.0s)
+[narma qslstm_log seed 484324222] epoch 031 train 0.00740 val 0.00712 gnorm 0.0196 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 032 train 0.00732 val 0.00710 gnorm 0.0194 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 033 train 0.00730 val 0.00699 gnorm 0.0261 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 034 train 0.00716 val 0.00684 gnorm 0.0222 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 035 train 0.00708 val 0.00680 gnorm 0.0154 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 036 train 0.00702 val 0.00670 gnorm 0.0163 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 037 train 0.00695 val 0.00663 gnorm 0.0136 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 038 train 0.00688 val 0.00659 gnorm 0.0101 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 039 train 0.00686 val 0.00654 gnorm 0.0192 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 040 train 0.00679 val 0.00646 gnorm 0.0171 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 041 train 0.00674 val 0.00641 gnorm 0.017 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 042 train 0.00669 val 0.00638 gnorm 0.0136 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 043 train 0.00665 val 0.00633 gnorm 0.0145 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 044 train 0.00658 val 0.00629 gnorm 0.00842 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 045 train 0.00656 val 0.00626 gnorm 0.0131 (15.8s) *
 [narma qslstm_log seed 484324222] epoch 046 train 0.00652 val 0.00622 gnorm 0.0129 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 047 train 0.00651 val 0.00636 gnorm 0.0173 (16.2s)
-[narma qslstm_log seed 484324222] epoch 048 train 0.00653 val 0.00620 gnorm 0.0234 (16.4s) *
-[narma qslstm_log seed 484324222] epoch 049 train 0.00644 val 0.00616 gnorm 0.0163 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 050 train 0.00644 val 0.00616 gnorm 0.0193 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 051 train 0.00642 val 0.00632 gnorm 0.0208 (16.2s)
-[narma qslstm_log seed 484324222] epoch 052 train 0.00648 val 0.00613 gnorm 0.0316 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 053 train 0.00640 val 0.00609 gnorm 0.023 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 054 train 0.00634 val 0.00611 gnorm 0.0159 (16.3s)
-[narma qslstm_log seed 484324222] epoch 055 train 0.00635 val 0.00607 gnorm 0.0212 (16.2s) *
+[narma qslstm_log seed 484324222] epoch 047 train 0.00651 val 0.00636 gnorm 0.0173 (15.9s)
+[narma qslstm_log seed 484324222] epoch 048 train 0.00653 val 0.00620 gnorm 0.0234 (16.0s) *
+[narma qslstm_log seed 484324222] epoch 049 train 0.00644 val 0.00616 gnorm 0.0163 (16.2s) *
+[narma qslstm_log seed 484324222] epoch 050 train 0.00644 val 0.00616 gnorm 0.0193 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 051 train 0.00642 val 0.00632 gnorm 0.0208 (15.9s)
+[narma qslstm_log seed 484324222] epoch 052 train 0.00648 val 0.00613 gnorm 0.0316 (15.8s) *
+[narma qslstm_log seed 484324222] epoch 053 train 0.00640 val 0.00609 gnorm 0.023 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 054 train 0.00634 val 0.00611 gnorm 0.0159 (16.0s)
+[narma qslstm_log seed 484324222] epoch 055 train 0.00635 val 0.00607 gnorm 0.0212 (16.0s) *
 [narma qslstm_log seed 484324222] epoch 056 train 0.00629 val 0.00605 gnorm 0.0143 (16.2s) *
-[narma qslstm_log seed 484324222] epoch 057 train 0.00628 val 0.00604 gnorm 0.0161 (16.1s) *
-[narma qslstm_log seed 484324222] epoch 058 train 0.00627 val 0.00608 gnorm 0.0178 (16.2s)
-[narma qslstm_log seed 484324222] epoch 059 train 0.00624 val 0.00603 gnorm 0.0191 (16.3s) *
-[narma qslstm_log seed 484324222] epoch 060 train 0.00619 val 0.00599 gnorm 0.018 (16.1s) *
+[narma qslstm_log seed 484324222] epoch 057 train 0.00628 val 0.00604 gnorm 0.0161 (15.9s) *
+[narma qslstm_log seed 484324222] epoch 058 train 0.00627 val 0.00608 gnorm 0.0178 (15.8s)
+[narma qslstm_log seed 484324222] epoch 059 train 0.00624 val 0.00603 gnorm 0.0191 (16.1s) *
+[narma qslstm_log seed 484324222] epoch 060 train 0.00619 val 0.00599 gnorm 0.018 (15.8s) *
 run complete: results/scalar_tasks/paper/2026-09-28/narma/seed_484324222/qslstm_log

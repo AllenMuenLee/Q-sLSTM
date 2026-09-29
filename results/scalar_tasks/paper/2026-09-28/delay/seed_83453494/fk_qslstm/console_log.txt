@@ -1,0 +1,62 @@
+scale=paper task=delay model=fk_qslstm seed=83453494 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[delay fk_qslstm seed 83453494] epoch 001 train 0.34970 val 0.33512 gnorm 0.263 (17.3s) *
+[delay fk_qslstm seed 83453494] epoch 002 train 0.33122 val 0.33286 gnorm 0.0698 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 003 train 0.32505 val 0.32154 gnorm 0.0438 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 004 train 0.30853 val 0.30929 gnorm 0.0693 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 005 train 0.29939 val 0.30191 gnorm 0.0566 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 006 train 0.28688 val 0.28306 gnorm 0.0802 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 007 train 0.26649 val 0.27033 gnorm 0.46 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 008 train 0.25288 val 0.25238 gnorm 0.0576 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 009 train 0.23306 val 0.22746 gnorm 0.0608 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 010 train 0.21118 val 0.21096 gnorm 0.0745 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 011 train 0.19857 val 0.20391 gnorm 0.0848 (17.4s) *
+[delay fk_qslstm seed 83453494] epoch 012 train 0.19291 val 0.19863 gnorm 0.129 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 013 train 0.18746 val 0.19173 gnorm 0.0891 (17.2s) *
+[delay fk_qslstm seed 83453494] epoch 014 train 0.17638 val 0.17256 gnorm 0.113 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 015 train 0.15077 val 0.14760 gnorm 0.127 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 016 train 0.13469 val 0.13851 gnorm 0.212 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 017 train 0.12752 val 0.13144 gnorm 0.284 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 018 train 0.12288 val 0.12736 gnorm 0.169 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 019 train 0.11851 val 0.12322 gnorm 0.167 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 020 train 0.11340 val 0.11630 gnorm 0.437 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 021 train 0.10847 val 0.11305 gnorm 0.344 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 022 train 0.10627 val 0.11318 gnorm 0.321 (17.1s)
+[delay fk_qslstm seed 83453494] epoch 023 train 0.10406 val 0.10901 gnorm 0.303 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 024 train 0.10241 val 0.10707 gnorm 0.371 (16.7s) *
+[delay fk_qslstm seed 83453494] epoch 025 train 0.10056 val 0.10419 gnorm 0.382 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 026 train 0.09733 val 0.10136 gnorm 0.356 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 027 train 0.09439 val 0.09306 gnorm 0.68 (16.7s) *
+[delay fk_qslstm seed 83453494] epoch 028 train 0.08334 val 0.07202 gnorm 0.723 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 029 train 0.05707 val 0.04255 gnorm 0.651 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 030 train 0.03635 val 0.02897 gnorm 0.422 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 031 train 0.02449 val 0.01985 gnorm 0.366 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 032 train 0.01730 val 0.01503 gnorm 0.271 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 033 train 0.01381 val 0.01240 gnorm 0.302 (16.7s) *
+[delay fk_qslstm seed 83453494] epoch 034 train 0.01098 val 0.00996 gnorm 0.198 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 035 train 0.00926 val 0.00855 gnorm 0.224 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 036 train 0.00878 val 0.00855 gnorm 0.444 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 037 train 0.00758 val 0.00664 gnorm 0.388 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 038 train 0.00667 val 0.00652 gnorm 0.309 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 039 train 0.00609 val 0.00556 gnorm 0.259 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 040 train 0.00532 val 0.00495 gnorm 0.193 (16.7s) *
+[delay fk_qslstm seed 83453494] epoch 041 train 0.00488 val 0.00464 gnorm 0.17 (16.7s) *
+[delay fk_qslstm seed 83453494] epoch 042 train 0.00457 val 0.00440 gnorm 0.167 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 043 train 0.00461 val 0.00439 gnorm 0.284 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 044 train 0.00408 val 0.00397 gnorm 0.192 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 045 train 0.00392 val 0.00379 gnorm 0.181 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 046 train 0.00482 val 0.00394 gnorm 0.519 (16.7s)
+[delay fk_qslstm seed 83453494] epoch 047 train 0.00360 val 0.00342 gnorm 0.179 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 048 train 0.00345 val 0.00362 gnorm 0.192 (17.1s)
+[delay fk_qslstm seed 83453494] epoch 049 train 0.00328 val 0.00336 gnorm 0.169 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 050 train 0.00441 val 0.00364 gnorm 0.569 (16.9s)
+[delay fk_qslstm seed 83453494] epoch 051 train 0.00349 val 0.00290 gnorm 0.334 (16.8s) *
+[delay fk_qslstm seed 83453494] epoch 052 train 0.00336 val 0.00356 gnorm 0.359 (17.0s)
+[delay fk_qslstm seed 83453494] epoch 053 train 0.00318 val 0.00378 gnorm 0.331 (17.1s)
+[delay fk_qslstm seed 83453494] epoch 054 train 0.00301 val 0.00307 gnorm 0.242 (16.9s)
+[delay fk_qslstm seed 83453494] epoch 055 train 0.00286 val 0.00272 gnorm 0.249 (16.9s) *
+[delay fk_qslstm seed 83453494] epoch 056 train 0.00269 val 0.00254 gnorm 0.204 (17.1s) *
+[delay fk_qslstm seed 83453494] epoch 057 train 0.00288 val 0.00354 gnorm 0.329 (17.1s)
+[delay fk_qslstm seed 83453494] epoch 058 train 0.00298 val 0.00252 gnorm 0.391 (17.0s) *
+[delay fk_qslstm seed 83453494] epoch 059 train 0.00271 val 0.00290 gnorm 0.312 (17.2s)
+[delay fk_qslstm seed 83453494] epoch 060 train 0.00268 val 0.00299 gnorm 0.321 (17.1s)
+run complete: results/scalar_tasks/paper/2026-09-28/delay/seed_83453494/fk_qslstm

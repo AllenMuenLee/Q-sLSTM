@@ -1,45 +1,45 @@
 scale=paper task=ema model=qslstm_log seed=435874469 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[ema qslstm_log seed 435874469] epoch 001 train 0.35782 val 0.31723 gnorm 0.249 (16.6s) *
-[ema qslstm_log seed 435874469] epoch 002 train 0.30737 val 0.28358 gnorm 0.112 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 003 train 0.26187 val 0.22147 gnorm 0.136 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 004 train 0.19262 val 0.15455 gnorm 0.126 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 005 train 0.12886 val 0.09397 gnorm 0.123 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 006 train 0.07063 val 0.04450 gnorm 0.12 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 007 train 0.03692 val 0.02831 gnorm 0.0715 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 008 train 0.02673 val 0.02328 gnorm 0.0413 (16.6s) *
-[ema qslstm_log seed 435874469] epoch 009 train 0.02289 val 0.02044 gnorm 0.0368 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 010 train 0.02000 val 0.01744 gnorm 0.0454 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 011 train 0.01743 val 0.01527 gnorm 0.0403 (16.3s) *
-[ema qslstm_log seed 435874469] epoch 012 train 0.01534 val 0.01362 gnorm 0.0464 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 013 train 0.01402 val 0.01243 gnorm 0.0657 (16.6s) *
-[ema qslstm_log seed 435874469] epoch 014 train 0.01291 val 0.01150 gnorm 0.053 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 015 train 0.01192 val 0.01089 gnorm 0.0316 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 016 train 0.01111 val 0.00997 gnorm 0.033 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 017 train 0.01043 val 0.00937 gnorm 0.0379 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 018 train 0.00988 val 0.00890 gnorm 0.0377 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 019 train 0.00938 val 0.00854 gnorm 0.0329 (16.6s) *
-[ema qslstm_log seed 435874469] epoch 020 train 0.00896 val 0.00817 gnorm 0.0265 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 021 train 0.00861 val 0.00789 gnorm 0.0243 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 022 train 0.00832 val 0.00763 gnorm 0.0322 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 023 train 0.00797 val 0.00704 gnorm 0.0461 (16.4s) *
-[ema qslstm_log seed 435874469] epoch 024 train 0.00738 val 0.00675 gnorm 0.032 (16.5s) *
-[ema qslstm_log seed 435874469] epoch 025 train 0.00716 val 0.00713 gnorm 0.0392 (16.4s)
-[ema qslstm_log seed 435874469] epoch 026 train 0.00713 val 0.00611 gnorm 0.047 (16.6s) *
+[ema qslstm_log seed 435874469] epoch 001 train 0.35782 val 0.31723 gnorm 0.249 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 002 train 0.30737 val 0.28358 gnorm 0.112 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 003 train 0.26187 val 0.22147 gnorm 0.136 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 004 train 0.19262 val 0.15455 gnorm 0.126 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 005 train 0.12886 val 0.09397 gnorm 0.123 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 006 train 0.07063 val 0.04450 gnorm 0.12 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 007 train 0.03692 val 0.02831 gnorm 0.0715 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 008 train 0.02673 val 0.02328 gnorm 0.0413 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 009 train 0.02289 val 0.02044 gnorm 0.0368 (15.9s) *
+[ema qslstm_log seed 435874469] epoch 010 train 0.02000 val 0.01744 gnorm 0.0454 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 011 train 0.01743 val 0.01527 gnorm 0.0403 (15.8s) *
+[ema qslstm_log seed 435874469] epoch 012 train 0.01534 val 0.01362 gnorm 0.0464 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 013 train 0.01402 val 0.01243 gnorm 0.0657 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 014 train 0.01291 val 0.01150 gnorm 0.053 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 015 train 0.01192 val 0.01089 gnorm 0.0316 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 016 train 0.01111 val 0.00997 gnorm 0.033 (16.0s) *
+[ema qslstm_log seed 435874469] epoch 017 train 0.01043 val 0.00937 gnorm 0.0379 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 018 train 0.00988 val 0.00890 gnorm 0.0377 (16.2s) *
+[ema qslstm_log seed 435874469] epoch 019 train 0.00938 val 0.00854 gnorm 0.0329 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 020 train 0.00896 val 0.00817 gnorm 0.0265 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 021 train 0.00861 val 0.00789 gnorm 0.0243 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 022 train 0.00832 val 0.00763 gnorm 0.0322 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 023 train 0.00797 val 0.00704 gnorm 0.0461 (16.1s) *
+[ema qslstm_log seed 435874469] epoch 024 train 0.00738 val 0.00675 gnorm 0.032 (16.3s) *
+[ema qslstm_log seed 435874469] epoch 025 train 0.00716 val 0.00713 gnorm 0.0392 (16.1s)
+[ema qslstm_log seed 435874469] epoch 026 train 0.00713 val 0.00611 gnorm 0.047 (16.1s) *
 [ema qslstm_log seed 435874469] epoch 027 train 0.00656 val 0.00598 gnorm 0.0428 (16.3s) *
-[ema qslstm_log seed 435874469] epoch 028 train 0.00639 val 0.00586 gnorm 0.0453 (16.5s) *
+[ema qslstm_log seed 435874469] epoch 028 train 0.00639 val 0.00586 gnorm 0.0453 (16.0s) *
 Traceback (most recent call last):
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
     main()
     ~~~~^^
   File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
     run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
     result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 359, in train_model
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 364, in train_model
     val = validation_mse(model, val_ds, config, epoch)
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
     return func(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 265, in validation_mse
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 270, in validation_mse
     outputs = model(batch["inputs"].to(device))[0]
               ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
