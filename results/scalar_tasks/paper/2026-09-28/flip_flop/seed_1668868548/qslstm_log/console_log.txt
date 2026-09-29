@@ -1,0 +1,63 @@
+scale=paper task=flip_flop model=qslstm_log seed=1668868548 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[flip_flop qslstm_log seed 1668868548] epoch 001 train 0.72301 val 0.68781 gnorm 0.165 (16.6s) *
+[flip_flop qslstm_log seed 1668868548] epoch 002 train 0.68683 val 0.62270 gnorm 0.172 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 003 train 0.53145 val 0.37317 gnorm 0.372 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 004 train 0.30528 val 0.21501 gnorm 0.444 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 005 train 0.19064 val 0.15264 gnorm 0.655 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 006 train 0.15841 val 0.13907 gnorm 0.892 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 007 train 0.14167 val 0.13827 gnorm 0.634 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 008 train 0.13834 val 0.12805 gnorm 0.702 (16.6s) *
+[flip_flop qslstm_log seed 1668868548] epoch 009 train 0.13140 val 0.12772 gnorm 0.781 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 010 train 0.13060 val 0.12732 gnorm 0.824 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 011 train 0.13091 val 0.12588 gnorm 0.646 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 012 train 0.13043 val 0.12556 gnorm 0.908 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 013 train 0.13098 val 0.12226 gnorm 0.882 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 014 train 0.12675 val 0.12153 gnorm 0.557 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 015 train 0.12658 val 0.11997 gnorm 0.695 (16.3s) *
+[flip_flop qslstm_log seed 1668868548] epoch 016 train 0.12409 val 0.11805 gnorm 0.734 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 017 train 0.12161 val 0.11570 gnorm 0.642 (16.6s) *
+[flip_flop qslstm_log seed 1668868548] epoch 018 train 0.12122 val 0.11318 gnorm 0.535 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 019 train 0.11711 val 0.11283 gnorm 0.47 (16.6s) *
+[flip_flop qslstm_log seed 1668868548] epoch 020 train 0.11555 val 0.10981 gnorm 0.676 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 021 train 0.11508 val 0.10787 gnorm 0.639 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 022 train 0.11506 val 0.10990 gnorm 0.576 (16.3s)
+[flip_flop qslstm_log seed 1668868548] epoch 023 train 0.11094 val 0.10610 gnorm 0.518 (16.4s) *
+[flip_flop qslstm_log seed 1668868548] epoch 024 train 0.11004 val 0.10600 gnorm 0.491 (16.5s) *
+[flip_flop qslstm_log seed 1668868548] epoch 025 train 0.11186 val 0.10481 gnorm 0.63 (16.4s) *
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
+    main()
+    ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
+    run_dir = run_experiment(config)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+    outputs = model(inputs)[0]
+              ~~~~~^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 131, in forward
+    outputs, state = _unroll(self.cell, x, hidden)
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 36, in _unroll
+    y_t, *state = cell(x[:, t, :], tuple(state))
+                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
+    c_t, n_t, scale_t, i_weight = self.memory_update(
+                                  ~~~~~~~~~~~~~~~~~~^
+        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
+    i = logarithmic_gate(q_i)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 27, in logarithmic_gate
+    raise ValueError("VQC expectation outside [-1, 1]; clipping is disabled")
+ValueError: VQC expectation outside [-1, 1]; clipping is disabled

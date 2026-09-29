@@ -53,7 +53,7 @@ PRESETS = {
     "paper": dict(
         sequence_length=32, train_size=1600, val_fraction=0.125, test_size=400,
         extrapolation_length=64, extrapolation_size=200, hidden_size=4, qnn_depth=2,
-        batch_size=64, epochs=60, lr=1e-2, n_seeds=5,
+        batch_size=64, epochs=60, lr=1e-2, n_seeds=20,
     ),
     "pilot": dict(
         sequence_length=12, train_size=32, val_fraction=0.125, test_size=8,

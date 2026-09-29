@@ -1,0 +1,51 @@
+scale=paper task=flip_flop model=qslstm_log seed=1710807515 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[flip_flop qslstm_log seed 1710807515] epoch 001 train 0.86036 val 0.70518 gnorm 0.722 (16.3s) *
+[flip_flop qslstm_log seed 1710807515] epoch 002 train 0.69615 val 0.65940 gnorm 0.309 (16.3s) *
+[flip_flop qslstm_log seed 1710807515] epoch 003 train 0.62772 val 0.57745 gnorm 0.278 (16.3s) *
+[flip_flop qslstm_log seed 1710807515] epoch 004 train 0.53316 val 0.48687 gnorm 0.376 (16.1s) *
+[flip_flop qslstm_log seed 1710807515] epoch 005 train 0.46580 val 0.43980 gnorm 0.46 (16.2s) *
+[flip_flop qslstm_log seed 1710807515] epoch 006 train 0.42078 val 0.40186 gnorm 0.426 (16.3s) *
+[flip_flop qslstm_log seed 1710807515] epoch 007 train 0.38760 val 0.37075 gnorm 0.406 (16.1s) *
+[flip_flop qslstm_log seed 1710807515] epoch 008 train 0.35608 val 0.33934 gnorm 0.488 (16.3s) *
+[flip_flop qslstm_log seed 1710807515] epoch 009 train 0.32535 val 0.30942 gnorm 0.543 (16.1s) *
+[flip_flop qslstm_log seed 1710807515] epoch 010 train 0.30004 val 0.29693 gnorm 0.58 (16.2s) *
+[flip_flop qslstm_log seed 1710807515] epoch 011 train 0.28780 val 0.27936 gnorm 0.913 (16.2s) *
+[flip_flop qslstm_log seed 1710807515] epoch 012 train 0.27386 val 0.26500 gnorm 0.599 (16.1s) *
+[flip_flop qslstm_log seed 1710807515] epoch 013 train 0.26840 val 0.25827 gnorm 0.693 (16.3s) *
+Traceback (most recent call last):
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
+    main()
+    ~~~~^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
+    run_dir = run_experiment(config)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 415, in run_experiment
+    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 343, in train_model
+    outputs = model(inputs)[0]
+              ~~~~~^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 131, in forward
+    outputs, state = _unroll(self.cell, x, hidden)
+                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 36, in _unroll
+    y_t, *state = cell(x[:, t, :], tuple(state))
+                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
+    c_t, n_t, scale_t, i_weight = self.memory_update(
+                                  ~~~~~~~~~~~~~~~~~~^
+        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
+    i = logarithmic_gate(q_i)
+  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 27, in logarithmic_gate
+    raise ValueError("VQC expectation outside [-1, 1]; clipping is disabled")
+ValueError: VQC expectation outside [-1, 1]; clipping is disabled
