@@ -24,8 +24,10 @@ from q_slstm.datasets.scalar_tasks import TASKS  # noqa: E402
 from q_slstm.experiments import scalar_tasks_metrics as stm  # noqa: E402
 from q_slstm.experiments.scalar_tasks import MODELS  # noqa: E402
 
-MODEL_LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "lstm": "LSTM (classical)"}
-COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868", "lstm": "#8C8C8C"}
+MODEL_LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log",
+                "fk_qslstm": "Q-sLSTM (fk reference)", "lstm": "LSTM (classical)"}
+COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868", "fk_qslstm": "#C44E52",
+          "lstm": "#8C8C8C"}
 SUMMARY_METRICS = ("mse", "mae", "final_mse", "nmse", "r2", "skill", "baseline_mse")
 COMPARISON_METRICS = ("mse", "nmse", "skill", "final_mse")
 

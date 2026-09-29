@@ -2,27 +2,34 @@
 
 import torch
 
+from .fk_q_slstm_cell import CustomFkQsLSTMCell
 from .q_slstm_cell import DEFAULT_GATE_EPSILON, CustomQsLSTMCell
 from .q_slstm_log_cell import CustomQsLSTMLogCell
 from .qlstm_cell import CustomQLSTMCell
 from .sequence_wrappers import CustomLSTM, CustomQsLSTM
 
 QUANTUM_MODELS = ("qlstm", "qslstm", "qslstm_log")
+# Reference port without write-proportion diagnostics; only the scalar-task pipeline accepts it.
+REFERENCE_MODELS = ("fk_qslstm",)
 
 
 def build_quantum_model(model, input_size, hidden_size, output_size, qnn_depth,
                         gate_epsilon=DEFAULT_GATE_EPSILON, device="cpu", seed=None):
     """Build `qlstm`, `qslstm` (stabilized, (h, c, n, m)), or `qslstm_log` (ln(2/(1-q)) gates,
-    (h, c, n, binary_scale)). All models construct their
+    (h, c, n, binary_scale)), or `fk_qslstm` (reference exp-gate cell with classical encoders, (h, c)).
+    All models construct their
     four VQCs and the output layer in the same order, so an equal
     `seed` gives equal initial parameters. Global RNG state is left untouched when `seed` is given.
     """
-    if model not in QUANTUM_MODELS:
-        raise ValueError(f"model must be one of {QUANTUM_MODELS}, got {model!r}")
+    if model not in QUANTUM_MODELS + REFERENCE_MODELS:
+        raise ValueError(f"model must be one of {QUANTUM_MODELS + REFERENCE_MODELS}, got {model!r}")
 
     def build():
         if model == "qlstm":
             cell = CustomQLSTMCell(input_size, hidden_size, output_size, qnn_depth).float()
+            return CustomLSTM(input_size, hidden_size, cell).float()
+        if model == "fk_qslstm":
+            cell = CustomFkQsLSTMCell(input_size, hidden_size, output_size, qnn_depth).float()
             return CustomLSTM(input_size, hidden_size, cell).float()
         cell_type = CustomQsLSTMLogCell if model == "qslstm_log" else CustomQsLSTMCell
         cell = cell_type(input_size, hidden_size, output_size, qnn_depth, gate_epsilon=gate_epsilon).float()

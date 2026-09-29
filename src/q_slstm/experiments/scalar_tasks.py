@@ -40,12 +40,16 @@ from q_slstm.experiments.nearest_neighbor import (
     parameter_checksums,
     source_revision,
 )
-from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
+from q_slstm.models.factory import (
+    QUANTUM_MODELS, REFERENCE_MODELS, build_quantum_model, count_trainable_parameters,
+)
+from q_slstm.models.fk_q_slstm_cell import FK_QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
 
 CLASSICAL_MODELS = ("lstm",)
-MODELS = QUANTUM_MODELS + CLASSICAL_MODELS
+VQC_MODELS = QUANTUM_MODELS + REFERENCE_MODELS
+MODELS = VQC_MODELS + CLASSICAL_MODELS
 
 # The paper preset keeps the nearest-neighbor model size (hidden 6, depth 3) and length (32) so the
 # two experiments are comparable; tasks are simpler, so the data and epoch budgets are smaller.
@@ -156,10 +160,11 @@ def resolve_config(args):
         "run_extrapolation": bool(a.get("run_extrapolation", False)),
         "input_size": INPUT_SIZE,
         "output_size": OUTPUT_SIZE,
-        "n_qubits": INPUT_SIZE + resolved["hidden_size"] if model in QUANTUM_MODELS else None,
+        "n_qubits": INPUT_SIZE + resolved["hidden_size"] if model in VQC_MODELS else None,
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
         "qslstm_recurrence": (QSLSTM_LOG_RECURRENCE if model == "qslstm_log"
-                              else QSLSTM_RECURRENCE if model == "qslstm" else None),
+                              else QSLSTM_RECURRENCE if model == "qslstm"
+                              else FK_QSLSTM_RECURRENCE if model == "fk_qslstm" else None),
         "weight_decay": a.get("weight_decay", 0.0),
         "grad_clip": a.get("grad_clip", 0.0),
         "device": a.get("device", "cpu"),
@@ -237,7 +242,7 @@ class ClassicalLSTM(nn.Module):
 
 
 def build_model(config):
-    if config["model"] in QUANTUM_MODELS:
+    if config["model"] in VQC_MODELS:
         return build_quantum_model(
             config["model"], config["input_size"], config["hidden_size"], config["output_size"],
             config["qnn_depth"], gate_epsilon=config["gate_epsilon"], device=config["device"],
