@@ -2,8 +2,9 @@ import numpy as np
 import pytest
 import torch
 
-from q_slstm.datasets.solar_scalar import DEFAULT_SOLAR_ROOT, _series, reference_mse
-from q_slstm.experiments.scalar_tasks import ALL_TASKS, make_datasets, resolve_config
+from q_slstm.datasets.scalar_tasks import TASKS
+from q_slstm.datasets.solar_next import DEFAULT_SOLAR_ROOT, _series, reference_mse
+from q_slstm.experiments.solar_next import make_datasets, resolve_config, run_directory
 
 pytestmark = pytest.mark.skipif(not (DEFAULT_SOLAR_ROOT / "prepared_paper.json").exists(),
                                 reason="collected IESO solar data not present")
@@ -11,13 +12,15 @@ pytestmark = pytest.mark.skipif(not (DEFAULT_SOLAR_ROOT / "prepared_paper.json")
 
 @pytest.fixture(scope="module")
 def datasets():
-    config = resolve_config({"model": "qlstm", "task": "solar_next", "seed": 1, "scale": "paper"})
+    config = resolve_config({"model": "qlstm", "seed": 1, "scale": "paper", "run_date": "2026-09-30"})
     return config, make_datasets(config)
 
 
-def test_listed_and_sized(datasets):
+def test_own_experiment_and_sized(datasets):
     config, ds = datasets
-    assert "solar_next" in ALL_TASKS
+    assert "solar_next" not in TASKS  # not part of the synthetic scalar-task suite
+    assert config["kind"] == "solar_next_run" and "generation" not in config
+    assert run_directory(config).as_posix().endswith("results/solar_next/paper/2026-09-30/seed_1/qlstm")
     assert len(ds["train"]) == config["optimizer_train_size"]
     assert len(ds["val"]) == config["val_size"] and len(ds["test"]) == config["test_size"]
     assert all(d.sequence_length == config["sequence_length"] for d in ds.values())
@@ -45,7 +48,7 @@ def test_splits_are_chronological_and_clean(datasets):
 
 def test_held_out_windows_do_not_depend_on_seed(datasets):
     _, ds = datasets
-    other = make_datasets(resolve_config({"model": "qslstm", "task": "solar_next", "seed": 2, "scale": "paper"}))
+    other = make_datasets(resolve_config({"model": "fk_qslstm", "seed": 2, "scale": "paper"}))
     for split in ("val", "test"):
         assert ds[split].checksums()["combined"] == other[split].checksums()["combined"]
     assert ds["train"].checksums()["combined"] != other["train"].checksums()["combined"]

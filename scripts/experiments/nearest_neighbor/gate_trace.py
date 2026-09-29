@@ -42,13 +42,13 @@ import torch  # noqa: E402
 import analyze_results as ar  # noqa: E402
 from analyze_results import COLORS, MODEL_LABELS, discover_runs  # noqa: E402
 from q_slstm.experiments.nearest_neighbor import make_datasets  # noqa: E402
-from q_slstm.models.factory import build_quantum_model  # noqa: E402
+from q_slstm.models.factory import build_quantum_model, match_recurrence  # noqa: E402
 from q_slstm.models.q_slstm_cell import (  # noqa: E402
-    QSLSTM_AMPLIFIED_FORGET_RECURRENCE, QSLSTM_POLYNOMIAL_RECURRENCE, QSLSTM_RECURRENCE, bounded_log_ratio, polynomial_memory_update, sigmoid_log_forget,
+    QSLSTM_POLYNOMIAL_RECURRENCE, QSLSTM_SIGMOID_FORGET_RECURRENCE, bounded_log_ratio, polynomial_memory_update, sigmoid_log_forget,
     stabilize_gates,
 )
 from q_slstm.models.q_slstm_log_cell import (  # noqa: E402
-    QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE, QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES, logarithmic_gate, logarithmic_memory_update, sigmoid_forget_gate,
+    QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES, logarithmic_gate, logarithmic_memory_update, sigmoid_forget_gate,
 )
 
 GAP_FLOOR = 1e-6  # |z - c/n| below this leaves k undefined rather than dividing by ~0
@@ -64,10 +64,7 @@ def load_model(run_dir, config):
     model.eval()
     # Runs trained before the sigmoid forget gate amplified it like the input gate; replay that recurrence.
     recurrence, cell = config.get("qslstm_recurrence"), model.cell
-    if config["model"] == "qslstm" and recurrence in (None, QSLSTM_AMPLIFIED_FORGET_RECURRENCE):
-        cell.log_forget = functools.partial(bounded_log_ratio, epsilon=cell.gate_epsilon)
-    elif config["model"] == "qslstm_log" and recurrence in (None, QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE):
-        cell.memory_update = functools.partial(logarithmic_memory_update, amplified_forget=True)
+    match_recurrence(model, recurrence)
     return model
 
 
@@ -87,14 +84,14 @@ def trace_run(run_dir, config, split, n_sequences):
     ds = make_datasets(cfg)[split]
     model = load_model(run_dir, config)
     cell = model.cell
-    fk = config["model"] == "fk_qslstm"  # exp gates behind classical encoders; unnormalized like QLSTM
+    fk = config["model"] in ("fk_qslstm", "fk_qlstm")  # gates behind classical encoders; unnormalized like QLSTM
     qslstm = config["model"] in ("qslstm", "qslstm_log")
     log_gates = config["model"] == "qslstm_log"
     polynomial = config["model"] == "qslstm" and config.get("qslstm_recurrence") == QSLSTM_POLYNOMIAL_RECURRENCE
     binary_scale = polynomial or log_gates
-    # Runs before the sigmoid forget gate (tagged QSLSTM_AMPLIFIED_FORGET_RECURRENCE,
-    # QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE, or untagged) amplified the forget gate like the input gate.
-    amplified_forget = config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
+    # Only the sigmoid-forget runs (2026-09-27 .. 2026-09-29) did not amplify the forget gate.
+    amplified_forget = config.get("qslstm_recurrence") not in (QSLSTM_SIGMOID_FORGET_RECURRENCE,
+                                                               *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
 
     idx = torch.arange(min(n_sequences, len(ds)))
     x = ds.tensors["inputs"][idx]
@@ -108,17 +105,15 @@ def trace_run(run_dir, config, split, n_sequences):
         for t in range(L):
             comb = torch.cat((x[:, t], h), dim=-1)
             if fk:
-                enc = lambda gate, name: getattr(cell, f"Elayer_out_{name}")(
-                    getattr(cell, f"{gate}_gate")(getattr(cell, f"Elayer_in_{name}")(comb)))
-                z, o = torch.tanh(enc("cell", "update")), torch.sigmoid(enc("output", "output"))
+                fk_i, fk_f, z, o = cell.gate_values(comb)
             else:
                 q_i, q_f = cell.gate_expectations(comb) if log_gates else (cell.input_gate(comb), cell.forget_gate(comb))
                 z = torch.tanh(cell.cell_gate(comb))
                 o = torch.sigmoid(cell.output_gate(comb))
             if fk:
                 m_t = torch.zeros_like(m)
-                i_gate = i_raw = torch.exp(enc("input", "input"))
-                f_gate = f_raw = torch.exp(enc("forget", "forget"))
+                i_gate = i_raw = fk_i
+                f_gate = f_raw = fk_f
             elif log_gates:
                 c_t, n_t, m_t, i_gate, f_gate = logarithmic_memory_update(
                     q_i, q_f, z, c, n, m, return_forget_weight=True, amplified_forget=amplified_forget)

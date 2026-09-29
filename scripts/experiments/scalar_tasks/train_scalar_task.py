@@ -13,14 +13,13 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "src"))
 
 from q_slstm.datasets.scalar_tasks import TASKS  # noqa: E402
-from q_slstm.experiments.scalar_tasks import ALL_TASKS  # noqa: E402
 from q_slstm.experiments.scalar_tasks import MODELS, add_run_arguments, resolve_config, run_experiment  # noqa: E402
 
 
 def build_parser():
     parser = argparse.ArgumentParser(description="1-D scalar sequence task experiment (one run).")
     parser.add_argument("--model", choices=MODELS, required=True)
-    parser.add_argument("--task", choices=ALL_TASKS, required=True)
+    parser.add_argument("--task", choices=TASKS, required=True)
     parser.add_argument("--seed", type=int, default=0, help="run seed; paired models share it")
     add_run_arguments(parser)
     return parser

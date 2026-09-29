@@ -1,4 +1,4 @@
-"""Q-sLSTM variant using ln(2/(1-q)) as the input gate and sigmoid(q) as the forget gate."""
+"""Q-sLSTM variant using ln(2/(1-q)) as both the input and the forget gate."""
 
 import math
 
@@ -11,15 +11,16 @@ from .q_slstm_cell import (
 )
 from .vqc import VQC
 
-# Gates are evaluated on float64 VQC expectations, then cast to the state dtype.
-QSLSTM_LOG_RECURRENCE = "log_input_sigmoid_forget_binary_scale_f64_gates_v2"
-# Same recurrence on float32 expectations: complex64 simulation overshoots |q| <= 1 and the float32
-# cast rounds q within ~3e-8 of +-1 onto +-1, so training crashed at q=1 (singular) or q=-1 (N=0).
-QSLSTM_LOG_FLOAT32_GATES_RECURRENCE = "log_input_sigmoid_forget_binary_scale_v1"
-# Log-gate recurrences whose forget gate is sigmoid(q_f).
-QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES = (QSLSTM_LOG_RECURRENCE, QSLSTM_LOG_FLOAT32_GATES_RECURRENCE)
-# Tag of runs whose forget gate was also ln(2/(1-q)) (kept for tracing those runs).
+# i = f = ln(2/(1-q)), evaluated on float64 VQC expectations, then cast to the state dtype.
+QSLSTM_LOG_RECURRENCE = "log_gate_binary_scale_f64_gates_v2"
+# Same amplified forget gate on float32 expectations: complex64 simulation overshoots |q| <= 1 and the
+# float32 cast rounds q within ~3e-8 of +-1 onto +-1, so training could crash at q=1 or q=-1 (N=0).
 QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE = "log_gate_binary_scale_v1"
+# Runs whose forget gate was sigmoid(q_f) (2026-09-27 .. 2026-09-29; kept for tracing those runs):
+# float64 gates, and the float32 gates that crashed as described above.
+QSLSTM_LOG_SIGMOID_FORGET_F64_RECURRENCE = "log_input_sigmoid_forget_binary_scale_f64_gates_v2"
+QSLSTM_LOG_FLOAT32_GATES_RECURRENCE = "log_input_sigmoid_forget_binary_scale_v1"
+QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES = (QSLSTM_LOG_SIGMOID_FORGET_F64_RECURRENCE, QSLSTM_LOG_FLOAT32_GATES_RECURRENCE)
 
 
 def float64_expectations(gate, X):
@@ -65,11 +66,11 @@ def sigmoid_forget_gate(q):
 
 
 def logarithmic_memory_update(q_i, q_f, z_t, c_prev, n_prev, scale_prev, *, return_forget_weight=False,
-                              amplified_forget=False):
-    """C'=f*C+i*z, N'=f*N+i with i=ln(2/(1-q_i)), f=sigmoid(q_f), and binary scaling.
+                              amplified_forget=True):
+    """C'=f*C+i*z, N'=f*N+i with i=f=ln(2/(1-q)) (i from q_i, f from q_f), and binary scaling.
 
-    `amplified_forget` uses f=ln(2/(1-q_f)) instead, as in runs tagged
-    QSLSTM_LOG_AMPLIFIED_FORGET_RECURRENCE.
+    `amplified_forget=False` uses f=sigmoid(q_f) instead, as in runs tagged
+    QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES.
     """
     # Gates are evaluated in the expectations' dtype (float64 from the cell) and only then cast to
     # the state dtype: cast first, q within ~3e-8 of +-1 would become exactly +-1.

@@ -602,7 +602,7 @@ def run_experiment(config, run_dir=None, resume=False, overwrite=False):
 def verify_pairing(run_dir_a, run_dir_b):
     """Checks that two runs of one seed differ only in the recurrent architecture.
 
-    Models share one configuration but not a parameter count (fk_qslstm adds classical encoders), so
+    Models share one configuration but not a parameter count (the fk models add classical encoders), so
     parameter counts and names are recorded, not required; shared parameters must start equal.
     """
     load = lambda d, f: json.loads((Path(d) / f).read_text(encoding="utf-8"))

@@ -62,7 +62,7 @@ def _extract_model_output(args, out):
 	Normalize model forward outputs into a tensor aligned with y.
 	This keeps your old per-model handling in one place.
 	"""
-	if args.model in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "lstm"):
+	if args.model in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm", "lstm"):
 		out, _ = out
 		out = out[:, -1, :]
 		return out

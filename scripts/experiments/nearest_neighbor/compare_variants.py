@@ -31,19 +31,22 @@ import analyze_results as ar  # noqa: E402
 from analyze_results import COLORS, COMPARISON_METRICS, MODEL_LABELS, SPLIT_TITLES  # noqa: E402
 from q_slstm.experiments import nearest_neighbor_metrics as nnm  # noqa: E402
 
-VARIANTS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm")
+ALL_VARIANTS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm")
+VARIANTS = ALL_VARIANTS
 # (a, b): differences are a - b, so negative = a has the lower value.
 ALL_PAIRS = (("qslstm", "qlstm"), ("qslstm_log", "qlstm"), ("qslstm_log", "qslstm"),
-             ("fk_qslstm", "qlstm"), ("fk_qslstm", "qslstm"))
+             ("fk_qslstm", "qlstm"), ("fk_qslstm", "qslstm"),
+             ("fk_qlstm", "qlstm"), ("fk_qslstm", "fk_qlstm"))  # last: gate design with encoders fixed
 PAIRS = ALL_PAIRS
 
 
 def use_variants(variants):
-    """Restrict the comparison to `variants` (e.g. older sweeps that predate fk_qslstm)."""
+    """Restrict the comparison to `variants` (e.g. older sweeps that predate the fk models)."""
     global VARIANTS, PAIRS
-    VARIANTS = tuple(m for m in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm") if m in variants)
+    VARIANTS = tuple(m for m in ALL_VARIANTS if m in variants)
     PAIRS = tuple((a, b) for a, b in ALL_PAIRS if a in VARIANTS and b in VARIANTS)
-SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)"}
+SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)",
+         "fk_qlstm": "QLSTM (fk)"}
 CASES = ("all", *nnm.CASE_ORDER)
 PANEL_METRICS = {
     "mse": "MSE", "mae": "MAE", "final_mse": "final-step MSE", "event_mse": "event-step MSE",
@@ -373,7 +376,7 @@ def main(argv=None):
     parser.add_argument("--runs-dirs", nargs="+", required=True,
                         help="sweep directories; together they must contain every compared model")
     parser.add_argument("--variants", nargs="+", choices=VARIANTS, default=list(VARIANTS),
-                        help="models to compare (default: all four; list three for sweeps without fk_qslstm)")
+                        help="models to compare (default: all; list a subset for sweeps without some models)")
     parser.add_argument("--out-dir", required=True)
     parser.add_argument("--splits", nargs="+", choices=["test", "extrapolation"], default=["test"],
                         help="evaluation splits to compare (default: test only)")

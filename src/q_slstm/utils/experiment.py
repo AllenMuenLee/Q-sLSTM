@@ -30,6 +30,7 @@ def build_result_path(args, experiment_root: Path):
 		"qslstm": [],
 		"qslstm_log": [],
 		"fk_qslstm": [],
+		"fk_qlstm": [],
 		"lstm": [],
 		"self_modulating_qfwp": [],
 		"self_modulating_qfwp_only_new_params": [],

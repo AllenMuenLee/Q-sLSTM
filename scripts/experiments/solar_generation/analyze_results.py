@@ -26,12 +26,15 @@ import numpy as np  # noqa: E402
 from q_slstm.experiments import solar_generation_metrics as sm  # noqa: E402
 from q_slstm.experiments.solar_generation import run_status, verify_pairing  # noqa: E402
 
-COMPARE_MODELS = ("qslstm", "qslstm_log", "fk_qslstm")
+COMPARE_MODELS = ("qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm")
 MODEL_LABELS = {"qlstm": "QLSTM (conventional)", "qslstm": "Q-sLSTM (stabilized)",
                 "qslstm_log": "Q-sLSTM-log (ln(2/(1-q)) input gate)",
-                "fk_qslstm": "Q-sLSTM (fk reference: exp gates, classical encoders)"}
-SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)"}
+                "fk_qslstm": "Q-sLSTM (fk reference: exp gates, classical encoders)",
+                "fk_qlstm": "QLSTM (fk encoders: sigmoid gates, classical encoders)"}
+SHORT = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)",
+         "fk_qlstm": "QLSTM (fk)"}
 COLORS = {"qlstm": "#4C72B0", "qslstm": "#DD8452", "qslstm_log": "#55A868", "fk_qslstm": "#C44E52",
+          "fk_qlstm": "#8172B3",
           "persistence": "#555555", "truth": "#000000"}
 # The model compared against QLSTM; set with --compare-model (use_compare_model).
 COMPARE = "qslstm"

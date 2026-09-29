@@ -53,3 +53,40 @@ def test_write_proportion_diagnostics_leave_outputs_unchanged():
     torch.testing.assert_close(outputs, plain)
     assert diag["alpha"].shape == (2, 3, 2)
     assert ((diag["alpha"] > 0) & (diag["alpha"] <= 1)).all()
+
+
+def test_fk_qlstm_shares_every_initial_parameter_with_fk_qslstm():
+    from q_slstm.models.fk_qlstm_cell import FK_QLSTM_RECURRENCE, CustomFkQLSTMCell
+
+    a = build_quantum_model("fk_qlstm", 1, 2, 1, 1, seed=5)
+    b = build_quantum_model("fk_qslstm", 1, 2, 1, 1, seed=5)
+    assert isinstance(a.cell, CustomFkQLSTMCell) and a.cell.recurrence == FK_QLSTM_RECURRENCE
+    sa, sb = a.state_dict(), b.state_dict()
+    assert sa.keys() == sb.keys() and all(torch.equal(sa[k], sb[k]) for k in sa)
+
+
+def test_fk_models_differ_only_in_input_and_forget_activations():
+    qlstm = build_quantum_model("fk_qlstm", 1, 2, 1, 1, seed=5).cell
+    qslstm = build_quantum_model("fk_qslstm", 1, 2, 1, 1, seed=5).cell
+    combined = torch.randn(4, 3)
+    with torch.no_grad():
+        i_a, f_a, g_a, o_a = qlstm.gate_values(combined)
+        i_b, f_b, g_b, o_b = qslstm.gate_values(combined)
+    torch.testing.assert_close(torch.logit(i_a), torch.log(i_b))
+    torch.testing.assert_close(torch.logit(f_a), torch.log(f_b))
+    torch.testing.assert_close(g_a, g_b)
+    torch.testing.assert_close(o_a, o_b)
+    assert ((i_a > 0) & (i_a < 1) & (f_a > 0) & (f_a < 1)).all()
+
+
+def test_fk_qlstm_in_every_experiment():
+    from q_slstm.experiments.nearest_neighbor import resolve_config as nn_config
+    from q_slstm.models.fk_qlstm_cell import FK_QLSTM_RECURRENCE
+
+    assert "fk_qlstm" in QUANTUM_MODELS
+    assert resolve_config({"model": "fk_qlstm", "task": "ema", "seed": 1, "scale": "pilot"})["qslstm_recurrence"] \
+        == FK_QLSTM_RECURRENCE
+    assert nn_config({"model": "fk_qlstm", "scale": "pilot", "seed": 0})["qslstm_recurrence"] == FK_QLSTM_RECURRENCE
+    model = build_quantum_model("fk_qlstm", 1, 2, 1, 1, seed=0)
+    outputs, _, diag = model(torch.randn(2, 3, 1), return_diagnostics=True)
+    assert outputs.shape == (2, 3, 1) and diag["alpha"].shape == (2, 3, 2)

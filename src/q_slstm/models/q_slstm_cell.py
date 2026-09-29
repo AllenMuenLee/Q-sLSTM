@@ -1,5 +1,6 @@
 # Q-sLSTM cell (stabilized): four independent VQC gates feeding the normalized, xLSTM-stabilized
-# (h, c, n, m) recurrence. Only the input gate is amplified; the forget gate is a sigmoid.
+# (h, c, n, m) recurrence. Input and forget gates are both amplified, (1 + q) / (1 - q), kept in the
+# log domain with the epsilon clamp on q.
 #
 # 2025 06 19: QLSTM with Pennylane Batch support
 # 2024 11 24: Modern QLSTM version
@@ -16,9 +17,11 @@ torch.set_default_dtype(torch.float32)
 DEFAULT_GATE_EPSILON = 1e-6
 # The unclipped polynomial recurrence was reverted: c and n still depend on the direct
 # input/forget gate values, so it did not remove the need to clip q.
-QSLSTM_RECURRENCE = "xlstm_stabilized_sigmoid_forget_v1"
-# Tag of runs whose forget gate was amplified like the input gate (kept for tracing those runs).
-QSLSTM_AMPLIFIED_FORGET_RECURRENCE = "xlstm_stabilized_v1"
+# Amplified input and forget gates (the same recurrence as the original xlstm_stabilized_v1 runs).
+QSLSTM_RECURRENCE = "xlstm_stabilized_v1"
+QSLSTM_AMPLIFIED_FORGET_RECURRENCE = QSLSTM_RECURRENCE
+# Tag of runs whose forget gate was sigmoid(q) (2026-09-27 .. 2026-09-29; kept for tracing those runs).
+QSLSTM_SIGMOID_FORGET_RECURRENCE = "xlstm_stabilized_sigmoid_forget_v1"
 # Tag of runs trained with the reverted polynomial recurrence (kept for tracing those runs).
 QSLSTM_POLYNOMIAL_RECURRENCE = "polynomial_binary_scale_v2"
 
@@ -209,8 +212,11 @@ class CustomQsLSTMCell(nn.Module):
         self.output_post_processing = nn.Linear(hidden_size, output_size)
 
     supports_alpha_diagnostics = True
-    # log forget gate; replays of QSLSTM_AMPLIFIED_FORGET_RECURRENCE runs swap in bounded_log_ratio.
-    log_forget = staticmethod(sigmoid_log_forget)
+
+    def log_forget(self, q_f):
+        """Log of the amplified forget gate (1 + q) / (1 - q). Replays of runs tagged
+        QSLSTM_SIGMOID_FORGET_RECURRENCE set an instance `log_forget = sigmoid_log_forget`."""
+        return bounded_log_ratio(q_f, self.gate_epsilon)
 
     def forward(self, x, hidden, return_diagnostics=False):
         h_prev, c_prev, n_prev, m_prev = hidden

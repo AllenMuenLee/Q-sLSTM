@@ -30,7 +30,6 @@ from q_slstm.datasets.scalar_tasks import (
     generate_dataset,
     split_train_val,
 )
-from q_slstm.datasets.solar_scalar import REAL_TASKS, load_solar_next, reference_mse
 from q_slstm.experiments import scalar_tasks_metrics as stm
 from q_slstm.experiments.nearest_neighbor import (
     _require_finite,
@@ -41,16 +40,13 @@ from q_slstm.experiments.nearest_neighbor import (
     parameter_checksums,
     source_revision,
 )
-from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
-from q_slstm.models.fk_q_slstm_cell import FK_QSLSTM_RECURRENCE
+from q_slstm.models.factory import FK_CELLS, QUANTUM_MODELS, build_quantum_model, count_trainable_parameters
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON, QSLSTM_RECURRENCE
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
 
 CLASSICAL_MODELS = ("lstm",)
 VQC_MODELS = QUANTUM_MODELS
 MODELS = VQC_MODELS + CLASSICAL_MODELS
-# Synthetic tasks plus real-data tasks (q_slstm.datasets.solar_scalar).
-ALL_TASKS = TASKS + REAL_TASKS
 
 # The paper preset keeps the nearest-neighbor model size (hidden 6, depth 3) and length (32) so the
 # two experiments are comparable; tasks are simpler, so the data and epoch budgets are smaller.
@@ -73,8 +69,11 @@ PRESET_FIELDS = tuple(k for k in PRESETS["paper"] if k != "n_seeds")
 # Arguments and config
 # ---------------------------------------------------------------------------------------------
 
-def add_run_arguments(parser):
-    """Arguments shared by the training script and the sweep launcher (all optional here)."""
+def add_run_arguments(parser, task_options=True, save_dir="results/scalar_tasks"):
+    """Arguments shared by the training script and the sweep launcher (all optional here).
+
+    `task_options=False` omits the synthetic-task generation options (for experiments with their own data).
+    """
     a = parser.add_argument
     d = ScalarTaskConfig()
     a("--scale", choices=sorted(PRESETS), default="paper", help="scale preset (default: paper)")
@@ -94,12 +93,13 @@ def add_run_arguments(parser):
     a("--lr", type=float, default=None, help="overrides the preset learning rate")
     a("--weight-decay", type=float, default=0.0)
     a("--grad-clip", type=float, default=0.0, help="max gradient norm; 0 disables clipping (norms are still logged)")
-    a("--delay", type=int, default=d.delay, help="delay task: lag k")
-    a("--ema-decay", type=float, default=d.ema_decay, help="ema task: decay d")
-    a("--flip-probability", type=float, default=d.flip_probability, help="flip_flop task: pulse probability")
-    a("--narma-order", type=int, default=d.narma_order, help="narma task: order n")
+    if task_options:
+        a("--delay", type=int, default=d.delay, help="delay task: lag k")
+        a("--ema-decay", type=float, default=d.ema_decay, help="ema task: decay d")
+        a("--flip-probability", type=float, default=d.flip_probability, help="flip_flop task: pulse probability")
+        a("--narma-order", type=int, default=d.narma_order, help="narma task: order n")
     a("--device", choices=["cpu", "cuda"], default="cpu")
-    a("--save-dir", type=str, default="results/scalar_tasks")
+    a("--save-dir", type=str, default=save_dir)
     a("--run-date", type=str, default=None, help="date folder (YYYY-MM-DD) under <save-dir>/<scale>; default: today")
 
 
@@ -109,13 +109,17 @@ def generation_config(config):
     return ScalarTaskConfig(**gen)
 
 
-def resolve_config(args):
-    """Merge the preset with explicit overrides into one fully resolved, validated config dict."""
+def resolve_config(args, tasks=TASKS):
+    """Merge the preset with explicit overrides into one fully resolved, validated config dict.
+
+    `tasks` lists the accepted task names; other experiments that reuse this pipeline (solar_next)
+    pass their own. Generation parameters are validated only for the synthetic tasks.
+    """
     a = dict(vars(args)) if not isinstance(args, dict) else dict(args)
     if a.get("model") not in MODELS:
         raise ValueError(f"--model must be one of {MODELS}, got {a.get('model')!r}")
-    if a.get("task") not in ALL_TASKS:
-        raise ValueError(f"--task must be one of {ALL_TASKS}, got {a.get('task')!r}")
+    if a.get("task") not in tasks:
+        raise ValueError(f"--task must be one of {tasks}, got {a.get('task')!r}")
 
     preset = a.get("scale", "paper")
     if preset not in PRESETS:
@@ -134,7 +138,7 @@ def resolve_config(args):
         flip_probability=a.get("flip_probability", d.flip_probability),
         narma_order=a.get("narma_order", d.narma_order),
     )
-    if a["task"] in TASKS:  # real-data tasks have no generation parameters
+    if a["task"] in TASKS:  # tasks of other experiments have no generation parameters
         generation.validate(a["task"], resolved["sequence_length"])
         if a.get("run_extrapolation"):
             generation.validate(a["task"], resolved["extrapolation_length"])
@@ -166,7 +170,7 @@ def resolve_config(args):
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
         "qslstm_recurrence": (QSLSTM_LOG_RECURRENCE if model == "qslstm_log"
                               else QSLSTM_RECURRENCE if model == "qslstm"
-                              else FK_QSLSTM_RECURRENCE if model == "fk_qslstm" else None),
+                              else FK_CELLS[model].recurrence if model in FK_CELLS else None),
         "weight_decay": a.get("weight_decay", 0.0),
         "grad_clip": a.get("grad_clip", 0.0),
         "device": a.get("device", "cpu"),
@@ -197,8 +201,6 @@ def run_directory(config):
 def make_datasets(config):
     """Materialize every split for one run; identical for all models given the same seeds and task."""
     gen, seeds, task = generation_config(config), config["seeds"], config["task"]
-    if task in REAL_TASKS:
-        return load_solar_next(config, seeds["data"])
     pool = generate_dataset(task, config["train_size"], config["sequence_length"], seeds["data"], "train_pool", gen)
     train, val, _, _ = split_train_val(pool, config["val_size"], seeds["split"])
     datasets = {
@@ -220,9 +222,6 @@ def dataset_manifest(config, datasets):
                           "warmup_steps": ds.metadata["warmup_steps"], "checksums": ds.checksums()}
                    for name, ds in datasets.items()},
         "checksum_method": "sha256 over dtype, shape, and little-endian tensor bytes",
-        **({"source": datasets["test"].metadata["source"],
-            "reference_mse": {name: reference_mse(ds) for name, ds in datasets.items()}}
-           if config["task"] in REAL_TASKS else {}),
     }
 
 
@@ -397,8 +396,13 @@ def train_model(model, train_ds, val_ds, config, run_dir):
 # One full run
 # ---------------------------------------------------------------------------------------------
 
-def run_experiment(config, run_dir=None):
-    """Train one model on one task and seed, evaluate the best-validation checkpoint once, write artifacts."""
+def run_experiment(config, run_dir=None, datasets_fn=None, manifest_fn=None):
+    """Train one model on one task and seed, evaluate the best-validation checkpoint once, write artifacts.
+
+    `datasets_fn(config)` and `manifest_fn(config, datasets)` replace this module's make_datasets and
+    dataset_manifest for experiments that reuse the pipeline with their own data (solar_next).
+    """
+    datasets_fn, manifest_fn = datasets_fn or make_datasets, manifest_fn or dataset_manifest
     run_dir = Path(run_dir) if run_dir is not None else run_directory(config)
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "complete.json").unlink(missing_ok=True)
@@ -408,8 +412,8 @@ def run_experiment(config, run_dir=None):
     started, timing = time.perf_counter(), {}
     try:
         t0 = time.perf_counter()
-        datasets = make_datasets(config)
-        _write_json(run_dir / "dataset_manifest.json", dataset_manifest(config, datasets))
+        datasets = datasets_fn(config)
+        _write_json(run_dir / "dataset_manifest.json", manifest_fn(config, datasets))
         baseline_value = training_target_mean(datasets["train"])
         timing["data_seconds"] = time.perf_counter() - t0
 
@@ -450,8 +454,11 @@ def run_experiment(config, run_dir=None):
         })
         return run_dir
     except BaseException as exc:
+        interrupted = isinstance(exc, KeyboardInterrupt)
         _write_json(run_dir / "failure.json", {
-            "error_type": type(exc).__name__, "error": str(exc), "traceback": traceback.format_exc(),
+            "error_type": type(exc).__name__,
+            "error": "interrupted by the user (Ctrl+C / stopped sweep); not a model failure" if interrupted else str(exc),
+            "interrupted": interrupted, "traceback": traceback.format_exc(),
             "task": config["task"], "model": config["model"], "run_seed": config["seeds"]["run_seed"],
             "elapsed_seconds": time.perf_counter() - started,
         })

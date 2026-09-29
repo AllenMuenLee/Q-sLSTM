@@ -1,6 +1,6 @@
 # scripts/experiments/nearest_neighbor/run_sweep.py
 #
-# Run ONE model (qlstm, qslstm, qslstm_log, or fk_qslstm) over many seeds, with a chosen number of parallel workers.
+# Run ONE model (qlstm, qslstm, qslstm_log, fk_qslstm, or fk_qlstm) over many seeds, with a chosen number of parallel workers.
 # Run the script once per model; combine afterwards with analyze_results.py.
 #
 # Pairing across the two invocations comes from the seeds: the same seed always gives identical

@@ -30,7 +30,7 @@ from q_slstm.utils.experiment import build_result_path
 from q_slstm.utils.experiment import generate_experiment_readme
 from q_slstm.utils.experiment import Tee
 
-from q_slstm.models.fk_q_slstm_cell import CustomFkQsLSTMCell
+from q_slstm.models.factory import FK_CELLS
 from q_slstm.models.qlstm_cell import CustomQLSTMCell
 from q_slstm.models.q_slstm_cell import CustomQsLSTMCell, DEFAULT_GATE_EPSILON
 from q_slstm.models.q_slstm_log_cell import CustomQsLSTMLogCell
@@ -69,7 +69,7 @@ def make_model(args):
     Move your existing model-creation if/elif here.
     """
     use_input_projection = (
-        args.model in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "lstm")
+        args.model in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm", "lstm")
         and args.input_projection_size > 0
         and args.input_size > args.input_projection_size
     )
@@ -93,10 +93,11 @@ def make_model(args):
             else base_model
         )
         return model.to(args.device).float()
-    elif args.model == "fk_qslstm":
-        # Reference Q-sLSTM: exp gates behind classical encoders, (h, c) state; same configuration.
+    elif args.model in FK_CELLS:
+        # Reference cells with classical encoders, (h, c) state; same configuration.
+        # fk_qslstm: exp input/forget gates; fk_qlstm: sigmoid gates.
         print("OPERATING MODEL {}".format(args.model))
-        fk_cell = CustomFkQsLSTMCell(
+        fk_cell = FK_CELLS[args.model](
             effective_input_size, args.hidden_size, args.output_size, args.qnn_depth
         ).float()
         base_model = CustomLSTM(effective_input_size, args.hidden_size, fk_cell).float()
@@ -162,6 +163,7 @@ def main():
             "qslstm",
             "qslstm_log",
             "fk_qslstm",
+            "fk_qlstm",
             "lstm",
             "self_modulating_qfwp",
             "self_modulating_qfwp_only_new_params",

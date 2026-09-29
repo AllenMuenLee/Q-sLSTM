@@ -9,9 +9,10 @@
 #
 # Gate values are the raw gates of each recurrence, averaged over hidden units and test sequences:
 #   qlstm       i = sigmoid(q_i)                f = sigmoid(q_f)
-#   qslstm      i = (1+q_i)/(1-q_i) (eps-clamped) f = sigmoid(q_f)
-#   qslstm_log  i = ln(2/(1-q_i))               f = sigmoid(q_f)
+#   qslstm      i = (1+q_i)/(1-q_i) (eps-clamped) f = (1+q_f)/(1-q_f)  (sigmoid(q_f) in sigmoid-forget runs)
+#   qslstm_log  i = ln(2/(1-q_i))               f = ln(2/(1-q_f))    (sigmoid(q_f) in sigmoid-forget runs)
 #   fk_qslstm   i = exp(Linear(VQC(Linear(.))))  f = exp(Linear(VQC(Linear(.))))  (unbounded)
+#   fk_qlstm    i = sigmoid(Linear(VQC(Linear(.))))  f = sigmoid(Linear(VQC(Linear(.))))
 # Input gates live on different scales, so that figure uses a log axis. Gate traces are cached in
 # <runs-dir>/figures/gate_traces.csv; pass --retrace to recompute them.
 
@@ -34,22 +35,40 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT = SCRIPT_DIR.parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 
-from q_slstm.experiments.scalar_tasks import ALL_TASKS as TASKS  # noqa: E402
+from q_slstm.datasets.scalar_tasks import TASKS as SCALAR_TASKS  # noqa: E402
 
-MODELS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm")
-LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)"}
-# Validated categorical slots 1-4 (blue, orange, aqua, yellow) on a light surface.
-COLORS = {"qlstm": "#2a78d6", "qslstm": "#eb6834", "qslstm_log": "#1baf7a", "fk_qslstm": "#eda100"}
+# Panel order; solar_next sweeps (scripts/experiments/solar_next) reuse these figures.
+TASKS = (*SCALAR_TASKS, "solar_next")
+
+MODELS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm")
+LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)",
+          "fk_qlstm": "QLSTM (fk)"}
+# Validated categorical slots 1-5 (blue, orange, aqua, yellow, magenta) on a light surface.
+COLORS = {"qlstm": "#2a78d6", "qslstm": "#eb6834", "qslstm_log": "#1baf7a", "fk_qslstm": "#eda100",
+          "fk_qlstm": "#e87ba4"}
+FK_MODELS = ("fk_qslstm", "fk_qlstm")
 SURFACE, INK, MUTED = "#fcfcfb", "#0b0b0b", "#52514e"
 
 
 def discover(runs_dir):
+    """(task, seed, model, run_dir) of completed runs; task and seed come from each run's config.json,
+    so both <task>/seed_*/<model> (scalar tasks) and seed_*/<model> (solar_next) layouts work."""
     runs = []
-    for complete in sorted(Path(runs_dir).glob("*/seed_*/*/complete.json")):
+    for complete in sorted(Path(runs_dir).rglob("complete.json")):
         run_dir = complete.parent
-        if run_dir.name in MODELS and run_dir.parent.parent.name in TASKS:
-            runs.append((run_dir.parent.parent.name, int(run_dir.parent.name[5:]), run_dir.name, run_dir))
+        config = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
+        if config.get("model") in MODELS and config.get("task") in TASKS:
+            runs.append((config["task"], config["seeds"]["run_seed"], config["model"], run_dir))
     return runs
+
+
+def load_test_data(config):
+    """The run's test split, built by the experiment that produced it."""
+    if config.get("kind") == "solar_next_run":
+        from q_slstm.experiments.solar_next import make_datasets
+    else:
+        from q_slstm.experiments.scalar_tasks import make_datasets
+    return make_datasets({**config, "run_extrapolation": False})["test"]
 
 
 # ---------------------------------------------------------------------------------------------
@@ -61,30 +80,35 @@ def trace_gates(job):
     import torch
 
     from q_slstm.experiments import scalar_tasks as st
-    from q_slstm.models.q_slstm_cell import bounded_log_ratio
-    from q_slstm.models.q_slstm_log_cell import float64_expectations, logarithmic_gate
+    from q_slstm.models.factory import match_recurrence
+    from q_slstm.models.q_slstm_cell import QSLSTM_SIGMOID_FORGET_RECURRENCE, bounded_log_ratio
+    from q_slstm.models.q_slstm_log_cell import (
+        QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES, float64_expectations, logarithmic_gate,
+    )
 
     task, seed, model_name, run_dir, n_sequences = job
     torch.set_num_threads(1)
     config = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
-    test = st.make_datasets({**config, "run_extrapolation": False})["test"]
+    test = load_test_data(config)
     model = st.build_model(config)
     state = torch.load(run_dir / "checkpoints" / "best.pt", map_location="cpu", weights_only=False)
     model.load_state_dict(state["model_state_dict"])
     model.eval()
+    match_recurrence(model, config.get("qslstm_recurrence"))
     cell = model.cell
+    sigmoid_forget = config.get("qslstm_recurrence") in (QSLSTM_SIGMOID_FORGET_RECURRENCE,
+                                                         *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
 
     x = test.tensors["inputs"][:n_sequences]
     batch, length, _ = x.shape
-    n_states = 2 if model_name in ("qlstm", "fk_qslstm") else 4
+    n_states = 2 if model_name in ("qlstm", *FK_MODELS) else 4
     hidden = tuple(x.new_zeros(batch, cell.hidden_size) for _ in range(n_states))
     rows = []
     with torch.no_grad():
         for t in range(length):
             combined = torch.cat((x[:, t], hidden[0]), dim=-1)
-            if model_name == "fk_qslstm":
-                i_gate = torch.exp(cell.Elayer_out_input(cell.input_gate(cell.Elayer_in_input(combined))))
-                f_gate = torch.exp(cell.Elayer_out_forget(cell.forget_gate(cell.Elayer_in_forget(combined))))
+            if model_name in FK_MODELS:
+                i_gate, f_gate, _, _ = cell.gate_values(combined)
             elif model_name == "qslstm_log":
                 q_i, q_f = (float64_expectations(g, combined) for g in (cell.input_gate, cell.forget_gate))
                 i_gate = logarithmic_gate(q_i)
@@ -92,8 +116,12 @@ def trace_gates(job):
                 q_i, q_f = cell.input_gate(combined), cell.forget_gate(combined)
                 i_gate = (torch.sigmoid(q_i) if model_name == "qlstm"
                           else torch.exp(bounded_log_ratio(q_i, cell.gate_epsilon)))
-            if model_name != "fk_qslstm":
+            if model_name == "qlstm" or (model_name not in FK_MODELS and sigmoid_forget):
                 f_gate = torch.sigmoid(q_f)
+            elif model_name == "qslstm":
+                f_gate = torch.exp(bounded_log_ratio(q_f, cell.gate_epsilon))
+            elif model_name == "qslstm_log":
+                f_gate = logarithmic_gate(q_f)
             rows.append({"task": task, "seed": seed, "model": model_name, "timestep": t,
                          "input_gate": float(i_gate.double().mean()), "forget_gate": float(f_gate.double().mean())})
             _, *hidden = cell(x[:, t], tuple(hidden))
@@ -236,11 +264,12 @@ def main(argv=None):
     band_plot(gates, "timestep", "input_gate", "Input gate by timestep (test data, best checkpoint)",
               "timestep", "input gate (log scale)", out / "input_gate_vs_timestep.png", models, counts,
               log_y=True, note="QLSTM: sigmoid(q); Q-sLSTM: (1+q)/(1-q); Q-sLSTM-log: ln(2/(1-q)); "
-                               "Q-sLSTM (fk): exp(encoder output). "
+                               "Q-sLSTM (fk): exp(encoder output); QLSTM (fk): sigmoid(encoder output). "
                                "Mean over hidden units and test sequences. " + note)
     band_plot(gates, "timestep", "forget_gate", "Forget gate by timestep (test data, best checkpoint)",
               "timestep", "forget gate", out / "forget_gate_vs_timestep.png", models, counts,
-              note="sigmoid(q) except Q-sLSTM (fk): exp(encoder output), which can exceed 1. "
+              note="QLSTM: sigmoid(q); Q-sLSTM: (1+q)/(1-q); Q-sLSTM-log: ln(2/(1-q)) (sigmoid(q) in "
+                   "sigmoid-forget runs); fk models: of their encoder output. "
                    "Mean over hidden units and test sequences. " + note)
     return 0
 

@@ -1,6 +1,7 @@
-# Real-data 1-D input / 1-D output task for the scalar-task pipeline.
+# Data for the solar_next experiment (q_slstm.experiments.solar_next): a real 1-D input / 1-D output
+# forecasting task,
 #
-#     solar_next   y[t] = g[t + 1] from inputs g[1..t]: next-hour Ontario (IESO) solar generation
+#     y[t] = g[t + 1] from inputs g[1..t]: next-hour Ontario (IESO) solar generation
 #
 # The series is the hourly IESO solar output already collected for the solar-generation experiment
 # (data/solar_generation, 2024-01-01 .. 2025-12-31 UTC). Each sequence is a window of L consecutive
@@ -24,7 +25,7 @@ import torch
 
 from .scalar_tasks import STREAM_ID_OFFSETS, ScalarTaskDataset
 
-REAL_TASKS = ("solar_next",)
+TASK = "solar_next"
 DEFAULT_SOLAR_ROOT = Path(__file__).resolve().parents[3] / "data" / "solar_generation"
 DAY = 24
 

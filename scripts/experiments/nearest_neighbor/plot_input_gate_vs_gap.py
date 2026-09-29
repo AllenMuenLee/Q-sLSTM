@@ -28,7 +28,7 @@ import compare_variants as cv
 from gate_trace import load_model
 from plot_key_results import SIGNED_BINS
 from q_slstm.experiments.nearest_neighbor import make_datasets
-from q_slstm.models.q_slstm_cell import QSLSTM_RECURRENCE, bounded_log_ratio
+from q_slstm.models.q_slstm_cell import QSLSTM_SIGMOID_FORGET_RECURRENCE, bounded_log_ratio
 from q_slstm.models.q_slstm_log_cell import QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES, logarithmic_gate
 
 GATES = ("input", "forget")
@@ -38,8 +38,10 @@ LABELS = {
     "qslstm": "QsLSTM: (1+q)/(1-q), before stabilization",
     "qslstm_log": "QsLSTM_LOG: ln(2/(1-q)), before scaling",
     "fk_qslstm": "QsLSTM_FK: exp(Linear(VQC)), unstabilized",
+    "fk_qlstm": "QLSTM_FK: sigmoid(Linear(VQC))",
 }
-SHORT_NAMES = {"qlstm": "QLSTM", "qslstm": "QsLSTM", "qslstm_log": "QsLSTM_LOG", "fk_qslstm": "QsLSTM_FK"}
+SHORT_NAMES = {"qlstm": "QLSTM", "qslstm": "QsLSTM", "qslstm_log": "QsLSTM_LOG", "fk_qslstm": "QsLSTM_FK",
+               "fk_qlstm": "QLSTM_FK"}
 SIGMOID_LABELS = {
     "qslstm": "QsLSTM: sigmoid(q)",
     "qslstm_log": "QsLSTM_LOG: sigmoid(q)",
@@ -47,15 +49,20 @@ SIGMOID_LABELS = {
 
 
 def amplified(config, gate):
-    """Input gates are always amplified; forget gates only in runs predating the sigmoid-forget recurrences
-    (fk_qslstm: both are exp gates)."""
-    return gate == "input" or config["model"] == "fk_qslstm" or config.get("qslstm_recurrence") not in (QSLSTM_RECURRENCE, *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
+    """Input gates are always amplified; forget gates in every run except the sigmoid-forget runs
+    (2026-09-27 .. 2026-09-29). fk_qslstm: both are exp gates; fk_qlstm: neither, both sigmoid."""
+    if config["model"] == "fk_qlstm":
+        return False
+    return gate == "input" or config["model"] == "fk_qslstm" or config.get("qslstm_recurrence") not in (QSLSTM_SIGMOID_FORGET_RECURRENCE,
+                                                 *QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES)
 
 
 def gate_value(q, config, gate):
-    """Gate from the observed value: the VQC expectation q, or for fk_qslstm its output encoder's value."""
+    """Gate from the observed value: the VQC expectation q, or for the fk models their output encoder's value."""
     if config["model"] == "fk_qslstm":
         return torch.exp(q)
+    if config["model"] == "fk_qlstm":
+        return torch.sigmoid(q)
     if config["model"] == "qlstm" or not amplified(config, gate):
         return torch.sigmoid(q)
     if config["model"] == "qslstm":
@@ -84,7 +91,8 @@ def trace(run_dir, config, batch_size, gate):
         cell.gate_expectations = gate_expectations
         handle = type("Restore", (), {"remove": staticmethod(lambda: delattr(cell, "gate_expectations"))})
     else:
-        module = getattr(cell, f"Elayer_out_{gate}" if config["model"] == "fk_qslstm" else f"{gate}_gate")
+        fk = config["model"] in ("fk_qslstm", "fk_qlstm")
+        module = getattr(cell, f"Elayer_out_{gate}" if fk else f"{gate}_gate")
         handle = module.register_forward_hook(lambda _module, _inputs, q: record(q))
     gates, predictions = [], []
     try:

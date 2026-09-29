@@ -1,6 +1,6 @@
 # scripts/experiments/solar_generation/run_sweep.py
 #
-# Run ONE model (qlstm, qslstm, qslstm_log, or fk_qslstm) over many seeds with a chosen number of parallel workers; run the
+# Run ONE model (qlstm, qslstm, qslstm_log, fk_qslstm, or fk_qlstm) over many seeds with a chosen number of parallel workers; run the
 # script once per model with the same seeds, then combine with analyze_results.py. The dataset and
 # chronological split are fixed, so seeds only change initialization and training order. Each run is
 # an isolated train_solar_generation.py subprocess with its own console_log.txt.

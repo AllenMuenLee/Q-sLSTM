@@ -27,7 +27,8 @@ from q_slstm.models.factory import build_quantum_model  # noqa: E402
 
 # Colour encodes the family; marker shape repeats it so identity never rests on colour alone.
 FAMILY = {"quantum": ("#2a78d6", "o"), "LSTM": ("#eb6834", "s"), "sLSTM": ("#1baf7a", "D")}
-QUANTUM = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)"}
+QUANTUM = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)",
+           "fk_qlstm": "QLSTM (fk)"}
 CLASSICAL = {"lstm": ("LSTM", "LSTM"), "slstm_sig": ("sLSTM σ-forget", "sLSTM"), "slstm_exp": ("sLSTM exp-forget", "sLSTM")}
 PANELS = {"val_mse": "validation MSE", "test_all": "test MSE (all cases)", "test_iid": "test: iid",
           "test_early": "test: early", "test_late": "test: late", "test_near_best": "test: near_best"}
@@ -121,6 +122,8 @@ def main(argv=None):
     parser.add_argument("--qslstm-log-dir", type=Path, default=paper / "2026-09-24")
     parser.add_argument("--fk-qslstm-dir", type=Path, default=None,
                         help="sweep with fk_qslstm runs (omitted from the plot when not given)")
+    parser.add_argument("--fk-qlstm-dir", type=Path, default=None,
+                        help="sweep with fk_qlstm runs (omitted from the plot when not given)")
     parser.add_argument("--lr", type=float, default=1e-2)
     args = parser.parse_args(argv)
 
@@ -128,7 +131,7 @@ def main(argv=None):
     seeds = sorted(pd.read_csv(csvs[0]).query("model == 'constant'")["run_seed"].unique())
     classical, constant = classical_rows(csvs, args.lr, seeds)
     quantum = quantum_rows({"qlstm": args.qlstm_dir, "qslstm": args.qslstm_dir, "qslstm_log": args.qslstm_log_dir,
-                            "fk_qslstm": args.fk_qslstm_dir}, seeds)
+                            "fk_qslstm": args.fk_qslstm_dir, "fk_qlstm": args.fk_qlstm_dir}, seeds)
     frame = pd.concat([quantum, classical], ignore_index=True)
     columns = ["label", "family", "n_params", "run_seed", *PANELS]
     frame[columns].to_csv(args.classical_dir / "comparison_per_seed.csv", index=False)
