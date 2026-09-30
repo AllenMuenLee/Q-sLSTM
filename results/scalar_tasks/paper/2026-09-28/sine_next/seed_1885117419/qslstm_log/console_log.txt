@@ -1,52 +1,62 @@
 scale=paper task=sine_next model=qslstm_log seed=1885117419 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[sine_next qslstm_log seed 1885117419] epoch 001 train 0.37486 val 0.31900 gnorm 0.25 (16.8s) *
-[sine_next qslstm_log seed 1885117419] epoch 002 train 0.26426 val 0.20469 gnorm 0.223 (16.6s) *
-[sine_next qslstm_log seed 1885117419] epoch 003 train 0.16262 val 0.12514 gnorm 0.161 (16.5s) *
-[sine_next qslstm_log seed 1885117419] epoch 004 train 0.10180 val 0.08061 gnorm 0.0939 (16.8s) *
-[sine_next qslstm_log seed 1885117419] epoch 005 train 0.06489 val 0.05098 gnorm 0.0662 (16.7s) *
-[sine_next qslstm_log seed 1885117419] epoch 006 train 0.04124 val 0.03368 gnorm 0.0503 (16.7s) *
-[sine_next qslstm_log seed 1885117419] epoch 007 train 0.02929 val 0.02673 gnorm 0.0535 (16.7s) *
-[sine_next qslstm_log seed 1885117419] epoch 008 train 0.02501 val 0.02430 gnorm 0.052 (16.9s) *
-[sine_next qslstm_log seed 1885117419] epoch 009 train 0.02342 val 0.02340 gnorm 0.0387 (16.7s) *
-[sine_next qslstm_log seed 1885117419] epoch 010 train 0.02277 val 0.02282 gnorm 0.0495 (16.9s) *
-[sine_next qslstm_log seed 1885117419] epoch 011 train 0.02223 val 0.02194 gnorm 0.0702 (17.0s) *
-[sine_next qslstm_log seed 1885117419] epoch 012 train 0.02098 val 0.02095 gnorm 0.04 (16.7s) *
-[sine_next qslstm_log seed 1885117419] epoch 013 train 0.02040 val 0.02125 gnorm 0.0532 (16.8s)
-[sine_next qslstm_log seed 1885117419] epoch 014 train 0.02022 val 0.02043 gnorm 0.0535 (16.8s) *
-Traceback (most recent call last):
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
-    main()
-    ~~~~^^
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
-    run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
-    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 348, in train_model
-    outputs = model(inputs)[0]
-              ~~~~~^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 131, in forward
-    outputs, state = _unroll(self.cell, x, hidden)
-                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 36, in _unroll
-    y_t, *state = cell(x[:, t, :], tuple(state))
-                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
-    c_t, n_t, scale_t, i_weight = self.memory_update(
-                                  ~~~~~~~~~~~~~~~~~~^
-        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
-    i = logarithmic_gate(q_i)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 29, in logarithmic_gate
-    raise ValueError("VQC expectation q=1: singular logarithmic gate; clipping is disabled")
-ValueError: VQC expectation q=1: singular logarithmic gate; clipping is disabled
+[sine_next qslstm_log seed 1885117419] epoch 001 train 0.38238 val 0.29822 gnorm 0.254 (16.2s) *
+[sine_next qslstm_log seed 1885117419] epoch 002 train 0.23051 val 0.16507 gnorm 0.231 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 003 train 0.12284 val 0.08563 gnorm 0.156 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 004 train 0.06328 val 0.04597 gnorm 0.079 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 005 train 0.03642 val 0.02933 gnorm 0.0475 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 006 train 0.02488 val 0.02190 gnorm 0.0338 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 007 train 0.01979 val 0.01860 gnorm 0.0366 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 008 train 0.01754 val 0.01711 gnorm 0.038 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 009 train 0.01644 val 0.01638 gnorm 0.0329 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 010 train 0.01591 val 0.01598 gnorm 0.0357 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 011 train 0.01566 val 0.01570 gnorm 0.0482 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 012 train 0.01538 val 0.01552 gnorm 0.0378 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 013 train 0.01515 val 0.01545 gnorm 0.04 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 014 train 0.01498 val 0.01506 gnorm 0.0351 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 015 train 0.01474 val 0.01488 gnorm 0.0292 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 016 train 0.01459 val 0.01472 gnorm 0.0328 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 017 train 0.01440 val 0.01451 gnorm 0.0373 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 018 train 0.01427 val 0.01434 gnorm 0.0465 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 019 train 0.01386 val 0.01394 gnorm 0.0277 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 020 train 0.01356 val 0.01373 gnorm 0.0285 (16.2s) *
+[sine_next qslstm_log seed 1885117419] epoch 021 train 0.01328 val 0.01333 gnorm 0.0417 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 022 train 0.01301 val 0.01285 gnorm 0.0503 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 023 train 0.01248 val 0.01246 gnorm 0.0346 (16.2s) *
+[sine_next qslstm_log seed 1885117419] epoch 024 train 0.01206 val 0.01212 gnorm 0.03 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 025 train 0.01173 val 0.01184 gnorm 0.0364 (15.8s) *
+[sine_next qslstm_log seed 1885117419] epoch 026 train 0.01132 val 0.01136 gnorm 0.0317 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 027 train 0.01105 val 0.01114 gnorm 0.054 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 028 train 0.01061 val 0.01067 gnorm 0.0412 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 029 train 0.01027 val 0.01038 gnorm 0.031 (15.8s) *
+[sine_next qslstm_log seed 1885117419] epoch 030 train 0.01005 val 0.01007 gnorm 0.0471 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 031 train 0.00979 val 0.00989 gnorm 0.0474 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 032 train 0.00972 val 0.00966 gnorm 0.066 (15.7s) *
+[sine_next qslstm_log seed 1885117419] epoch 033 train 0.00937 val 0.00942 gnorm 0.0493 (15.8s) *
+[sine_next qslstm_log seed 1885117419] epoch 034 train 0.00915 val 0.00951 gnorm 0.0477 (15.8s)
+[sine_next qslstm_log seed 1885117419] epoch 035 train 0.00901 val 0.00927 gnorm 0.0451 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 036 train 0.00884 val 0.00898 gnorm 0.047 (15.7s) *
+[sine_next qslstm_log seed 1885117419] epoch 037 train 0.00868 val 0.00893 gnorm 0.0488 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 038 train 0.00880 val 0.00927 gnorm 0.0726 (15.8s)
+[sine_next qslstm_log seed 1885117419] epoch 039 train 0.00868 val 0.00862 gnorm 0.0684 (16.1s) *
+[sine_next qslstm_log seed 1885117419] epoch 040 train 0.00837 val 0.00847 gnorm 0.0482 (15.8s) *
+[sine_next qslstm_log seed 1885117419] epoch 041 train 0.00830 val 0.00853 gnorm 0.0559 (15.9s)
+[sine_next qslstm_log seed 1885117419] epoch 042 train 0.00816 val 0.00837 gnorm 0.0406 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 043 train 0.00843 val 0.00869 gnorm 0.0849 (16.1s)
+[sine_next qslstm_log seed 1885117419] epoch 044 train 0.00811 val 0.00824 gnorm 0.0585 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 045 train 0.00805 val 0.00819 gnorm 0.0675 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 046 train 0.00793 val 0.00810 gnorm 0.0544 (15.7s) *
+[sine_next qslstm_log seed 1885117419] epoch 047 train 0.00789 val 0.00848 gnorm 0.0635 (16.0s)
+[sine_next qslstm_log seed 1885117419] epoch 048 train 0.00790 val 0.00783 gnorm 0.0708 (15.9s) *
+[sine_next qslstm_log seed 1885117419] epoch 049 train 0.00783 val 0.00812 gnorm 0.0757 (15.9s)
+[sine_next qslstm_log seed 1885117419] epoch 050 train 0.00763 val 0.00772 gnorm 0.0517 (15.7s) *
+[sine_next qslstm_log seed 1885117419] epoch 051 train 0.00750 val 0.00847 gnorm 0.0527 (15.9s)
+[sine_next qslstm_log seed 1885117419] epoch 052 train 0.00767 val 0.00768 gnorm 0.0754 (15.8s) *
+[sine_next qslstm_log seed 1885117419] epoch 053 train 0.00754 val 0.00751 gnorm 0.0627 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 054 train 0.00743 val 0.00766 gnorm 0.0596 (15.9s)
+[sine_next qslstm_log seed 1885117419] epoch 055 train 0.00761 val 0.00789 gnorm 0.0851 (15.9s)
+[sine_next qslstm_log seed 1885117419] epoch 056 train 0.00736 val 0.00748 gnorm 0.06 (15.8s) *
+[sine_next qslstm_log seed 1885117419] epoch 057 train 0.00730 val 0.00777 gnorm 0.0652 (15.8s)
+[sine_next qslstm_log seed 1885117419] epoch 058 train 0.00725 val 0.00748 gnorm 0.065 (16.1s)
+[sine_next qslstm_log seed 1885117419] epoch 059 train 0.00744 val 0.00739 gnorm 0.087 (16.0s) *
+[sine_next qslstm_log seed 1885117419] epoch 060 train 0.00718 val 0.00765 gnorm 0.0545 (15.8s)
+run complete: results/scalar_tasks/paper/2026-09-28/sine_next/seed_1885117419/qslstm_log

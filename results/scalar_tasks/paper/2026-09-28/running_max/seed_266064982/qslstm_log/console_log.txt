@@ -1,67 +1,62 @@
 scale=paper task=running_max model=qslstm_log seed=266064982 L=32 train/val/test=1400/200/400 hidden=4 depth=2
-[running_max qslstm_log seed 266064982] epoch 001 train 0.45743 val 0.18636 gnorm 1.26 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 002 train 0.11124 val 0.09635 gnorm 0.258 (15.8s) *
-[running_max qslstm_log seed 266064982] epoch 003 train 0.08254 val 0.08031 gnorm 0.0988 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 004 train 0.07405 val 0.07325 gnorm 0.0641 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 005 train 0.06717 val 0.06586 gnorm 0.0448 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 006 train 0.06016 val 0.05812 gnorm 0.047 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 007 train 0.05286 val 0.05008 gnorm 0.04 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 008 train 0.04521 val 0.04187 gnorm 0.0333 (16.2s) *
-[running_max qslstm_log seed 266064982] epoch 009 train 0.03869 val 0.03612 gnorm 0.0345 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 010 train 0.03450 val 0.03269 gnorm 0.0312 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 011 train 0.03189 val 0.03048 gnorm 0.0337 (15.7s) *
-[running_max qslstm_log seed 266064982] epoch 012 train 0.02971 val 0.02836 gnorm 0.0294 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 013 train 0.02783 val 0.02679 gnorm 0.0248 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 014 train 0.02625 val 0.02492 gnorm 0.0313 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 015 train 0.02477 val 0.02367 gnorm 0.0335 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 016 train 0.02354 val 0.02242 gnorm 0.0437 (16.1s) *
-[running_max qslstm_log seed 266064982] epoch 017 train 0.02240 val 0.02136 gnorm 0.0346 (15.8s) *
-[running_max qslstm_log seed 266064982] epoch 018 train 0.02140 val 0.02044 gnorm 0.0279 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 019 train 0.02068 val 0.02015 gnorm 0.0456 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 020 train 0.01992 val 0.01909 gnorm 0.0371 (15.8s) *
-[running_max qslstm_log seed 266064982] epoch 021 train 0.01929 val 0.01850 gnorm 0.0295 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 022 train 0.01885 val 0.01805 gnorm 0.0407 (16.1s) *
-[running_max qslstm_log seed 266064982] epoch 023 train 0.01821 val 0.01744 gnorm 0.0281 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 024 train 0.01776 val 0.01718 gnorm 0.0375 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 025 train 0.01728 val 0.01682 gnorm 0.0384 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 026 train 0.01692 val 0.01661 gnorm 0.0332 (16.1s) *
-[running_max qslstm_log seed 266064982] epoch 027 train 0.01667 val 0.01601 gnorm 0.0492 (16.0s) *
-[running_max qslstm_log seed 266064982] epoch 028 train 0.01618 val 0.01556 gnorm 0.0325 (15.9s) *
-[running_max qslstm_log seed 266064982] epoch 029 train 0.01567 val 0.01494 gnorm 0.0379 (16.0s) *
-Traceback (most recent call last):
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 40, in <module>
-    main()
-    ~~~~^^
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/scripts/experiments/scalar_tasks/train_scalar_task.py", line 35, in main
-    run_dir = run_experiment(config)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 420, in run_experiment
-    result = train_model(model, datasets["train"], datasets["val"], config, run_dir)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/experiments/scalar_tasks.py", line 348, in train_model
-    outputs = model(inputs)[0]
-              ~~~~~^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 131, in forward
-    outputs, state = _unroll(self.cell, x, hidden)
-                     ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/sequence_wrappers.py", line 36, in _unroll
-    y_t, *state = cell(x[:, t, :], tuple(state))
-                  ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/miniconda3/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 82, in forward
-    c_t, n_t, scale_t, i_weight = self.memory_update(
-                                  ~~~~~~~~~~~~~~~~~~^
-        q_i, q_f, z_t, c_prev, n_prev, scale_prev)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 51, in logarithmic_memory_update
-    i = logarithmic_gate(q_i)
-  File "/Users/peculab/Documents/Allen Lee QLSTM/Q-sLSTM/src/q_slstm/models/q_slstm_log_cell.py", line 27, in logarithmic_gate
-    raise ValueError("VQC expectation outside [-1, 1]; clipping is disabled")
-ValueError: VQC expectation outside [-1, 1]; clipping is disabled
+[running_max qslstm_log seed 266064982] epoch 001 train 0.46981 val 0.18595 gnorm 1.28 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 002 train 0.11008 val 0.09597 gnorm 0.266 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 003 train 0.08339 val 0.08084 gnorm 0.0966 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 004 train 0.07456 val 0.07239 gnorm 0.0614 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 005 train 0.06600 val 0.06260 gnorm 0.0497 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 006 train 0.05574 val 0.05063 gnorm 0.0532 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 007 train 0.04350 val 0.03726 gnorm 0.0473 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 008 train 0.03124 val 0.02611 gnorm 0.0406 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 009 train 0.02285 val 0.01982 gnorm 0.0344 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 010 train 0.01781 val 0.01598 gnorm 0.0285 (16.2s) *
+[running_max qslstm_log seed 266064982] epoch 011 train 0.01490 val 0.01400 gnorm 0.0268 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 012 train 0.01340 val 0.01288 gnorm 0.0371 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 013 train 0.01256 val 0.01237 gnorm 0.0345 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 014 train 0.01191 val 0.01161 gnorm 0.0265 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 015 train 0.01136 val 0.01114 gnorm 0.0255 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 016 train 0.01095 val 0.01065 gnorm 0.0285 (16.2s) *
+[running_max qslstm_log seed 266064982] epoch 017 train 0.01049 val 0.01030 gnorm 0.02 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 018 train 0.01012 val 0.00981 gnorm 0.0215 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 019 train 0.00977 val 0.00942 gnorm 0.0213 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 020 train 0.00936 val 0.00896 gnorm 0.0249 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 021 train 0.00900 val 0.00870 gnorm 0.0311 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 022 train 0.00865 val 0.00826 gnorm 0.0346 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 023 train 0.00809 val 0.00762 gnorm 0.0183 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 024 train 0.00769 val 0.00722 gnorm 0.0297 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 025 train 0.00723 val 0.00680 gnorm 0.0254 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 026 train 0.00683 val 0.00636 gnorm 0.0336 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 027 train 0.00631 val 0.00590 gnorm 0.0229 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 028 train 0.00593 val 0.00559 gnorm 0.0269 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 029 train 0.00551 val 0.00527 gnorm 0.0222 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 030 train 0.00517 val 0.00496 gnorm 0.0212 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 031 train 0.00491 val 0.00482 gnorm 0.0205 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 032 train 0.00483 val 0.00471 gnorm 0.0256 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 033 train 0.00471 val 0.00465 gnorm 0.0231 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 034 train 0.00466 val 0.00463 gnorm 0.0208 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 035 train 0.00465 val 0.00484 gnorm 0.0242 (16.1s)
+[running_max qslstm_log seed 266064982] epoch 036 train 0.00463 val 0.00460 gnorm 0.0239 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 037 train 0.00457 val 0.00460 gnorm 0.0204 (16.2s) *
+[running_max qslstm_log seed 266064982] epoch 038 train 0.00455 val 0.00458 gnorm 0.0173 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 039 train 0.00454 val 0.00449 gnorm 0.0219 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 040 train 0.00464 val 0.00454 gnorm 0.031 (16.0s)
+[running_max qslstm_log seed 266064982] epoch 041 train 0.00452 val 0.00459 gnorm 0.0213 (16.1s)
+[running_max qslstm_log seed 266064982] epoch 042 train 0.00448 val 0.00455 gnorm 0.0181 (16.1s)
+[running_max qslstm_log seed 266064982] epoch 043 train 0.00448 val 0.00443 gnorm 0.0214 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 044 train 0.00452 val 0.00443 gnorm 0.0293 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 045 train 0.00443 val 0.00447 gnorm 0.0195 (16.3s)
+[running_max qslstm_log seed 266064982] epoch 046 train 0.00440 val 0.00437 gnorm 0.0167 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 047 train 0.00439 val 0.00436 gnorm 0.0209 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 048 train 0.00436 val 0.00434 gnorm 0.0183 (15.9s) *
+[running_max qslstm_log seed 266064982] epoch 049 train 0.00444 val 0.00433 gnorm 0.0301 (16.1s) *
+[running_max qslstm_log seed 266064982] epoch 050 train 0.00436 val 0.00430 gnorm 0.0236 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 051 train 0.00437 val 0.00431 gnorm 0.0246 (16.0s)
+[running_max qslstm_log seed 266064982] epoch 052 train 0.00429 val 0.00432 gnorm 0.0196 (16.0s)
+[running_max qslstm_log seed 266064982] epoch 053 train 0.00429 val 0.00423 gnorm 0.0214 (16.2s) *
+[running_max qslstm_log seed 266064982] epoch 054 train 0.00427 val 0.00430 gnorm 0.0218 (16.0s)
+[running_max qslstm_log seed 266064982] epoch 055 train 0.00424 val 0.00424 gnorm 0.0219 (16.2s)
+[running_max qslstm_log seed 266064982] epoch 056 train 0.00437 val 0.00453 gnorm 0.0369 (15.9s)
+[running_max qslstm_log seed 266064982] epoch 057 train 0.00434 val 0.00437 gnorm 0.025 (16.2s)
+[running_max qslstm_log seed 266064982] epoch 058 train 0.00425 val 0.00425 gnorm 0.0189 (15.9s)
+[running_max qslstm_log seed 266064982] epoch 059 train 0.00420 val 0.00414 gnorm 0.0228 (16.0s) *
+[running_max qslstm_log seed 266064982] epoch 060 train 0.00417 val 0.00411 gnorm 0.0183 (16.0s) *
+run complete: results/scalar_tasks/paper/2026-09-28/running_max/seed_266064982/qslstm_log
