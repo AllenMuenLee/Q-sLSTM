@@ -1,0 +1,62 @@
+scale=paper task=flip_flop model=qslstm_sqrt seed=266064982 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[flip_flop qslstm_sqrt seed 266064982] epoch 001 train 0.74461 val 0.73192 gnorm 0.154 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 002 train 0.73611 val 0.72905 gnorm 0.0942 (16.2s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 003 train 0.72883 val 0.71290 gnorm 0.161 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 004 train 0.68927 val 0.63599 gnorm 0.187 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 005 train 0.59176 val 0.50496 gnorm 0.22 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 006 train 0.46896 val 0.39629 gnorm 0.384 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 007 train 0.37766 val 0.32240 gnorm 0.792 (17.0s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 008 train 0.29999 val 0.26311 gnorm 0.797 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 009 train 0.26604 val 0.23759 gnorm 0.884 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 010 train 0.23675 val 0.21685 gnorm 0.52 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 011 train 0.21947 val 0.20422 gnorm 0.621 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 012 train 0.21009 val 0.20054 gnorm 0.893 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 013 train 0.20724 val 0.19371 gnorm 0.764 (16.9s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 014 train 0.19615 val 0.18467 gnorm 0.53 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 015 train 0.19289 val 0.18246 gnorm 0.603 (16.7s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 016 train 0.19076 val 0.18106 gnorm 0.613 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 017 train 0.18952 val 0.18350 gnorm 0.674 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 018 train 0.18773 val 0.18124 gnorm 0.614 (16.6s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 019 train 0.18816 val 0.18577 gnorm 0.738 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 020 train 0.18793 val 0.18149 gnorm 0.719 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 021 train 0.18494 val 0.17765 gnorm 0.703 (16.3s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 022 train 0.18446 val 0.18099 gnorm 0.718 (16.3s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 023 train 0.18405 val 0.17674 gnorm 0.734 (16.2s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 024 train 0.18253 val 0.17766 gnorm 0.669 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 025 train 0.18295 val 0.18110 gnorm 0.719 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 026 train 0.18501 val 0.17824 gnorm 0.971 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 027 train 0.18585 val 0.17638 gnorm 0.875 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 028 train 0.18257 val 0.18040 gnorm 0.876 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 029 train 0.18329 val 0.17357 gnorm 0.852 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 030 train 0.18073 val 0.17565 gnorm 0.782 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 031 train 0.18039 val 0.17310 gnorm 0.811 (16.6s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 032 train 0.18093 val 0.17885 gnorm 0.938 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 033 train 0.17958 val 0.18163 gnorm 0.839 (16.7s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 034 train 0.18177 val 0.17443 gnorm 1 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 035 train 0.17822 val 0.17118 gnorm 0.776 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 036 train 0.17720 val 0.17249 gnorm 0.73 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 037 train 0.17733 val 0.17417 gnorm 0.859 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 038 train 0.17703 val 0.17030 gnorm 0.816 (16.7s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 039 train 0.18205 val 0.18236 gnorm 1.04 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 040 train 0.18261 val 0.16923 gnorm 1.3 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 041 train 0.17536 val 0.16663 gnorm 0.69 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 042 train 0.17440 val 0.16779 gnorm 0.861 (16.6s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 043 train 0.17469 val 0.16635 gnorm 0.956 (16.5s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 044 train 0.17447 val 0.16869 gnorm 0.997 (16.2s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 045 train 0.17429 val 0.16624 gnorm 1.03 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 046 train 0.17915 val 0.16581 gnorm 1.29 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 047 train 0.17140 val 0.16613 gnorm 0.819 (16.7s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 048 train 0.17463 val 0.17529 gnorm 1.1 (16.6s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 049 train 0.17637 val 0.16850 gnorm 1.16 (16.5s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 050 train 0.17118 val 0.16516 gnorm 0.844 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 051 train 0.17332 val 0.16654 gnorm 1.15 (16.3s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 052 train 0.17050 val 0.16494 gnorm 0.751 (16.8s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 053 train 0.17001 val 0.16759 gnorm 0.841 (16.7s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 054 train 0.17137 val 0.16367 gnorm 0.955 (16.7s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 055 train 0.16933 val 0.16901 gnorm 0.747 (16.6s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 056 train 0.16970 val 0.16426 gnorm 0.931 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 057 train 0.16944 val 0.16778 gnorm 0.708 (16.4s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 058 train 0.16988 val 0.16318 gnorm 0.908 (16.4s) *
+[flip_flop qslstm_sqrt seed 266064982] epoch 059 train 0.16933 val 0.16470 gnorm 0.907 (15.9s)
+[flip_flop qslstm_sqrt seed 266064982] epoch 060 train 0.17021 val 0.16849 gnorm 0.967 (16.1s)
+run complete: results/scalar_tasks/paper/2026-09-28/flip_flop/seed_266064982/qslstm_sqrt

@@ -1,0 +1,62 @@
+scale=paper task=running_max model=qslstm_sqrt seed=83453494 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[running_max qslstm_sqrt seed 83453494] epoch 001 train 0.19702 val 0.08944 gnorm 0.689 (16.3s) *
+[running_max qslstm_sqrt seed 83453494] epoch 002 train 0.08146 val 0.07326 gnorm 0.128 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 003 train 0.07627 val 0.06957 gnorm 0.0505 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 004 train 0.07355 val 0.06744 gnorm 0.0318 (16.3s) *
+[running_max qslstm_sqrt seed 83453494] epoch 005 train 0.07056 val 0.06409 gnorm 0.0278 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 006 train 0.06339 val 0.05344 gnorm 0.0354 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 007 train 0.04939 val 0.04023 gnorm 0.0449 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 008 train 0.03608 val 0.02680 gnorm 0.0531 (16.2s) *
+[running_max qslstm_sqrt seed 83453494] epoch 009 train 0.02284 val 0.01767 gnorm 0.037 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 010 train 0.01668 val 0.01380 gnorm 0.0302 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 011 train 0.01382 val 0.01214 gnorm 0.0254 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 012 train 0.01221 val 0.01072 gnorm 0.0246 (16.3s) *
+[running_max qslstm_sqrt seed 83453494] epoch 013 train 0.01119 val 0.00990 gnorm 0.0333 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 014 train 0.01028 val 0.00913 gnorm 0.0224 (16.3s) *
+[running_max qslstm_sqrt seed 83453494] epoch 015 train 0.00966 val 0.00871 gnorm 0.0249 (16.2s) *
+[running_max qslstm_sqrt seed 83453494] epoch 016 train 0.00925 val 0.00825 gnorm 0.0254 (15.8s) *
+[running_max qslstm_sqrt seed 83453494] epoch 017 train 0.00889 val 0.00789 gnorm 0.0276 (16.2s) *
+[running_max qslstm_sqrt seed 83453494] epoch 018 train 0.00859 val 0.00767 gnorm 0.0262 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 019 train 0.00825 val 0.00754 gnorm 0.0195 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 020 train 0.00804 val 0.00745 gnorm 0.0197 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 021 train 0.00790 val 0.00707 gnorm 0.0341 (16.2s) *
+[running_max qslstm_sqrt seed 83453494] epoch 022 train 0.00764 val 0.00691 gnorm 0.0252 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 023 train 0.00743 val 0.00682 gnorm 0.0246 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 024 train 0.00724 val 0.00655 gnorm 0.0272 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 025 train 0.00716 val 0.00642 gnorm 0.0364 (16.3s) *
+[running_max qslstm_sqrt seed 83453494] epoch 026 train 0.00688 val 0.00622 gnorm 0.023 (16.7s) *
+[running_max qslstm_sqrt seed 83453494] epoch 027 train 0.00669 val 0.00603 gnorm 0.0237 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 028 train 0.00650 val 0.00600 gnorm 0.0219 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 029 train 0.00634 val 0.00577 gnorm 0.023 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 030 train 0.00619 val 0.00560 gnorm 0.0245 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 031 train 0.00604 val 0.00554 gnorm 0.027 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 032 train 0.00603 val 0.00566 gnorm 0.0365 (16.2s)
+[running_max qslstm_sqrt seed 83453494] epoch 033 train 0.00589 val 0.00521 gnorm 0.0358 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 034 train 0.00564 val 0.00519 gnorm 0.0201 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 035 train 0.00552 val 0.00502 gnorm 0.0199 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 036 train 0.00544 val 0.00495 gnorm 0.0239 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 037 train 0.00538 val 0.00499 gnorm 0.0258 (16.5s)
+[running_max qslstm_sqrt seed 83453494] epoch 038 train 0.00530 val 0.00488 gnorm 0.0268 (16.7s) *
+[running_max qslstm_sqrt seed 83453494] epoch 039 train 0.00519 val 0.00479 gnorm 0.0205 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 040 train 0.00510 val 0.00484 gnorm 0.0182 (16.6s)
+[running_max qslstm_sqrt seed 83453494] epoch 041 train 0.00509 val 0.00469 gnorm 0.0248 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 042 train 0.00500 val 0.00468 gnorm 0.0178 (16.3s) *
+[running_max qslstm_sqrt seed 83453494] epoch 043 train 0.00510 val 0.00475 gnorm 0.0352 (16.6s)
+[running_max qslstm_sqrt seed 83453494] epoch 044 train 0.00498 val 0.00460 gnorm 0.0274 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 045 train 0.00491 val 0.00462 gnorm 0.0215 (16.5s)
+[running_max qslstm_sqrt seed 83453494] epoch 046 train 0.00492 val 0.00490 gnorm 0.0285 (16.6s)
+[running_max qslstm_sqrt seed 83453494] epoch 047 train 0.00502 val 0.00452 gnorm 0.0385 (16.7s) *
+[running_max qslstm_sqrt seed 83453494] epoch 048 train 0.00483 val 0.00476 gnorm 0.0275 (16.5s)
+[running_max qslstm_sqrt seed 83453494] epoch 049 train 0.00484 val 0.00449 gnorm 0.0307 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 050 train 0.00479 val 0.00444 gnorm 0.0226 (16.0s) *
+[running_max qslstm_sqrt seed 83453494] epoch 051 train 0.00472 val 0.00445 gnorm 0.0238 (16.1s)
+[running_max qslstm_sqrt seed 83453494] epoch 052 train 0.00481 val 0.00438 gnorm 0.0371 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 053 train 0.00467 val 0.00438 gnorm 0.0257 (16.5s)
+[running_max qslstm_sqrt seed 83453494] epoch 054 train 0.00468 val 0.00432 gnorm 0.0216 (16.4s) *
+[running_max qslstm_sqrt seed 83453494] epoch 055 train 0.00462 val 0.00431 gnorm 0.027 (16.6s) *
+[running_max qslstm_sqrt seed 83453494] epoch 056 train 0.00462 val 0.00431 gnorm 0.0237 (16.5s) *
+[running_max qslstm_sqrt seed 83453494] epoch 057 train 0.00467 val 0.00432 gnorm 0.0355 (16.2s)
+[running_max qslstm_sqrt seed 83453494] epoch 058 train 0.00456 val 0.00442 gnorm 0.0233 (16.5s)
+[running_max qslstm_sqrt seed 83453494] epoch 059 train 0.00457 val 0.00437 gnorm 0.0255 (16.3s)
+[running_max qslstm_sqrt seed 83453494] epoch 060 train 0.00458 val 0.00454 gnorm 0.032 (16.3s)
+run complete: results/scalar_tasks/paper/2026-09-28/running_max/seed_83453494/qslstm_sqrt
