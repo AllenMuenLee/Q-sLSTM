@@ -34,6 +34,7 @@ from q_slstm.models.factory import FK_CELLS
 from q_slstm.models.qlstm_cell import CustomQLSTMCell
 from q_slstm.models.q_slstm_cell import CustomQsLSTMCell, DEFAULT_GATE_EPSILON
 from q_slstm.models.q_slstm_log_cell import CustomQsLSTMLogCell
+from q_slstm.models.q_slstm_sqrt_cell import CustomQsLSTMSqrtCell
 from q_slstm.models.sequence_wrappers import CustomLSTM, CustomQsLSTM
 
 class StandardLSTMCell(nn.Module):
@@ -69,7 +70,7 @@ def make_model(args):
     Move your existing model-creation if/elif here.
     """
     use_input_projection = (
-        args.model in ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm", "lstm")
+        args.model in ("qlstm", "qslstm", "qslstm_log", "qslstm_sqrt", "fk_qslstm", "fk_qlstm", "lstm")
         and args.input_projection_size > 0
         and args.input_size > args.input_projection_size
     )
@@ -107,10 +108,11 @@ def make_model(args):
             else base_model
         )
         return model.to(args.device).float()
-    elif args.model in ("qslstm", "qslstm_log"):
-        # Q-sLSTM variants: (h, c, n, binary_scale) state.
+    elif args.model in ("qslstm", "qslstm_log", "qslstm_sqrt"):
+        # Q-sLSTM variants: (h, c, n, m) or (h, c, n, binary_scale) state.
         print("OPERATING MODEL {}".format(args.model))
-        cell_type = CustomQsLSTMLogCell if args.model == "qslstm_log" else CustomQsLSTMCell
+        cell_type = {"qslstm": CustomQsLSTMCell, "qslstm_log": CustomQsLSTMLogCell,
+                     "qslstm_sqrt": CustomQsLSTMSqrtCell}[args.model]
         qslstm_cell = cell_type(
             effective_input_size,
             args.hidden_size,
@@ -162,6 +164,7 @@ def main():
             "qlstm",
             "qslstm",
             "qslstm_log",
+            "qslstm_sqrt",
             "fk_qslstm",
             "fk_qlstm",
             "lstm",

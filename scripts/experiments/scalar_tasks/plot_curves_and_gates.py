@@ -11,6 +11,7 @@
 #   qlstm       i = sigmoid(q_i)                f = sigmoid(q_f)
 #   qslstm      i = (1+q_i)/(1-q_i) (eps-clamped) f = (1+q_f)/(1-q_f)  (sigmoid(q_f) in sigmoid-forget runs)
 #   qslstm_log  i = ln(2/(1-q_i))               f = ln(2/(1-q_f))    (sigmoid(q_f) in sigmoid-forget runs)
+#   qslstm_sqrt i = sqrt((1+q_i)/(1-q_i))       f = sqrt((1+q_f)/(1-q_f))  (eps-clamped)
 #   fk_qslstm   i = exp(Linear(VQC(Linear(.))))  f = exp(Linear(VQC(Linear(.))))  (unbounded)
 #   fk_qlstm    i = sigmoid(Linear(VQC(Linear(.))))  f = sigmoid(Linear(VQC(Linear(.))))
 # Input gates live on different scales, so that figure uses a log axis. Gate traces are cached in
@@ -40,12 +41,12 @@ from q_slstm.datasets.scalar_tasks import TASKS as SCALAR_TASKS  # noqa: E402
 # Panel order; solar_next sweeps (scripts/experiments/solar_next) reuse these figures.
 TASKS = (*SCALAR_TASKS, "solar_next")
 
-MODELS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm")
-LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "fk_qslstm": "Q-sLSTM (fk)",
-          "fk_qlstm": "QLSTM (fk)"}
-# Validated categorical slots 1-5 (blue, orange, aqua, yellow, magenta) on a light surface.
+MODELS = ("qlstm", "qslstm", "qslstm_log", "qslstm_sqrt", "fk_qslstm", "fk_qlstm")
+LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "qslstm_log": "Q-sLSTM-log", "qslstm_sqrt": "Q-sLSTM-sqrt",
+          "fk_qslstm": "Q-sLSTM (fk)", "fk_qlstm": "QLSTM (fk)"}
+# Validated categorical slots 1-5 (blue, orange, aqua, yellow, magenta) on a light surface, plus purple.
 COLORS = {"qlstm": "#2a78d6", "qslstm": "#eb6834", "qslstm_log": "#1baf7a", "fk_qslstm": "#eda100",
-          "fk_qlstm": "#e87ba4"}
+          "fk_qlstm": "#e87ba4", "qslstm_sqrt": "#7a5bd6"}
 FK_MODELS = ("fk_qslstm", "fk_qlstm")
 SURFACE, INK, MUTED = "#fcfcfb", "#0b0b0b", "#52514e"
 
@@ -81,7 +82,7 @@ def trace_gates(job):
 
     from q_slstm.experiments import scalar_tasks as st
     from q_slstm.models.factory import match_recurrence
-    from q_slstm.models.q_slstm_cell import QSLSTM_SIGMOID_FORGET_RECURRENCE, bounded_log_ratio
+    from q_slstm.models.q_slstm_cell import QSLSTM_SIGMOID_FORGET_RECURRENCE
     from q_slstm.models.q_slstm_log_cell import (
         QSLSTM_LOG_SIGMOID_FORGET_RECURRENCES, float64_expectations, logarithmic_gate,
     )
@@ -115,11 +116,11 @@ def trace_gates(job):
             else:
                 q_i, q_f = cell.input_gate(combined), cell.forget_gate(combined)
                 i_gate = (torch.sigmoid(q_i) if model_name == "qlstm"
-                          else torch.exp(bounded_log_ratio(q_i, cell.gate_epsilon)))
+                          else torch.exp(cell.log_input(q_i)))
             if model_name == "qlstm" or (model_name not in FK_MODELS and sigmoid_forget):
                 f_gate = torch.sigmoid(q_f)
-            elif model_name == "qslstm":
-                f_gate = torch.exp(bounded_log_ratio(q_f, cell.gate_epsilon))
+            elif model_name in ("qslstm", "qslstm_sqrt"):
+                f_gate = torch.exp(cell.log_forget(q_f))
             elif model_name == "qslstm_log":
                 f_gate = logarithmic_gate(q_f)
             rows.append({"task": task, "seed": seed, "model": model_name, "timestep": t,

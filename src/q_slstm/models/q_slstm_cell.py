@@ -213,6 +213,10 @@ class CustomQsLSTMCell(nn.Module):
 
     supports_alpha_diagnostics = True
 
+    def log_input(self, q_i):
+        """Log of the amplified input gate (1 + q) / (1 - q)."""
+        return bounded_log_ratio(q_i, self.gate_epsilon)
+
     def log_forget(self, q_f):
         """Log of the amplified forget gate (1 + q) / (1 - q). Replays of runs tagged
         QSLSTM_SIGMOID_FORGET_RECURRENCE set an instance `log_forget = sigmoid_log_forget`."""
@@ -229,7 +233,7 @@ class CustomQsLSTMCell(nn.Module):
         q_z = self.cell_gate(combined)
         q_o = self.output_gate(combined)
 
-        ell_i = bounded_log_ratio(q_i, self.gate_epsilon)
+        ell_i = self.log_input(q_i)
         ell_f = self.log_forget(q_f)
 
         m_t, i_prime, f_prime = stabilize_gates(ell_i, ell_f, m_prev)

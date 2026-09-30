@@ -6,19 +6,22 @@ from .fk_q_slstm_cell import CustomFkQsLSTMCell
 from .fk_qlstm_cell import CustomFkQLSTMCell
 from .q_slstm_cell import DEFAULT_GATE_EPSILON, CustomQsLSTMCell
 from .q_slstm_log_cell import CustomQsLSTMLogCell
+from .q_slstm_sqrt_cell import CustomQsLSTMSqrtCell
 from .qlstm_cell import CustomQLSTMCell
 from .sequence_wrappers import CustomLSTM, CustomQsLSTM
 
 # Every experiment runs these with the same configuration (hidden size, depth, qubits, training);
 # parameter counts are not matched (the fk_* models add classical encoders around their VQCs).
-QUANTUM_MODELS = ("qlstm", "qslstm", "qslstm_log", "fk_qslstm", "fk_qlstm")
+QUANTUM_MODELS = ("qlstm", "qslstm", "qslstm_log", "qslstm_sqrt", "fk_qslstm", "fk_qlstm")
+QSLSTM_CELLS = {"qslstm": CustomQsLSTMCell, "qslstm_log": CustomQsLSTMLogCell, "qslstm_sqrt": CustomQsLSTMSqrtCell}
 FK_CELLS = {"fk_qslstm": CustomFkQsLSTMCell, "fk_qlstm": CustomFkQLSTMCell}
 
 
 def build_quantum_model(model, input_size, hidden_size, output_size, qnn_depth,
                         gate_epsilon=DEFAULT_GATE_EPSILON, device="cpu", seed=None):
     """Build `qlstm`, `qslstm` (stabilized, (h, c, n, m)), or `qslstm_log` (ln(2/(1-q)) gates,
-    (h, c, n, binary_scale)), `fk_qslstm` (reference exp-gate cell with classical encoders, (h, c)), or
+    (h, c, n, binary_scale)), `qslstm_sqrt` (qslstm with sqrt((1+q)/(1-q)) input and forget gates,
+    (h, c, n, m)), `fk_qslstm` (reference exp-gate cell with classical encoders, (h, c)), or
     `fk_qlstm` (the same encoders with sigmoid gates, (h, c)).
     All models construct their
     four VQCs and the output layer in the same order, so an equal
@@ -34,8 +37,7 @@ def build_quantum_model(model, input_size, hidden_size, output_size, qnn_depth,
         if model in FK_CELLS:
             cell = FK_CELLS[model](input_size, hidden_size, output_size, qnn_depth).float()
             return CustomLSTM(input_size, hidden_size, cell).float()
-        cell_type = CustomQsLSTMLogCell if model == "qslstm_log" else CustomQsLSTMCell
-        cell = cell_type(input_size, hidden_size, output_size, qnn_depth, gate_epsilon=gate_epsilon).float()
+        cell = QSLSTM_CELLS[model](input_size, hidden_size, output_size, qnn_depth, gate_epsilon=gate_epsilon).float()
         return CustomQsLSTM(input_size, hidden_size, cell).float()
 
     if seed is None:
@@ -75,7 +77,8 @@ def recurrence_tag(model):
     """Recurrence version recorded in run configs (`qslstm_recurrence`); None for qlstm."""
     from .q_slstm_cell import QSLSTM_RECURRENCE
     from .q_slstm_log_cell import QSLSTM_LOG_RECURRENCE
+    from .q_slstm_sqrt_cell import QSLSTM_SQRT_RECURRENCE
 
-    tags = {"qslstm": QSLSTM_RECURRENCE, "qslstm_log": QSLSTM_LOG_RECURRENCE,
+    tags = {"qslstm": QSLSTM_RECURRENCE, "qslstm_log": QSLSTM_LOG_RECURRENCE, "qslstm_sqrt": QSLSTM_SQRT_RECURRENCE,
             **{m: cell.recurrence for m, cell in FK_CELLS.items()}}
     return tags.get(model)
