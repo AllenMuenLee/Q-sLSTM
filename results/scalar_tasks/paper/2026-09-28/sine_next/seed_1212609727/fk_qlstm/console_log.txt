@@ -1,0 +1,9 @@
+scale=paper task=sine_next model=fk_qlstm seed=1212609727 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[sine_next fk_qlstm seed 1212609727] epoch 001 train 0.50025 val 0.40319 gnorm 0.309 (17.3s) *
+[sine_next fk_qlstm seed 1212609727] epoch 002 train 0.27654 val 0.12595 gnorm 0.213 (17.7s) *
+[sine_next fk_qlstm seed 1212609727] epoch 003 train 0.05576 val 0.01632 gnorm 0.0781 (17.2s) *
+[sine_next fk_qlstm seed 1212609727] epoch 004 train 0.00946 val 0.00648 gnorm 0.0288 (17.1s) *
+[sine_next fk_qlstm seed 1212609727] epoch 005 train 0.00536 val 0.00441 gnorm 0.0171 (17.2s) *
+[sine_next fk_qlstm seed 1212609727] epoch 006 train 0.00395 val 0.00345 gnorm 0.0149 (17.3s) *
+[sine_next fk_qlstm seed 1212609727] epoch 007 train 0.00323 val 0.00291 gnorm 0.0171 (17.2s) *
+[sine_next fk_qlstm seed 1212609727] epoch 008 train 0.00276 val 0.00248 gnorm 0.0201 (17.1s) *
