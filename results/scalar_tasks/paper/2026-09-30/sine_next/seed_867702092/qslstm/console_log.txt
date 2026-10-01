@@ -1,0 +1,62 @@
+scale=paper task=sine_next model=qslstm seed=867702092 L=16 train/val/test=1400/200/400 hidden=4 depth=2
+[sine_next qslstm seed 867702092] epoch 001 train 0.50818 val 0.48116 gnorm 0.204 (7.9s) *
+[sine_next qslstm seed 867702092] epoch 002 train 0.41852 val 0.32680 gnorm 0.237 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 003 train 0.23109 val 0.14153 gnorm 0.24 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 004 train 0.11168 val 0.08917 gnorm 0.106 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 005 train 0.08351 val 0.07445 gnorm 0.0528 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 006 train 0.07307 val 0.06800 gnorm 0.0431 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 007 train 0.06736 val 0.06300 gnorm 0.0378 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 008 train 0.06274 val 0.05888 gnorm 0.0309 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 009 train 0.05866 val 0.05510 gnorm 0.0381 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 010 train 0.05461 val 0.05091 gnorm 0.036 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 011 train 0.05007 val 0.04597 gnorm 0.0336 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 012 train 0.04435 val 0.03981 gnorm 0.0306 (8.0s) *
+[sine_next qslstm seed 867702092] epoch 013 train 0.03753 val 0.03274 gnorm 0.0346 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 014 train 0.03045 val 0.02626 gnorm 0.0337 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 015 train 0.02448 val 0.02128 gnorm 0.0318 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 016 train 0.02046 val 0.01819 gnorm 0.033 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 017 train 0.01791 val 0.01648 gnorm 0.0253 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 018 train 0.01654 val 0.01533 gnorm 0.0363 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 019 train 0.01564 val 0.01465 gnorm 0.0316 (7.6s) *
+[sine_next qslstm seed 867702092] epoch 020 train 0.01501 val 0.01421 gnorm 0.0274 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 021 train 0.01472 val 0.01377 gnorm 0.0428 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 022 train 0.01428 val 0.01353 gnorm 0.0328 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 023 train 0.01408 val 0.01363 gnorm 0.0378 (7.7s)
+[sine_next qslstm seed 867702092] epoch 024 train 0.01369 val 0.01299 gnorm 0.034 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 025 train 0.01346 val 0.01289 gnorm 0.0283 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 026 train 0.01327 val 0.01260 gnorm 0.035 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 027 train 0.01304 val 0.01242 gnorm 0.0293 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 028 train 0.01295 val 0.01230 gnorm 0.0342 (7.9s) *
+[sine_next qslstm seed 867702092] epoch 029 train 0.01286 val 0.01227 gnorm 0.0377 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 030 train 0.01259 val 0.01204 gnorm 0.0234 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 031 train 0.01249 val 0.01201 gnorm 0.0298 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 032 train 0.01235 val 0.01175 gnorm 0.0337 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 033 train 0.01217 val 0.01160 gnorm 0.0271 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 034 train 0.01203 val 0.01150 gnorm 0.0265 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 035 train 0.01191 val 0.01128 gnorm 0.0297 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 036 train 0.01171 val 0.01136 gnorm 0.0295 (7.8s)
+[sine_next qslstm seed 867702092] epoch 037 train 0.01154 val 0.01100 gnorm 0.0281 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 038 train 0.01134 val 0.01089 gnorm 0.0296 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 039 train 0.01127 val 0.01062 gnorm 0.0436 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 040 train 0.01097 val 0.01047 gnorm 0.0317 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 041 train 0.01082 val 0.01029 gnorm 0.0308 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 042 train 0.01074 val 0.01015 gnorm 0.0388 (7.7s) *
+[sine_next qslstm seed 867702092] epoch 043 train 0.01054 val 0.00997 gnorm 0.0297 (7.8s) *
+[sine_next qslstm seed 867702092] epoch 044 train 0.01039 val 0.01010 gnorm 0.0272 (7.9s)
+[sine_next qslstm seed 867702092] epoch 045 train 0.01033 val 0.00989 gnorm 0.0373 (8.1s) *
+[sine_next qslstm seed 867702092] epoch 046 train 0.01012 val 0.00972 gnorm 0.0271 (8.2s) *
+[sine_next qslstm seed 867702092] epoch 047 train 0.01003 val 0.00951 gnorm 0.0323 (8.2s) *
+[sine_next qslstm seed 867702092] epoch 048 train 0.00990 val 0.00934 gnorm 0.0359 (8.2s) *
+[sine_next qslstm seed 867702092] epoch 049 train 0.00969 val 0.00923 gnorm 0.0251 (8.1s) *
+[sine_next qslstm seed 867702092] epoch 050 train 0.00960 val 0.00931 gnorm 0.032 (8.2s)
+[sine_next qslstm seed 867702092] epoch 051 train 0.00951 val 0.00917 gnorm 0.0312 (8.2s) *
+[sine_next qslstm seed 867702092] epoch 052 train 0.00955 val 0.00901 gnorm 0.0411 (8.1s) *
+[sine_next qslstm seed 867702092] epoch 053 train 0.00936 val 0.00904 gnorm 0.035 (8.2s)
+[sine_next qslstm seed 867702092] epoch 054 train 0.00940 val 0.00879 gnorm 0.0516 (8.1s) *
+[sine_next qslstm seed 867702092] epoch 055 train 0.00929 val 0.00878 gnorm 0.0435 (8.2s) *
+[sine_next qslstm seed 867702092] epoch 056 train 0.00908 val 0.00895 gnorm 0.03 (8.1s)
+[sine_next qslstm seed 867702092] epoch 057 train 0.00899 val 0.00856 gnorm 0.0287 (8.2s) *
+[sine_next qslstm seed 867702092] epoch 058 train 0.00891 val 0.00846 gnorm 0.0246 (8.0s) *
+[sine_next qslstm seed 867702092] epoch 059 train 0.00884 val 0.00844 gnorm 0.0295 (7.9s) *
+[sine_next qslstm seed 867702092] epoch 060 train 0.00885 val 0.00841 gnorm 0.0389 (7.9s) *
+run complete: results/scalar_tasks/paper/2026-09-30/sine_next/seed_867702092/qslstm

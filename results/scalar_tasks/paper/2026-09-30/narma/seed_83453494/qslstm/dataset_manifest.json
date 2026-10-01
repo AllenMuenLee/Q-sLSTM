@@ -1,0 +1,60 @@
+{
+  "checksum_method": "sha256 over dtype, shape, and little-endian tensor bytes",
+  "generation": {
+    "delay": 4,
+    "ema_decay": 0.8,
+    "flip_probability": 0.1,
+    "narma_order": 10,
+    "sine_frequency_range": [
+      0.1,
+      0.6
+    ]
+  },
+  "seeds": {
+    "data": 584863194,
+    "data_seed_base": 83453494,
+    "loader": 964987152,
+    "model": 1753600934,
+    "run_seed": 83453494,
+    "split": 910498799
+  },
+  "splits": {
+    "test": {
+      "checksums": {
+        "combined": "91605c49902250128b3235b2f095f93ee3e44d7557daa2038355e18f79cc4ef1",
+        "inputs": "a2126c72d1b6cf132e64c788cf0ec8f978ee1431050b3437a7ab5606f115c4b8",
+        "loss_mask": "e6d82259dc59bad32289f8f155408e28fdaafd0ae4a0d293ce12e1e9503069d3",
+        "sequence_ids": "2072adbe3fe1e063fab4718b65e5dfdd2b4a39a5c81010ce68d622bb223d7308",
+        "targets": "4986e430381e7369e9e4b9c8ea144d0dc06aad09d8613a4226acf0b2b26c51c5"
+      },
+      "n_sequences": 400,
+      "sequence_length": 16,
+      "warmup_steps": 10
+    },
+    "train": {
+      "checksums": {
+        "combined": "4959aa45e88eb2f36074b7df15ac7d677054b2bc8ae32e0c6f1084f63dd56852",
+        "inputs": "be92be6d20d5afff05e05032c6e372bc15ab1d20ac0cd47b370914f3127ea58d",
+        "loss_mask": "d9fafe18c6fd957b28330570578b814c3128d1a6b40900e2f6ecd69ce6ff5291",
+        "sequence_ids": "af5935b21c5c819ddb072516304551c2e9c6595b9545b6939af5d1a1f4008f92",
+        "targets": "8c2c69285f2b75cd422782a3f83fd976db3e1f330b9af4f418a1ee82409d2da5"
+      },
+      "n_sequences": 1400,
+      "sequence_length": 16,
+      "warmup_steps": 10
+    },
+    "val": {
+      "checksums": {
+        "combined": "17d0e1078a7387894a6da2bbbb9fc1e546ee41352d2e7c8f5b62b4c826a57df6",
+        "inputs": "50eca0db63249d79c80f341d8f4a6cfdaa9282c6c23afad95c72e47eb047ae2f",
+        "loss_mask": "deb07bd92d749b15689e6f8a9f9606391985999e7acefa038633d3efc414d93f",
+        "sequence_ids": "e7d6641a068287ca6fa00a3691c91ddfabb5184d231c2a082b381cfc5d4dd685",
+        "targets": "98f43db30f84df63d1bc86d95bad45d83b1dccfd45fb027602c57a25b862b473"
+      },
+      "n_sequences": 200,
+      "sequence_length": 16,
+      "warmup_steps": 10
+    }
+  },
+  "task": "narma"
+}
