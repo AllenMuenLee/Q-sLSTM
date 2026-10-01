@@ -229,7 +229,7 @@ def main(argv=None):
     parser.add_argument("--workers", type=int, default=8)
     args = parser.parse_args(argv)
     runs_dir = args.runs_dir.resolve()
-    out = args.out_dir or runs_dir / "analysis" / "QLSTM vs QsLSTM vs FK_QsLSTM" / "fk_mechanism"
+    out = args.out_dir or runs_dir / "analysis" / "fk_mechanism"
     out.mkdir(parents=True, exist_ok=True)
 
     runs = discover(runs_dir)

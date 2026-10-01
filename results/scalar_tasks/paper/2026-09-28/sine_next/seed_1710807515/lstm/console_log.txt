@@ -1,0 +1,64 @@
+C:\Users\limue\AppData\Roaming\Python\Python313\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+scale=paper task=sine_next model=lstm seed=1710807515 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[sine_next lstm seed 1710807515] epoch 001 train 0.52398 val 0.37236 gnorm 0.55 (0.5s) *
+[sine_next lstm seed 1710807515] epoch 002 train 0.26103 val 0.14648 gnorm 0.335 (0.3s) *
+[sine_next lstm seed 1710807515] epoch 003 train 0.07746 val 0.02962 gnorm 0.174 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 004 train 0.01752 val 0.01152 gnorm 0.06 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 005 train 0.00901 val 0.00780 gnorm 0.0322 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 006 train 0.00673 val 0.00629 gnorm 0.0192 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 007 train 0.00559 val 0.00530 gnorm 0.0179 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 008 train 0.00488 val 0.00464 gnorm 0.0187 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 009 train 0.00435 val 0.00416 gnorm 0.0182 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 010 train 0.00386 val 0.00376 gnorm 0.0145 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 011 train 0.00348 val 0.00342 gnorm 0.0125 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 012 train 0.00320 val 0.00313 gnorm 0.0143 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 013 train 0.00288 val 0.00288 gnorm 0.0103 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 014 train 0.00266 val 0.00263 gnorm 0.0122 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 015 train 0.00244 val 0.00243 gnorm 0.0108 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 016 train 0.00226 val 0.00225 gnorm 0.00897 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 017 train 0.00211 val 0.00211 gnorm 0.00846 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 018 train 0.00198 val 0.00198 gnorm 0.00881 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 019 train 0.00187 val 0.00187 gnorm 0.00968 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 020 train 0.00176 val 0.00177 gnorm 0.0082 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 021 train 0.00167 val 0.00168 gnorm 0.0084 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 022 train 0.00159 val 0.00159 gnorm 0.00737 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 023 train 0.00151 val 0.00152 gnorm 0.00752 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 024 train 0.00144 val 0.00144 gnorm 0.00901 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 025 train 0.00138 val 0.00138 gnorm 0.01 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 026 train 0.00129 val 0.00131 gnorm 0.00635 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 027 train 0.00124 val 0.00124 gnorm 0.00764 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 028 train 0.00118 val 0.00119 gnorm 0.00894 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 029 train 0.00112 val 0.00114 gnorm 0.0072 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 030 train 0.00107 val 0.00110 gnorm 0.00789 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 031 train 0.00102 val 0.00105 gnorm 0.00568 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 032 train 0.00099 val 0.00101 gnorm 0.00598 (0.3s) *
+[sine_next lstm seed 1710807515] epoch 033 train 0.00095 val 0.00099 gnorm 0.00605 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 034 train 0.00092 val 0.00096 gnorm 0.00595 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 035 train 0.00090 val 0.00095 gnorm 0.00809 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 036 train 0.00089 val 0.00092 gnorm 0.0104 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 037 train 0.00086 val 0.00089 gnorm 0.00783 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 038 train 0.00085 val 0.00088 gnorm 0.00926 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 039 train 0.00083 val 0.00088 gnorm 0.0089 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 040 train 0.00081 val 0.00085 gnorm 0.00986 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 041 train 0.00079 val 0.00083 gnorm 0.00603 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 042 train 0.00078 val 0.00081 gnorm 0.00554 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 043 train 0.00077 val 0.00081 gnorm 0.00762 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 044 train 0.00076 val 0.00080 gnorm 0.00667 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 045 train 0.00074 val 0.00079 gnorm 0.00583 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 046 train 0.00073 val 0.00076 gnorm 0.00721 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 047 train 0.00072 val 0.00075 gnorm 0.00426 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 048 train 0.00072 val 0.00076 gnorm 0.0076 (0.2s)
+[sine_next lstm seed 1710807515] epoch 049 train 0.00070 val 0.00073 gnorm 0.00634 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 050 train 0.00069 val 0.00071 gnorm 0.0077 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 051 train 0.00069 val 0.00074 gnorm 0.00789 (0.2s)
+[sine_next lstm seed 1710807515] epoch 052 train 0.00068 val 0.00071 gnorm 0.00824 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 053 train 0.00066 val 0.00069 gnorm 0.00691 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 054 train 0.00064 val 0.00067 gnorm 0.00722 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 055 train 0.00064 val 0.00067 gnorm 0.00881 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 056 train 0.00063 val 0.00065 gnorm 0.00692 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 057 train 0.00061 val 0.00063 gnorm 0.00685 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 058 train 0.00060 val 0.00062 gnorm 0.00702 (0.2s) *
+[sine_next lstm seed 1710807515] epoch 059 train 0.00060 val 0.00063 gnorm 0.00886 (0.2s)
+[sine_next lstm seed 1710807515] epoch 060 train 0.00059 val 0.00062 gnorm 0.00941 (0.2s)
+run complete: results\scalar_tasks\paper\2026-09-28\sine_next\seed_1710807515\lstm

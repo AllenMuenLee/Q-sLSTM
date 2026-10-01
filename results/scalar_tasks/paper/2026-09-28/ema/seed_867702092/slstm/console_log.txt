@@ -1,0 +1,64 @@
+C:\Users\limue\AppData\Roaming\Python\Python313\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+scale=paper task=ema model=slstm seed=867702092 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[ema slstm seed 867702092] epoch 001 train 0.29165 val 0.23298 gnorm 0.126 (0.6s) *
+[ema slstm seed 867702092] epoch 002 train 0.16049 val 0.04060 gnorm 0.222 (0.9s) *
+[ema slstm seed 867702092] epoch 003 train 0.02268 val 0.01320 gnorm 0.132 (0.7s) *
+[ema slstm seed 867702092] epoch 004 train 0.01302 val 0.00908 gnorm 0.0519 (0.6s) *
+[ema slstm seed 867702092] epoch 005 train 0.00973 val 0.00754 gnorm 0.0504 (0.6s) *
+[ema slstm seed 867702092] epoch 006 train 0.00818 val 0.00628 gnorm 0.0686 (0.6s) *
+[ema slstm seed 867702092] epoch 007 train 0.00704 val 0.00536 gnorm 0.0646 (0.6s) *
+[ema slstm seed 867702092] epoch 008 train 0.00617 val 0.00472 gnorm 0.0346 (0.6s) *
+[ema slstm seed 867702092] epoch 009 train 0.00556 val 0.00426 gnorm 0.0405 (0.6s) *
+[ema slstm seed 867702092] epoch 010 train 0.00497 val 0.00376 gnorm 0.0431 (0.6s) *
+[ema slstm seed 867702092] epoch 011 train 0.00437 val 0.00328 gnorm 0.0429 (0.7s) *
+[ema slstm seed 867702092] epoch 012 train 0.00383 val 0.00312 gnorm 0.0649 (0.7s) *
+[ema slstm seed 867702092] epoch 013 train 0.00330 val 0.00234 gnorm 0.0807 (0.6s) *
+[ema slstm seed 867702092] epoch 014 train 0.00273 val 0.00195 gnorm 0.0469 (0.6s) *
+[ema slstm seed 867702092] epoch 015 train 0.00228 val 0.00173 gnorm 0.0574 (0.6s) *
+[ema slstm seed 867702092] epoch 016 train 0.00189 val 0.00154 gnorm 0.0662 (0.7s) *
+[ema slstm seed 867702092] epoch 017 train 0.00179 val 0.00146 gnorm 0.162 (0.6s) *
+[ema slstm seed 867702092] epoch 018 train 0.00137 val 0.00106 gnorm 0.0847 (0.6s) *
+[ema slstm seed 867702092] epoch 019 train 0.00122 val 0.00090 gnorm 0.0851 (1.1s) *
+[ema slstm seed 867702092] epoch 020 train 0.00104 val 0.00083 gnorm 0.0545 (0.9s) *
+[ema slstm seed 867702092] epoch 021 train 0.00095 val 0.00076 gnorm 0.0459 (0.8s) *
+[ema slstm seed 867702092] epoch 022 train 0.00088 val 0.00083 gnorm 0.0556 (0.8s)
+[ema slstm seed 867702092] epoch 023 train 0.00082 val 0.00068 gnorm 0.0569 (0.8s) *
+[ema slstm seed 867702092] epoch 024 train 0.00076 val 0.00062 gnorm 0.0588 (0.8s) *
+[ema slstm seed 867702092] epoch 025 train 0.00073 val 0.00061 gnorm 0.0687 (0.6s) *
+[ema slstm seed 867702092] epoch 026 train 0.00067 val 0.00055 gnorm 0.0521 (0.7s) *
+[ema slstm seed 867702092] epoch 027 train 0.00064 val 0.00049 gnorm 0.068 (0.8s) *
+[ema slstm seed 867702092] epoch 028 train 0.00057 val 0.00045 gnorm 0.0439 (0.8s) *
+[ema slstm seed 867702092] epoch 029 train 0.00053 val 0.00043 gnorm 0.0367 (0.8s) *
+[ema slstm seed 867702092] epoch 030 train 0.00054 val 0.00071 gnorm 0.0755 (0.6s)
+[ema slstm seed 867702092] epoch 031 train 0.00052 val 0.00044 gnorm 0.0743 (0.6s)
+[ema slstm seed 867702092] epoch 032 train 0.00051 val 0.00041 gnorm 0.0743 (0.6s) *
+[ema slstm seed 867702092] epoch 033 train 0.00052 val 0.00044 gnorm 0.11 (0.6s)
+[ema slstm seed 867702092] epoch 034 train 0.00045 val 0.00045 gnorm 0.0782 (0.9s)
+[ema slstm seed 867702092] epoch 035 train 0.00047 val 0.00032 gnorm 0.105 (0.8s) *
+[ema slstm seed 867702092] epoch 036 train 0.00040 val 0.00054 gnorm 0.0708 (0.8s)
+[ema slstm seed 867702092] epoch 037 train 0.00044 val 0.00051 gnorm 0.111 (0.8s)
+[ema slstm seed 867702092] epoch 038 train 0.00038 val 0.00031 gnorm 0.0829 (0.8s) *
+[ema slstm seed 867702092] epoch 039 train 0.00035 val 0.00029 gnorm 0.0557 (0.8s) *
+[ema slstm seed 867702092] epoch 040 train 0.00033 val 0.00025 gnorm 0.0717 (0.9s) *
+[ema slstm seed 867702092] epoch 041 train 0.00034 val 0.00026 gnorm 0.0866 (0.8s)
+[ema slstm seed 867702092] epoch 042 train 0.00039 val 0.00023 gnorm 0.113 (1.0s) *
+[ema slstm seed 867702092] epoch 043 train 0.00032 val 0.00036 gnorm 0.085 (0.9s)
+[ema slstm seed 867702092] epoch 044 train 0.00036 val 0.00022 gnorm 0.11 (0.8s) *
+[ema slstm seed 867702092] epoch 045 train 0.00027 val 0.00024 gnorm 0.0568 (0.9s)
+[ema slstm seed 867702092] epoch 046 train 0.00024 val 0.00025 gnorm 0.0423 (0.7s)
+[ema slstm seed 867702092] epoch 047 train 0.00026 val 0.00025 gnorm 0.0643 (0.7s)
+[ema slstm seed 867702092] epoch 048 train 0.00024 val 0.00021 gnorm 0.0519 (0.6s) *
+[ema slstm seed 867702092] epoch 049 train 0.00023 val 0.00025 gnorm 0.0569 (0.8s)
+[ema slstm seed 867702092] epoch 050 train 0.00028 val 0.00035 gnorm 0.101 (0.8s)
+[ema slstm seed 867702092] epoch 051 train 0.00038 val 0.00021 gnorm 0.159 (0.6s)
+[ema slstm seed 867702092] epoch 052 train 0.00023 val 0.00024 gnorm 0.0752 (0.6s)
+[ema slstm seed 867702092] epoch 053 train 0.00021 val 0.00015 gnorm 0.0629 (0.7s) *
+[ema slstm seed 867702092] epoch 054 train 0.00020 val 0.00015 gnorm 0.0648 (0.6s)
+[ema slstm seed 867702092] epoch 055 train 0.00017 val 0.00018 gnorm 0.0329 (0.7s)
+[ema slstm seed 867702092] epoch 056 train 0.00019 val 0.00022 gnorm 0.0617 (0.6s)
+[ema slstm seed 867702092] epoch 057 train 0.00022 val 0.00017 gnorm 0.0979 (0.7s)
+[ema slstm seed 867702092] epoch 058 train 0.00018 val 0.00038 gnorm 0.0557 (0.6s)
+[ema slstm seed 867702092] epoch 059 train 0.00032 val 0.00016 gnorm 0.155 (0.6s)
+[ema slstm seed 867702092] epoch 060 train 0.00018 val 0.00016 gnorm 0.0671 (0.6s)
+run complete: results\scalar_tasks\paper\2026-09-28\ema\seed_867702092\slstm

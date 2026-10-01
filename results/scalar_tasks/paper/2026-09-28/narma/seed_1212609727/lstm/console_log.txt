@@ -1,0 +1,64 @@
+C:\Users\limue\AppData\Roaming\Python\Python313\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+scale=paper task=narma model=lstm seed=1212609727 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[narma lstm seed 1212609727] epoch 001 train 0.10244 val 0.02317 gnorm 0.615 (0.5s) *
+[narma lstm seed 1212609727] epoch 002 train 0.01230 val 0.01137 gnorm 0.113 (0.4s) *
+[narma lstm seed 1212609727] epoch 003 train 0.00960 val 0.00990 gnorm 0.0315 (0.4s) *
+[narma lstm seed 1212609727] epoch 004 train 0.00893 val 0.00938 gnorm 0.0133 (0.4s) *
+[narma lstm seed 1212609727] epoch 005 train 0.00844 val 0.00896 gnorm 0.0216 (0.4s) *
+[narma lstm seed 1212609727] epoch 006 train 0.00800 val 0.00849 gnorm 0.0179 (0.4s) *
+[narma lstm seed 1212609727] epoch 007 train 0.00765 val 0.00815 gnorm 0.017 (0.4s) *
+[narma lstm seed 1212609727] epoch 008 train 0.00740 val 0.00797 gnorm 0.0115 (0.4s) *
+[narma lstm seed 1212609727] epoch 009 train 0.00725 val 0.00782 gnorm 0.0149 (0.4s) *
+[narma lstm seed 1212609727] epoch 010 train 0.00716 val 0.00777 gnorm 0.0123 (0.4s) *
+[narma lstm seed 1212609727] epoch 011 train 0.00709 val 0.00763 gnorm 0.014 (0.5s) *
+[narma lstm seed 1212609727] epoch 012 train 0.00702 val 0.00764 gnorm 0.0126 (0.4s)
+[narma lstm seed 1212609727] epoch 013 train 0.00697 val 0.00750 gnorm 0.0152 (0.4s) *
+[narma lstm seed 1212609727] epoch 014 train 0.00690 val 0.00738 gnorm 0.0117 (0.4s) *
+[narma lstm seed 1212609727] epoch 015 train 0.00688 val 0.00733 gnorm 0.0218 (0.4s) *
+[narma lstm seed 1212609727] epoch 016 train 0.00681 val 0.00723 gnorm 0.0183 (0.4s) *
+[narma lstm seed 1212609727] epoch 017 train 0.00672 val 0.00719 gnorm 0.0158 (0.3s) *
+[narma lstm seed 1212609727] epoch 018 train 0.00664 val 0.00706 gnorm 0.0151 (0.3s) *
+[narma lstm seed 1212609727] epoch 019 train 0.00659 val 0.00738 gnorm 0.0209 (0.3s)
+[narma lstm seed 1212609727] epoch 020 train 0.00651 val 0.00697 gnorm 0.0191 (0.3s) *
+[narma lstm seed 1212609727] epoch 021 train 0.00642 val 0.00686 gnorm 0.0156 (0.3s) *
+[narma lstm seed 1212609727] epoch 022 train 0.00636 val 0.00678 gnorm 0.0167 (0.2s) *
+[narma lstm seed 1212609727] epoch 023 train 0.00634 val 0.00672 gnorm 0.0214 (0.3s) *
+[narma lstm seed 1212609727] epoch 024 train 0.00625 val 0.00667 gnorm 0.012 (0.2s) *
+[narma lstm seed 1212609727] epoch 025 train 0.00624 val 0.00660 gnorm 0.0187 (0.2s) *
+[narma lstm seed 1212609727] epoch 026 train 0.00620 val 0.00657 gnorm 0.0203 (0.2s) *
+[narma lstm seed 1212609727] epoch 027 train 0.00617 val 0.00658 gnorm 0.0237 (0.2s)
+[narma lstm seed 1212609727] epoch 028 train 0.00614 val 0.00652 gnorm 0.026 (0.2s) *
+[narma lstm seed 1212609727] epoch 029 train 0.00603 val 0.00640 gnorm 0.0118 (0.2s) *
+[narma lstm seed 1212609727] epoch 030 train 0.00598 val 0.00633 gnorm 0.01 (0.2s) *
+[narma lstm seed 1212609727] epoch 031 train 0.00595 val 0.00631 gnorm 0.016 (0.2s) *
+[narma lstm seed 1212609727] epoch 032 train 0.00588 val 0.00627 gnorm 0.0125 (0.2s) *
+[narma lstm seed 1212609727] epoch 033 train 0.00584 val 0.00618 gnorm 0.0115 (0.2s) *
+[narma lstm seed 1212609727] epoch 034 train 0.00580 val 0.00619 gnorm 0.0142 (0.2s)
+[narma lstm seed 1212609727] epoch 035 train 0.00575 val 0.00611 gnorm 0.0137 (0.2s) *
+[narma lstm seed 1212609727] epoch 036 train 0.00573 val 0.00607 gnorm 0.0172 (0.2s) *
+[narma lstm seed 1212609727] epoch 037 train 0.00567 val 0.00606 gnorm 0.0102 (0.2s) *
+[narma lstm seed 1212609727] epoch 038 train 0.00562 val 0.00598 gnorm 0.00793 (0.2s) *
+[narma lstm seed 1212609727] epoch 039 train 0.00558 val 0.00597 gnorm 0.0123 (0.2s) *
+[narma lstm seed 1212609727] epoch 040 train 0.00557 val 0.00591 gnorm 0.0201 (0.2s) *
+[narma lstm seed 1212609727] epoch 041 train 0.00552 val 0.00595 gnorm 0.0168 (0.2s)
+[narma lstm seed 1212609727] epoch 042 train 0.00551 val 0.00581 gnorm 0.0225 (0.2s) *
+[narma lstm seed 1212609727] epoch 043 train 0.00548 val 0.00572 gnorm 0.0244 (0.1s) *
+[narma lstm seed 1212609727] epoch 044 train 0.00536 val 0.00564 gnorm 0.0125 (0.2s) *
+[narma lstm seed 1212609727] epoch 045 train 0.00529 val 0.00569 gnorm 0.0134 (0.2s)
+[narma lstm seed 1212609727] epoch 046 train 0.00529 val 0.00548 gnorm 0.0175 (0.2s) *
+[narma lstm seed 1212609727] epoch 047 train 0.00521 val 0.00548 gnorm 0.017 (0.2s) *
+[narma lstm seed 1212609727] epoch 048 train 0.00514 val 0.00534 gnorm 0.0134 (0.2s) *
+[narma lstm seed 1212609727] epoch 049 train 0.00513 val 0.00532 gnorm 0.0213 (0.2s) *
+[narma lstm seed 1212609727] epoch 050 train 0.00505 val 0.00524 gnorm 0.0182 (0.2s) *
+[narma lstm seed 1212609727] epoch 051 train 0.00498 val 0.00519 gnorm 0.00777 (0.2s) *
+[narma lstm seed 1212609727] epoch 052 train 0.00499 val 0.00526 gnorm 0.0199 (0.2s)
+[narma lstm seed 1212609727] epoch 053 train 0.00492 val 0.00509 gnorm 0.014 (0.2s) *
+[narma lstm seed 1212609727] epoch 054 train 0.00486 val 0.00502 gnorm 0.0123 (0.2s) *
+[narma lstm seed 1212609727] epoch 055 train 0.00483 val 0.00498 gnorm 0.0135 (0.2s) *
+[narma lstm seed 1212609727] epoch 056 train 0.00480 val 0.00497 gnorm 0.0139 (0.2s) *
+[narma lstm seed 1212609727] epoch 057 train 0.00476 val 0.00487 gnorm 0.0131 (0.2s) *
+[narma lstm seed 1212609727] epoch 058 train 0.00482 val 0.00486 gnorm 0.0291 (0.2s) *
+[narma lstm seed 1212609727] epoch 059 train 0.00472 val 0.00480 gnorm 0.0199 (0.2s) *
+[narma lstm seed 1212609727] epoch 060 train 0.00466 val 0.00476 gnorm 0.0187 (0.2s) *
+run complete: results\scalar_tasks\paper\2026-09-28\narma\seed_1212609727\lstm

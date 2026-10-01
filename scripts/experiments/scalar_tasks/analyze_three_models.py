@@ -1,6 +1,7 @@
 # scripts/experiments/scalar_tasks/analyze_three_models.py
 #
-# QLSTM vs Q-sLSTM vs Q-sLSTM (fk) on one scalar-task sweep, mean ± sd over seeds:
+# Compare models on one scalar-task sweep, mean ± sd over seeds (default: the six quantum models;
+# --models picks others). The two-model QLSTM vs Q-sLSTM study is analyze_qlstm_vs_qslstm.py:
 #   test_mse.png, test_mae.png, test_rmse.png   overall test metric per task (best-validation checkpoint)
 #   mse_vs_timestep.png, mae_vs_timestep.png, rmse_vs_timestep.png
 #                                               test error at each supervised timestep
@@ -30,10 +31,15 @@ from scipy import stats  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[3]
 TASKS = ("delay", "ema", "running_max", "flip_flop", "narma", "sine_next")
-MODELS = ("qlstm", "qslstm", "fk_qslstm")
-LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "fk_qslstm": "Q-sLSTM (fk)"}
+ALL_MODELS = ("qlstm", "qslstm", "fk_qslstm", "fk_qlstm", "qslstm_log", "qslstm_sqrt", "lstm", "slstm")
+QUANTUM = ("qlstm", "qslstm", "qslstm_log", "qslstm_sqrt", "fk_qslstm", "fk_qlstm")
+MODELS = QUANTUM  # set from --models in main()
+LABELS = {"qlstm": "QLSTM", "qslstm": "Q-sLSTM", "fk_qslstm": "Q-sLSTM (fk)", "fk_qlstm": "QLSTM (fk)",
+          "qslstm_log": "Q-sLSTM-log", "qslstm_sqrt": "Q-sLSTM-sqrt", "lstm": "LSTM", "slstm": "sLSTM"}
 # Same slots as plot_curves_and_gates.py so the figures read as one set.
-COLORS = {"qlstm": "#2a78d6", "qslstm": "#eb6834", "fk_qslstm": "#eda100"}
+COLORS = {"qlstm": "#2a78d6", "qslstm": "#eb6834", "fk_qslstm": "#eda100", "fk_qlstm": "#7c4dbd",
+          "qslstm_log": "#2e9e5b", "qslstm_sqrt": "#1aa3b8", "lstm": "#6b6b6b", "slstm": "#d0439a"}
+DEFAULT_OUT = {QUANTUM: "quantum models"}
 SURFACE, INK, MUTED = "#fcfcfb", "#0b0b0b", "#52514e"
 METRIC_LABELS = {"mse": "MSE", "mae": "MAE", "rmse": "RMSE"}
 LOG_NOTE = "Log axis: where mean − sd ≤ 0 the band is cut at mean/10."
@@ -110,11 +116,14 @@ def task_grid(title):
 def finish(fig, out_path, n_seeds, extra_handles=(), note=None, checkpoint=True):
     handles = [plt.Line2D([], [], color=COLORS[m], linewidth=2.5, label=LABELS[m]) for m in MODELS]
     handles += list(extra_handles)
-    fig.legend(handles=handles, loc="upper right", ncol=len(handles), frameon=False, fontsize=9,
-               labelcolor=INK, bbox_to_anchor=(0.99, 0.995))
+    # Up to five entries fit beside the title; more go on their own row below it.
+    wide = len(handles) > 5
+    fig.legend(handles=handles, loc="upper left" if wide else "upper right", ncol=len(handles), frameon=False,
+               fontsize=9, labelcolor=INK, bbox_to_anchor=(0.01, 0.955) if wide else (0.99, 0.995),
+               columnspacing=1.2)
     base = f"Mean ± 1 sd over {n_seeds} paired random seeds" + (" (best-validation checkpoint)." if checkpoint else ".")
     fig.text(0.01, 0.005, f"{base} {note}" if note else base, color=MUTED, fontsize=8, ha="left", va="bottom")
-    fig.tight_layout(rect=(0, 0.03, 1, 0.94))
+    fig.tight_layout(rect=(0, 0.03, 1, 0.915 if wide else 0.94))
     fig.savefig(out_path, dpi=150, facecolor=SURFACE)
     plt.close(fig)
     print("wrote", out_path)
@@ -141,11 +150,12 @@ def bar_plot(metrics, metric, out_path, n_seeds, log_y=False):
             values = sel.loc[sel.model == model, metric].to_numpy()
             mean, sd = values.mean(), values.std(ddof=1)
             lower = min(sd, mean * 0.9) if log_y else sd
-            ax.bar(k, mean, width=0.62, color=COLORS[model], alpha=0.85, zorder=2)
+            ax.bar(k, mean, width=0.62 if len(MODELS) <= 3 else 0.7, color=COLORS[model], alpha=0.85, zorder=2)
             ax.errorbar(k, mean, yerr=[[lower], [sd]], color=INK, capsize=5, linewidth=1.3, zorder=4)
             ax.scatter(k + rng.uniform(-0.18, 0.18, len(values)), values, s=9, color=INK, alpha=0.35,
                        linewidth=0, zorder=3)
-        ax.set_xticks(range(len(MODELS)), [LABELS[m] for m in MODELS], fontsize=8, color=MUTED)
+        ax.set_xticks(range(len(MODELS)), [LABELS[m] for m in MODELS], fontsize=8 if len(MODELS) <= 3 else 7,
+                      color=MUTED, rotation=0 if len(MODELS) <= 3 else 20, ha="center" if len(MODELS) <= 3 else "right")
         ax.set_title(task, color=INK, fontsize=10, loc="left")
         ax.set_ylabel(f"test {METRIC_LABELS[metric]}", color=MUTED, fontsize=8)
     finish(fig, out_path, n_seeds, note="Bars = mean, whiskers = ± 1 sd, dots = individual seeds.")
@@ -193,12 +203,12 @@ def epoch_plot(history, columns, title, out_path, n_seeds, note=None, log_y=Fals
 # ---------------------------------------------------------------------------------------------
 
 def fmt(mean, sd):
-    return f"{mean:.4f} ± {sd:.4f}"
+    return f"{mean:.3g} ± {sd:.2g}"
 
 
 def pairwise(metrics):
     rows = []
-    pairs = (("qslstm", "qlstm"), ("fk_qslstm", "qlstm"), ("qslstm", "fk_qslstm"))
+    pairs = [(a, b) for i, a in enumerate(MODELS) for b in MODELS[i + 1:]]
     for task in TASKS:
         wide = metrics[metrics.task == task].pivot(index="seed", columns="model")
         for metric in ("mse", "mae", "rmse"):
@@ -212,9 +222,9 @@ def pairwise(metrics):
 
 
 def write_summary(out, summary, best, pairs, runs_dir, n_seeds):
-    lines = ["# QLSTM vs Q-sLSTM vs Q-sLSTM (fk) — scalar tasks", "",
+    lines = [f"# {' vs '.join(LABELS[m] for m in MODELS)} — scalar tasks", "",
              f"Sweep: `{runs_dir.relative_to(ROOT).as_posix()}`", "",
-             f"Paired seeds with all three models on all six tasks: {n_seeds}. Values are mean ± sd over "
+             f"Paired seeds with all {len(MODELS)} models on all six tasks: {n_seeds}. Values are mean ± sd over "
              "seeds on the test split, best-validation checkpoint. RMSE per seed = sqrt(test MSE).", "",
              "The per-epoch curves use validation MSE: the runs log train loss and validation MSE each "
              "epoch but evaluate the test split only once, at the best checkpoint.", ""]
@@ -238,7 +248,7 @@ def write_summary(out, summary, best, pairs, runs_dir, n_seeds):
               "Wilcoxon signed-rank over seeds; `wins` = seeds where a has lower MSE.", "",
               "| task | a − b | mean diff ± sd | wins | p |", "|---|---|---|---|---|"]
     for _, r in pairs[pairs.metric == "mse"].iterrows():
-        lines.append(f"| {r.task} | {LABELS[r.a]} − {LABELS[r.b]} | {r.mean_diff:+.4f} ± {r.sd_diff:.4f} | "
+        lines.append(f"| {r.task} | {LABELS[r.a]} − {LABELS[r.b]} | {r.mean_diff:+.2e} ± {r.sd_diff:.2e} | "
                      f"{r.a_wins}/{r.n} | {r.wilcoxon_p:.3g} |")
     lines += ["", "## Figures", "", "Log y-axis; linear-axis copies of each are in `linear/`.", ""]
     lines += [f"- `{name}`" for name in ("test_mse.png", "test_mae.png", "test_rmse.png", "mse_vs_timestep.png",
@@ -249,13 +259,17 @@ def write_summary(out, summary, best, pairs, runs_dir, n_seeds):
 
 
 def main(argv=None):
+    global MODELS
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "results/scalar_tasks/paper/2026-09-28")
+    parser.add_argument("--models", nargs="+", choices=ALL_MODELS, default=list(QUANTUM),
+                        help="models to compare, in plot order (default: %(default)s)")
     parser.add_argument("--out-dir", type=Path, default=None,
-                        help="default: <runs-dir>/analysis/QLSTM vs QsLSTM vs FK_QsLSTM")
+                        help="default: <runs-dir>/analysis/<models>, e.g. 'quantum models'")
     args = parser.parse_args(argv)
+    MODELS = tuple(args.models)
     runs_dir = args.runs_dir.resolve()
-    out = args.out_dir or runs_dir / "analysis" / "QLSTM vs QsLSTM vs FK_QsLSTM"
+    out = args.out_dir or runs_dir / "analysis" / DEFAULT_OUT.get(MODELS, " vs ".join(MODELS))
     out.mkdir(parents=True, exist_ok=True)
 
     runs = discover(runs_dir)

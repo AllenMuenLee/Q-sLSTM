@@ -1,0 +1,64 @@
+C:\Users\limue\AppData\Roaming\Python\Python313\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+scale=paper task=running_max model=lstm seed=867702092 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[running_max lstm seed 867702092] epoch 001 train 0.11910 val 0.07176 gnorm 0.418 (2.0s) *
+[running_max lstm seed 867702092] epoch 002 train 0.06626 val 0.06113 gnorm 0.128 (2.2s) *
+[running_max lstm seed 867702092] epoch 003 train 0.05903 val 0.05163 gnorm 0.067 (1.5s) *
+[running_max lstm seed 867702092] epoch 004 train 0.04773 val 0.03721 gnorm 0.073 (1.1s) *
+[running_max lstm seed 867702092] epoch 005 train 0.03533 val 0.03041 gnorm 0.0543 (2.7s) *
+[running_max lstm seed 867702092] epoch 006 train 0.03038 val 0.02628 gnorm 0.0418 (1.7s) *
+[running_max lstm seed 867702092] epoch 007 train 0.02686 val 0.02323 gnorm 0.0484 (1.4s) *
+[running_max lstm seed 867702092] epoch 008 train 0.02399 val 0.02106 gnorm 0.0443 (1.9s) *
+[running_max lstm seed 867702092] epoch 009 train 0.02155 val 0.01920 gnorm 0.037 (0.9s) *
+[running_max lstm seed 867702092] epoch 010 train 0.01942 val 0.01735 gnorm 0.0314 (0.9s) *
+[running_max lstm seed 867702092] epoch 011 train 0.01758 val 0.01592 gnorm 0.0403 (0.8s) *
+[running_max lstm seed 867702092] epoch 012 train 0.01545 val 0.01348 gnorm 0.0425 (0.9s) *
+[running_max lstm seed 867702092] epoch 013 train 0.01271 val 0.01058 gnorm 0.0368 (1.6s) *
+[running_max lstm seed 867702092] epoch 014 train 0.01015 val 0.00851 gnorm 0.0308 (1.1s) *
+[running_max lstm seed 867702092] epoch 015 train 0.00884 val 0.00763 gnorm 0.023 (1.2s) *
+[running_max lstm seed 867702092] epoch 016 train 0.00810 val 0.00703 gnorm 0.027 (1.0s) *
+[running_max lstm seed 867702092] epoch 017 train 0.00742 val 0.00668 gnorm 0.0214 (1.5s) *
+[running_max lstm seed 867702092] epoch 018 train 0.00696 val 0.00621 gnorm 0.0255 (1.2s) *
+[running_max lstm seed 867702092] epoch 019 train 0.00645 val 0.00570 gnorm 0.0186 (0.9s) *
+[running_max lstm seed 867702092] epoch 020 train 0.00611 val 0.00533 gnorm 0.0288 (1.0s) *
+[running_max lstm seed 867702092] epoch 021 train 0.00570 val 0.00505 gnorm 0.021 (1.4s) *
+[running_max lstm seed 867702092] epoch 022 train 0.00540 val 0.00473 gnorm 0.0281 (2.1s) *
+[running_max lstm seed 867702092] epoch 023 train 0.00502 val 0.00443 gnorm 0.0172 (1.2s) *
+[running_max lstm seed 867702092] epoch 024 train 0.00471 val 0.00423 gnorm 0.0181 (1.2s) *
+[running_max lstm seed 867702092] epoch 025 train 0.00445 val 0.00391 gnorm 0.0297 (1.2s) *
+[running_max lstm seed 867702092] epoch 026 train 0.00412 val 0.00365 gnorm 0.0167 (1.7s) *
+[running_max lstm seed 867702092] epoch 027 train 0.00389 val 0.00352 gnorm 0.0262 (1.3s) *
+[running_max lstm seed 867702092] epoch 028 train 0.00363 val 0.00318 gnorm 0.0208 (1.4s) *
+[running_max lstm seed 867702092] epoch 029 train 0.00342 val 0.00301 gnorm 0.0244 (1.3s) *
+[running_max lstm seed 867702092] epoch 030 train 0.00323 val 0.00311 gnorm 0.0256 (1.9s)
+[running_max lstm seed 867702092] epoch 031 train 0.00329 val 0.00283 gnorm 0.0506 (1.1s) *
+[running_max lstm seed 867702092] epoch 032 train 0.00289 val 0.00260 gnorm 0.0151 (1.0s) *
+[running_max lstm seed 867702092] epoch 033 train 0.00278 val 0.00249 gnorm 0.0205 (1.1s) *
+[running_max lstm seed 867702092] epoch 034 train 0.00272 val 0.00249 gnorm 0.0296 (1.2s)
+[running_max lstm seed 867702092] epoch 035 train 0.00262 val 0.00234 gnorm 0.0292 (1.2s) *
+[running_max lstm seed 867702092] epoch 036 train 0.00250 val 0.00230 gnorm 0.0217 (1.1s) *
+[running_max lstm seed 867702092] epoch 037 train 0.00238 val 0.00228 gnorm 0.0152 (1.5s) *
+[running_max lstm seed 867702092] epoch 038 train 0.00241 val 0.00218 gnorm 0.0309 (1.0s) *
+[running_max lstm seed 867702092] epoch 039 train 0.00232 val 0.00203 gnorm 0.0283 (1.2s) *
+[running_max lstm seed 867702092] epoch 040 train 0.00227 val 0.00208 gnorm 0.0299 (1.1s)
+[running_max lstm seed 867702092] epoch 041 train 0.00222 val 0.00196 gnorm 0.0288 (1.0s) *
+[running_max lstm seed 867702092] epoch 042 train 0.00217 val 0.00191 gnorm 0.0302 (1.0s) *
+[running_max lstm seed 867702092] epoch 043 train 0.00208 val 0.00188 gnorm 0.0213 (1.0s) *
+[running_max lstm seed 867702092] epoch 044 train 0.00206 val 0.00196 gnorm 0.0241 (1.6s)
+[running_max lstm seed 867702092] epoch 045 train 0.00211 val 0.00182 gnorm 0.0402 (1.1s) *
+[running_max lstm seed 867702092] epoch 046 train 0.00199 val 0.00186 gnorm 0.0236 (0.9s)
+[running_max lstm seed 867702092] epoch 047 train 0.00191 val 0.00175 gnorm 0.0128 (1.0s) *
+[running_max lstm seed 867702092] epoch 048 train 0.00189 val 0.00173 gnorm 0.0176 (1.2s) *
+[running_max lstm seed 867702092] epoch 049 train 0.00188 val 0.00167 gnorm 0.0223 (1.7s) *
+[running_max lstm seed 867702092] epoch 050 train 0.00181 val 0.00167 gnorm 0.0146 (1.1s)
+[running_max lstm seed 867702092] epoch 051 train 0.00179 val 0.00167 gnorm 0.0177 (1.2s)
+[running_max lstm seed 867702092] epoch 052 train 0.00179 val 0.00160 gnorm 0.0271 (1.2s) *
+[running_max lstm seed 867702092] epoch 053 train 0.00173 val 0.00158 gnorm 0.0169 (2.0s) *
+[running_max lstm seed 867702092] epoch 054 train 0.00173 val 0.00156 gnorm 0.022 (1.2s) *
+[running_max lstm seed 867702092] epoch 055 train 0.00169 val 0.00152 gnorm 0.022 (1.4s) *
+[running_max lstm seed 867702092] epoch 056 train 0.00165 val 0.00157 gnorm 0.0178 (1.2s)
+[running_max lstm seed 867702092] epoch 057 train 0.00164 val 0.00147 gnorm 0.0201 (1.8s) *
+[running_max lstm seed 867702092] epoch 058 train 0.00163 val 0.00148 gnorm 0.0236 (1.3s)
+[running_max lstm seed 867702092] epoch 059 train 0.00158 val 0.00172 gnorm 0.0201 (1.1s)
+[running_max lstm seed 867702092] epoch 060 train 0.00164 val 0.00143 gnorm 0.0361 (2.6s) *
+run complete: results\scalar_tasks\paper\2026-09-28\running_max\seed_867702092\lstm

@@ -1,0 +1,22 @@
+{
+  "hidden_size": 4,
+  "n_qubits": null,
+  "parameter_shapes": {
+    "gates.bias": [
+      16
+    ],
+    "gates.weight": [
+      16,
+      5
+    ],
+    "head.bias": [
+      1
+    ],
+    "head.weight": [
+      1,
+      4
+    ]
+  },
+  "qnn_depth": 2,
+  "trainable_parameters": 101
+}

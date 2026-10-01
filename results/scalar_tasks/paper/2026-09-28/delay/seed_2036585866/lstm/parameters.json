@@ -1,0 +1,29 @@
+{
+  "hidden_size": 4,
+  "n_qubits": null,
+  "parameter_shapes": {
+    "head.bias": [
+      1
+    ],
+    "head.weight": [
+      1,
+      4
+    ],
+    "lstm.bias_hh_l0": [
+      16
+    ],
+    "lstm.bias_ih_l0": [
+      16
+    ],
+    "lstm.weight_hh_l0": [
+      16,
+      4
+    ],
+    "lstm.weight_ih_l0": [
+      16,
+      1
+    ]
+  },
+  "qnn_depth": 2,
+  "trainable_parameters": 117
+}

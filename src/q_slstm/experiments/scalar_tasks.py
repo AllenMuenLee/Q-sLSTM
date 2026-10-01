@@ -1,7 +1,7 @@
 # Training / evaluation pipeline for the 1-D scalar sequence tasks.
 #
-# Compares the conventional QLSTM, the Q-sLSTM variants, and (as a sanity reference) a classical
-# nn.LSTM on the tasks in q_slstm.datasets.scalar_tasks. Every model maps a [batch, L, 1] input to a
+# Compares the conventional QLSTM, the Q-sLSTM variants, and (as classical references) nn.LSTM and a
+# classical sLSTM (exponential input and forget gates) on the tasks in q_slstm.datasets.scalar_tasks. Every model maps a [batch, L, 1] input to a
 # [batch, L, 1] prediction; training uses masked MSE over the task's supervised steps.
 #
 # Run layout: <save_dir>/<scale>/<run date>/<task>/seed_<seed>/<model>/
@@ -19,7 +19,6 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
-from torch import nn
 from torch.utils.data import DataLoader
 
 from q_slstm.datasets.scalar_tasks import (
@@ -40,10 +39,11 @@ from q_slstm.experiments.nearest_neighbor import (
     parameter_checksums,
     source_revision,
 )
+from q_slstm.models.classical import CLASSICAL_SLSTM_RECURRENCE, ClassicalLSTM, ClassicalSLSTM
 from q_slstm.models.factory import QUANTUM_MODELS, build_quantum_model, count_trainable_parameters, recurrence_tag
 from q_slstm.models.q_slstm_cell import DEFAULT_GATE_EPSILON
 
-CLASSICAL_MODELS = ("lstm",)
+CLASSICAL_MODELS = ("lstm", "slstm")
 VQC_MODELS = QUANTUM_MODELS
 MODELS = VQC_MODELS + CLASSICAL_MODELS
 
@@ -92,6 +92,8 @@ def add_run_arguments(parser, task_options=True, save_dir="results/scalar_tasks"
     a("--lr", type=float, default=None, help="overrides the preset learning rate")
     a("--weight-decay", type=float, default=0.0)
     a("--grad-clip", type=float, default=0.0, help="max gradient norm; 0 disables clipping (norms are still logged)")
+    a("--snapshot-epochs", type=str, default=None,
+      help="comma-separated epochs whose weights are also saved as checkpoints/epoch_NNN.pt (e.g. 1,20,50,100)")
     if task_options:
         a("--delay", type=int, default=d.delay, help="delay task: lag k")
         a("--ema-decay", type=float, default=d.ema_decay, help="ema task: decay d")
@@ -167,7 +169,7 @@ def resolve_config(args, tasks=TASKS):
         "output_size": OUTPUT_SIZE,
         "n_qubits": INPUT_SIZE + resolved["hidden_size"] if model in VQC_MODELS else None,
         "gate_epsilon": a.get("gate_epsilon", DEFAULT_GATE_EPSILON),
-        "qslstm_recurrence": recurrence_tag(model),
+        "qslstm_recurrence": CLASSICAL_SLSTM_RECURRENCE if model == "slstm" else recurrence_tag(model),
         "weight_decay": a.get("weight_decay", 0.0),
         "grad_clip": a.get("grad_clip", 0.0),
         "device": a.get("device", "cpu"),
@@ -181,9 +183,20 @@ def resolve_config(args, tasks=TASKS):
     for key in ("epochs", "batch_size"):
         if config[key] < 1:
             raise ValueError(f"{key} must be positive, got {config[key]}")
+    config["snapshot_epochs"] = parse_snapshot_epochs(a.get("snapshot_epochs"), config["epochs"])
     if not config["lr"] > 0:
         raise ValueError(f"lr must be positive, got {config['lr']}")
     return config
+
+
+def parse_snapshot_epochs(value, epochs):
+    """'1,20,50' -> [1, 20, 50]; each must lie within the epoch budget."""
+    if not value:
+        return []
+    snapshots = sorted({int(e) for e in str(value).split(",") if e.strip()})
+    if snapshots and not 1 <= snapshots[0] <= snapshots[-1] <= epochs:
+        raise ValueError(f"--snapshot-epochs must lie in 1..{epochs}, got {value!r}")
+    return snapshots
 
 
 def sweep_directory(config):
@@ -231,19 +244,6 @@ def training_target_mean(dataset):
 # Models
 # ---------------------------------------------------------------------------------------------
 
-class ClassicalLSTM(nn.Module):
-    """nn.LSTM + linear read-out with the quantum models' (outputs, state) return contract."""
-
-    def __init__(self, input_size, hidden_size, output_size):
-        super().__init__()
-        self.lstm = nn.LSTM(input_size, hidden_size, batch_first=True)
-        self.head = nn.Linear(hidden_size, output_size)
-
-    def forward(self, x):
-        h, state = self.lstm(x)
-        return self.head(h), state
-
-
 def build_model(config):
     if config["model"] in VQC_MODELS:
         return build_quantum_model(
@@ -252,7 +252,11 @@ def build_model(config):
             seed=config["seeds"]["model"])
     with torch.random.fork_rng(devices=[]):
         torch.manual_seed(config["seeds"]["model"])
-        net = ClassicalLSTM(config["input_size"], config["hidden_size"], config["output_size"])
+        if config["model"] == "slstm":
+            net = ClassicalSLSTM(config["input_size"], config["hidden_size"], config["output_size"],
+                                 gate_epsilon=config["gate_epsilon"])
+        else:
+            net = ClassicalLSTM(config["input_size"], config["hidden_size"], config["output_size"])
     return net.to(config["device"])
 
 
@@ -384,6 +388,8 @@ def train_model(model, train_ds, val_ds, config, run_dir):
             best_val, best_epoch = val, epoch
             torch.save(payload, ckpt_dir / "best.pt")
         torch.save({**payload, "optimizer_state_dict": optimizer.state_dict()}, ckpt_dir / "last.pt")
+        if epoch in config.get("snapshot_epochs", ()):
+            torch.save(payload, ckpt_dir / f"epoch_{epoch:03d}.pt")
 
     return {"history": history, "best_epoch": best_epoch, "best_val_mse": best_val,
             "epochs_run": len(history), "loader_order_checksum_epoch1": order_hash.hexdigest()}

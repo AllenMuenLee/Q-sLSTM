@@ -1,0 +1,64 @@
+C:\Users\limue\AppData\Roaming\Python\Python313\site-packages\torch\cuda\__init__.py:63: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+scale=paper task=delay model=lstm seed=484324222 L=32 train/val/test=1400/200/400 hidden=4 depth=2
+[delay lstm seed 484324222] epoch 001 train 0.32594 val 0.29260 gnorm 0.142 (31.3s) *
+[delay lstm seed 484324222] epoch 002 train 0.27509 val 0.25795 gnorm 0.122 (44.3s) *
+[delay lstm seed 484324222] epoch 003 train 0.25590 val 0.25225 gnorm 0.0407 (50.3s) *
+[delay lstm seed 484324222] epoch 004 train 0.24951 val 0.24045 gnorm 0.0351 (7.9s) *
+[delay lstm seed 484324222] epoch 005 train 0.22396 val 0.20215 gnorm 0.0509 (0.6s) *
+[delay lstm seed 484324222] epoch 006 train 0.19472 val 0.18433 gnorm 0.0685 (0.6s) *
+[delay lstm seed 484324222] epoch 007 train 0.16865 val 0.13949 gnorm 0.0672 (0.6s) *
+[delay lstm seed 484324222] epoch 008 train 0.13008 val 0.11929 gnorm 0.072 (1.2s) *
+[delay lstm seed 484324222] epoch 009 train 0.12079 val 0.11270 gnorm 0.081 (0.7s) *
+[delay lstm seed 484324222] epoch 010 train 0.11331 val 0.10335 gnorm 0.0839 (1.2s) *
+[delay lstm seed 484324222] epoch 011 train 0.10443 val 0.09624 gnorm 0.211 (0.8s) *
+[delay lstm seed 484324222] epoch 012 train 0.09628 val 0.08597 gnorm 0.193 (1.5s) *
+[delay lstm seed 484324222] epoch 013 train 0.06825 val 0.04225 gnorm 0.248 (1.2s) *
+[delay lstm seed 484324222] epoch 014 train 0.03218 val 0.02504 gnorm 0.316 (0.9s) *
+[delay lstm seed 484324222] epoch 015 train 0.01984 val 0.01560 gnorm 0.291 (0.9s) *
+[delay lstm seed 484324222] epoch 016 train 0.01413 val 0.01245 gnorm 0.44 (1.4s) *
+[delay lstm seed 484324222] epoch 017 train 0.01037 val 0.00918 gnorm 0.341 (1.5s) *
+[delay lstm seed 484324222] epoch 018 train 0.00881 val 0.00791 gnorm 0.447 (2.3s) *
+[delay lstm seed 484324222] epoch 019 train 0.00741 val 0.00738 gnorm 0.348 (42.5s) *
+[delay lstm seed 484324222] epoch 020 train 0.00734 val 0.00746 gnorm 0.724 (19.3s)
+[delay lstm seed 484324222] epoch 021 train 0.00616 val 0.00555 gnorm 0.485 (17.0s) *
+[delay lstm seed 484324222] epoch 022 train 0.00573 val 0.00553 gnorm 0.542 (9.8s) *
+[delay lstm seed 484324222] epoch 023 train 0.00513 val 0.00474 gnorm 0.406 (8.7s) *
+[delay lstm seed 484324222] epoch 024 train 0.00472 val 0.00452 gnorm 0.382 (8.4s) *
+[delay lstm seed 484324222] epoch 025 train 0.00419 val 0.00391 gnorm 0.263 (9.2s) *
+[delay lstm seed 484324222] epoch 026 train 0.00456 val 0.00391 gnorm 0.648 (9.9s)
+[delay lstm seed 484324222] epoch 027 train 0.00396 val 0.00384 gnorm 0.431 (27.5s) *
+[delay lstm seed 484324222] epoch 028 train 0.00367 val 0.00426 gnorm 0.294 (58.5s)
+[delay lstm seed 484324222] epoch 029 train 0.00485 val 0.00582 gnorm 1.03 (37.5s)
+[delay lstm seed 484324222] epoch 030 train 0.00360 val 0.00321 gnorm 0.493 (51.1s) *
+[delay lstm seed 484324222] epoch 031 train 0.00330 val 0.00482 gnorm 0.396 (52.3s)
+[delay lstm seed 484324222] epoch 032 train 0.00343 val 0.00306 gnorm 0.597 (52.0s) *
+[delay lstm seed 484324222] epoch 033 train 0.00317 val 0.00310 gnorm 0.5 (53.4s)
+[delay lstm seed 484324222] epoch 034 train 0.00319 val 0.00341 gnorm 0.528 (50.0s)
+[delay lstm seed 484324222] epoch 035 train 0.00309 val 0.00264 gnorm 0.579 (45.8s) *
+[delay lstm seed 484324222] epoch 036 train 0.00307 val 0.00273 gnorm 0.596 (96.2s)
+[delay lstm seed 484324222] epoch 037 train 0.00267 val 0.00247 gnorm 0.37 (62.3s) *
+[delay lstm seed 484324222] epoch 038 train 0.00264 val 0.00273 gnorm 0.376 (66.8s)
+[delay lstm seed 484324222] epoch 039 train 0.00291 val 0.00227 gnorm 0.686 (54.7s) *
+[delay lstm seed 484324222] epoch 040 train 0.00258 val 0.00244 gnorm 0.498 (73.5s)
+[delay lstm seed 484324222] epoch 041 train 0.00298 val 0.00381 gnorm 0.83 (80.4s)
+[delay lstm seed 484324222] epoch 042 train 0.00259 val 0.00239 gnorm 0.484 (13.0s)
+[delay lstm seed 484324222] epoch 043 train 0.00244 val 0.00210 gnorm 0.369 (15.5s) *
+[delay lstm seed 484324222] epoch 044 train 0.00250 val 0.00213 gnorm 0.529 (9.6s)
+[delay lstm seed 484324222] epoch 045 train 0.00290 val 0.00320 gnorm 0.867 (64.0s)
+[delay lstm seed 484324222] epoch 046 train 0.00247 val 0.00257 gnorm 0.657 (64.8s)
+[delay lstm seed 484324222] epoch 047 train 0.00233 val 0.00197 gnorm 0.384 (74.9s) *
+[delay lstm seed 484324222] epoch 048 train 0.00203 val 0.00197 gnorm 0.281 (61.8s) *
+[delay lstm seed 484324222] epoch 049 train 0.00229 val 0.00218 gnorm 0.574 (65.2s)
+[delay lstm seed 484324222] epoch 050 train 0.00238 val 0.00287 gnorm 0.757 (89.2s)
+[delay lstm seed 484324222] epoch 051 train 0.00213 val 0.00241 gnorm 0.563 (18.5s)
+[delay lstm seed 484324222] epoch 052 train 0.00257 val 0.00204 gnorm 0.882 (30.2s)
+[delay lstm seed 484324222] epoch 053 train 0.00204 val 0.00264 gnorm 0.513 (22.8s)
+[delay lstm seed 484324222] epoch 054 train 0.00219 val 0.00215 gnorm 0.621 (34.4s)
+[delay lstm seed 484324222] epoch 055 train 0.00214 val 0.00230 gnorm 0.641 (82.2s)
+[delay lstm seed 484324222] epoch 056 train 0.00315 val 0.00204 gnorm 1.19 (64.4s)
+[delay lstm seed 484324222] epoch 057 train 0.00192 val 0.00200 gnorm 0.391 (83.6s)
+[delay lstm seed 484324222] epoch 058 train 0.00194 val 0.00192 gnorm 0.439 (102.4s) *
+[delay lstm seed 484324222] epoch 059 train 0.00182 val 0.00165 gnorm 0.383 (68.0s) *
+[delay lstm seed 484324222] epoch 060 train 0.00206 val 0.00211 gnorm 0.617 (50.2s)
+run complete: results\scalar_tasks\paper\2026-09-28\delay\seed_484324222\lstm

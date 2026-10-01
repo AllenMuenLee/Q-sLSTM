@@ -1,0 +1,53 @@
+{
+  "batch_size": 64,
+  "device": "cpu",
+  "early_stopping": "none: every run trains for the full epoch budget; best-validation checkpoint kept",
+  "epochs": 60,
+  "extrapolation_length": 64,
+  "extrapolation_size": 200,
+  "gate_epsilon": 1e-06,
+  "generation": {
+    "delay": 4,
+    "ema_decay": 0.8,
+    "flip_probability": 0.1,
+    "narma_order": 10,
+    "sine_frequency_range": [
+      0.1,
+      0.6
+    ]
+  },
+  "grad_clip": 0.0,
+  "hidden_size": 4,
+  "input_size": 1,
+  "kind": "scalar_task_run",
+  "loss": "mean squared error over loss_mask (warm-up steps excluded)",
+  "lr": 0.01,
+  "model": "slstm",
+  "n_qubits": null,
+  "optimizer_train_size": 1400,
+  "output_size": 1,
+  "preset_overrides": {},
+  "qnn_depth": 2,
+  "qslstm_recurrence": "classical_xlstm_exp_gates_v1",
+  "run_date": "2026-09-28",
+  "run_extrapolation": false,
+  "save_dir": "results/scalar_tasks",
+  "scale_label": "paper",
+  "scale_preset": "paper",
+  "seeds": {
+    "data": 1957250699,
+    "data_seed_base": 1668868548,
+    "loader": 1687022700,
+    "model": 1193535900,
+    "run_seed": 1668868548,
+    "split": 1082983784
+  },
+  "selection_metric": "validation MSE over loss_mask",
+  "sequence_length": 32,
+  "task": "narma",
+  "test_size": 400,
+  "train_size": 1600,
+  "val_fraction": 0.125,
+  "val_size": 200,
+  "weight_decay": 0.0
+}
