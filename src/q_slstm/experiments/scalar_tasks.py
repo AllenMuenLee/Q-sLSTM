@@ -51,7 +51,7 @@ MODELS = VQC_MODELS + CLASSICAL_MODELS
 # two experiments are comparable; tasks are simpler, so the data and epoch budgets are smaller.
 PRESETS = {
     "paper": dict(
-        sequence_length=32, train_size=1600, val_fraction=0.125, test_size=400,
+        sequence_length=8, train_size=1600, val_fraction=0.125, test_size=400,
         extrapolation_length=64, extrapolation_size=200, hidden_size=4, qnn_depth=2,
         batch_size=64, epochs=60, lr=1e-2, n_seeds=20,
     ),
