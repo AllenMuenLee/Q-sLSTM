@@ -1,0 +1,60 @@
+{
+  "checksum_method": "sha256 over dtype, shape, and little-endian tensor bytes",
+  "generation": {
+    "delay": 4,
+    "ema_decay": 0.8,
+    "flip_probability": 0.1,
+    "narma_order": 10,
+    "sine_frequency_range": [
+      0.1,
+      0.6
+    ]
+  },
+  "seeds": {
+    "data": 1718943498,
+    "data_seed_base": 975428833,
+    "loader": 784362335,
+    "model": 790014638,
+    "run_seed": 975428833,
+    "split": 984385006
+  },
+  "splits": {
+    "test": {
+      "checksums": {
+        "combined": "1ff5f80b40c85b5b76f6efff1a5b7de7a98ccbaadc1f0baa1315416fd2c0af80",
+        "inputs": "33a7e4aefa2a710caa4f2245002a6d1c95102b8e254ace3ea2cb08efb4da6a4d",
+        "loss_mask": "1adbab7581108a802f355329384de40fd25be9be194dac354b2c659f24454dc1",
+        "sequence_ids": "2072adbe3fe1e063fab4718b65e5dfdd2b4a39a5c81010ce68d622bb223d7308",
+        "targets": "0ed3228dc36829c83024ddf6aaa38d7ebaf7ffab161b0623d8468fd9651707b8"
+      },
+      "n_sequences": 400,
+      "sequence_length": 64,
+      "warmup_steps": 0
+    },
+    "train": {
+      "checksums": {
+        "combined": "5e33b4a68d65da2c3ababbbdac03b54da40f34832c913b3db0c20df8a09e75b8",
+        "inputs": "5b396814a6e221d4259f13dd3615fb42c7d306b83eee0fd90052fac500d82dd3",
+        "loss_mask": "e035e9c40f688460e0407bcb4de1f519139f60e35e4df3d034a8535f4a8a4160",
+        "sequence_ids": "a67f5d9f9f662a1e2cd63f3f998a0861cd27fc3f2d78bad148b9b4be033b388a",
+        "targets": "186fbedc021a59cbe29130eed1b885029d7747774239c995f2fd92b168fd737c"
+      },
+      "n_sequences": 1400,
+      "sequence_length": 64,
+      "warmup_steps": 0
+    },
+    "val": {
+      "checksums": {
+        "combined": "953f54b5b13e8f7d88ec23eaf2a73a983aaa438ff4342bf8dc7ecd90a90d509b",
+        "inputs": "9d4f9c8dd0efa3db0a224432dd166d60b025532e190158ee1d1dd2e7c30aeab6",
+        "loss_mask": "752e8900e20b6df202e9bb45bf6fccf8b585ec5013efbfde7d9fcf34fa5d1da7",
+        "sequence_ids": "6b81c84e1cfd6a14f65cba2add2ebf026645e60087600c744a956420226c5e3b",
+        "targets": "c54347d90cfbdd289a4a0e624b98397cb5bdc12c3a6585c43f81603a2f509630"
+      },
+      "n_sequences": 200,
+      "sequence_length": 64,
+      "warmup_steps": 0
+    }
+  },
+  "task": "flip_flop"
+}
